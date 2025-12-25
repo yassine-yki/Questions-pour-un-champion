@@ -7,11 +7,12 @@ ICI vous trouverez tout les fichiers concernant ce projet.
 
 Structure du projet :
 📁 Game/                                                                                                                             
+│                                                                                                                                     
+├── main.py                                                                                                                       │                                                                                                                                 │                                              
+├── questions.json                                                                                                                
 │
-├── main.py
-├── questions.json
-├── requirements.txt    
-├── README.md      
+├── requirements.txt                                                                                                              │   
+├── README.md                                                                                                                     │
 │
 ├── 📁templates/
 │   └── index.html
