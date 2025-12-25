@@ -1,0 +1,5 @@
+Python (virtual environnement)
+FASTAPI
+Websocket
+Jinja2
+uvicorn
