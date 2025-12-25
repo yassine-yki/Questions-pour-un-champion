@@ -12,7 +12,7 @@ ICI vous trouverez tout les fichiers concernant ce projet.
 
 
 
-Explications  : 
+Explications à titre indicatif  : 
 
 - 📁Game : LE FICHIER GLOBAL CONTENANT TOUT LES FICHIERS EN DESSOUS.
 
