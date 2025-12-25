@@ -17,13 +17,13 @@ Explications  :
 📁Game : LE FICHIER GLOBAL CONTENANT TOUT LES FICHIERS EN DESSOUS.
 
 🧠 main.py : Partie backend du jeu , logique de fonctionnement.
-          Code langage Python + Web FrameWork FASTAPI  + Protocole de Communication WebSocket
+              Code langage Python + Web FrameWork FASTAPI  + Protocole de Communication WebSocket
 
 ❓questions.json : Fichier JSON ( type de format texte qui transforme les fichiers de données en format lisible par l'humain 
                                 et parfaitement adapté aux APPLICATIONS WEB et API.  
-                 Contient les questions et réponses.
+                   Contient les questions et réponses.
 
-📦requirements.txt : dépendances et prérequis PYTHON  pour exécuter les fichiers. Toutes les instructions pour savoir comment procéder y seront inclus.
+📦requirements.txt : Dépendances et prérequis PYTHON  pour exécuter les fichiers. Toutes les instructions pour savoir comment                         procéder y seront inclus.
 
 📘READMENOW.md : Fichier contenant la documentation principale du projet.
 
@@ -34,6 +34,12 @@ Explications  :
 📁static : SOUS-FICHIER du fichier GLOBAL Game , contient uniquement le fichier game.js
 
 ⚡game.js : Le fichier JavaScript responsable de l'interaction entre le client et le serveur.
+
+- Les fichiers 📁.venv et 📁__pycache__ sont des fichiers crées automatiquement par Python lors de la création de votre environnement virtuel.
+
+
+
+  
 
 
 
