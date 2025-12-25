@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trivia Game</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+
+    h1 {
+      color: #667eea;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    h2 {
+      color: #667eea;
+      margin-bottom: 20px;
+    }
+
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    input {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 16px;
+      margin-bottom: 15px;
+      transition: border 0.3s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+      margin-bottom: 10px;
+    }
+
+    button:hover {
+      background: #5568d3;
+    }
+
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    button.start-btn {
+      background: #10b981;
+    }
+
+    button.start-btn:hover {
+      background: #059669;
+    }
+
+    button.solo-btn {
+      background: #8b5cf6;
+    }
+
+    button.solo-btn:hover {
+      background: #7c3aed;
+    }
+
+    button.multi-btn {
+      background: #f59e0b;
+    }
+
+    button.multi-btn:hover {
+      background: #d97706;
+    }
+
+    .players-list {
+      background: #f9fafb;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .player-item {
+      padding: 10px;
+      background: white;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .player-item.host {
+      background: #fef3c7;
+      border: 2px solid #fbbf24;
+    }
+
+    .host-badge {
+      background: #fbbf24;
+      color: #78350f;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .question-box {
+      background: #f9fafb;
+      border-radius: 10px;
+      padding: 25px;
+      margin-bottom: 20px;
+    }
+
+    .question-text {
+      font-size: 20px;
+      font-weight: bold;
+      color: #1f2937;
+      margin-bottom: 20px;
+    }
+
+    .buzzer-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .buzzer {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #ef4444, #dc2626);
+      border: 5px solid #991b1b;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 10px 30px rgba(239, 68, 68, 0.4);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .buzzer:hover:not(:disabled) {
+      transform: scale(1.05);
+      box-shadow: 0 15px 40px rgba(239, 68, 68, 0.6);
+    }
+
+    .buzzer:active:not(:disabled) {
+      transform: scale(0.95);
+    }
+
+    .buzzer:disabled {
+      background: linear-gradient(145deg, #9ca3af, #6b7280);
+      border-color: #4b5563;
+      cursor: not-allowed;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .buzzer.buzzed {
+      background: linear-gradient(145deg, #fbbf24, #f59e0b);
+      border-color: #d97706;
+      animation: pulse 0.5s ease-in-out;
+    }
+
+    .buzzer.eliminated {
+      background: linear-gradient(145deg, #6b7280, #4b5563) !important;
+      cursor: not-allowed !important;
+      opacity: 0.5;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.1);
+      }
+    }
+
+    .option {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: none;
+    }
+
+    .option.visible {
+      display: block;
+    }
+
+    .option:hover {
+      border-color: #667eea;
+      transform: translateX(5px);
+    }
+
+    .option.correct {
+      background: #d1fae5;
+      border-color: #10b981;
+    }
+
+    .option.incorrect {
+      background: #fee2e2;
+      border-color: #ef4444;
+    }
+
+    .timer {
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      color: #667eea;
+      margin-bottom: 15px;
+    }
+
+    .message {
+      text-align: center;
+      padding: 15px;
+      background: #dbeafe;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      color: #1e40af;
+    }
+
+    .scores {
+      background: #f9fafb;
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    .score-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      margin-bottom: 5px;
+      background: white;
+      border-radius: 8px;
+    }
+
+    .room-code {
+      text-align: center;
+      font-size: 32px;
+      font-weight: bold;
+      color: #667eea;
+      letter-spacing: 5px;
+      margin-bottom: 20px;
+      padding: 15px;
+      background: #f3f4f6;
+      border-radius: 10px;
+    }
+
+    .settings-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: white;
+      border: 2px solid #667eea;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      transition: all 0.3s;
+      margin: 0;
+    }
+
+    .settings-btn:hover {
+      background: #667eea;
+      transform: rotate(90deg);
+    }
+
+    .settings-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .settings-modal.active {
+      display: flex;
+    }
+
+    .settings-content {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 400px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .settings-content h2 {
+      color: #667eea;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .language-option {
+      padding: 15px;
+      background: #f9fafb;
+      border: 2px solid #e5e7eb;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .language-option:hover {
+      border-color: #667eea;
+      background: #f3f4f6;
+    }
+
+    .language-option.selected {
+      background: #dbeafe;
+      border-color: #667eea;
+      font-weight: bold;
+    }
+
+    .close-settings {
+      background: #10b981;
+      margin-top: 20px;
+    }
+
+    .close-settings:hover {
+      background: #059669;
+    }
+
+    .subject-selection {
+      background: #f9fafb;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .subject-item {
+      padding: 12px;
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .subject-item:hover {
+      border-color: #667eea;
+      background: #f3f4f6;
+    }
+
+    .subject-item input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      margin: 0;
+    }
+
+    .solo-score {
+      text-align: center;
+      font-size: 28px;
+      font-weight: bold;
+      color: #667eea;
+      margin-bottom: 20px;
+    }
+
+    .team-badge {
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-left: 8px;
+    }
+
+    .team-red {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 2px solid #ef4444;
+    }
+
+    .team-blue {
+      background: #dbeafe;
+      color: #1e40af;
+      border: 2px solid #3b82f6;
+    }
+
+    .team-scores {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .team-score-box {
+      flex: 1;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .team-score-box.red {
+      background: #fee2e2;
+      border: 3px solid #ef4444;
+      color: #991b1b;
+    }
+
+    .team-score-box.blue {
+      background: #dbeafe;
+      border: 3px solid #3b82f6;
+      color: #1e40af;
+    }
+
+    .team-score-box.eliminated {
+      opacity: 0.4;
+      filter: grayscale(100%);
+    }
+
+    /* Team selection styling */
+    .team-select-item {
+      padding: 15px;
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .team-select-item:hover:not(.disabled) {
+      transform: translateX(5px);
+    }
+
+    .team-select-item.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .team-select-item.selected-red {
+      border-color: #ef4444;
+      background: #fee2e2;
+    }
+
+    .team-select-item.selected-blue {
+      border-color: #3b82f6;
+      background: #dbeafe;
+    }
+
+    .team-select-item input[type="radio"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      margin: 0;
+    }
+
+    .team-count {
+      margin-left: auto;
+      color: #666;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+  <button class="settings-btn" onclick="openSettings()">⚙️</button>
+
+  <div id="settingsModal" class="settings-modal">
+    <div class="settings-content">
+      <h2 data-translate="settings">⚙️ Settings</h2>
+      <h3 style="margin-bottom: 15px; color: #374151;" data-translate="selectLanguage">Select Language:</h3>
+      <div class="language-option" data-lang="en" onclick="selectLanguage('en')">
+        <span>🇬🇧</span><span>English</span>
+      </div>
+      <div class="language-option" data-lang="fr" onclick="selectLanguage('fr')">
+        <span>🇫🇷</span><span>Français (French)</span>
+      </div>
+      <button class="close-settings" onclick="closeSettings()" data-translate="done">Done</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <h1 data-translate="title">🎯 Trivia Game</h1>
+
+    <div id="homeScreen" class="screen active">
+      <button class="solo-btn" onclick="showSoloSetup()" data-translate="soloMode">🎮 Solo Mode</button>
+      <button class="multi-btn" onclick="showMultiMode()" data-translate="multiplayerMode">👥 Multiplayer Mode</button>
+    </div>
+
+    <div id="soloSetupScreen" class="screen">
+      <h2 data-translate="soloMode">🎮 Solo Mode</h2>
+      <input type="text" id="soloName" data-translate-placeholder="yourName" placeholder="Your Name" maxlength="20">
+      <div class="subject-selection">
+        <h3 style="margin-bottom: 15px;" data-translate="selectSubjects">Select Subjects:</h3>
+        <div id="soloSubjects"></div>
+      </div>
+      <button onclick="startSoloGame()" data-translate="startGame">Start Game</button>
+      <button onclick="showHome()" data-translate="back">Back</button>
+    </div>
+
+    <div id="multiModeScreen" class="screen">
+      <h2 data-translate="multiplayerMode">👥 Multiplayer Mode</h2>
+      <button onclick="showCreateMulti()" data-translate="createRoom">Create Room</button>
+      <button onclick="showJoinMulti()" data-translate="joinRoom">Join Room</button>
+      <button onclick="showHome()" data-translate="back">Back</button>
+    </div>
+
+    <div id="createMultiScreen" class="screen">
+      <h2 data-translate="createRoom">Create Room</h2>
+      <input type="text" id="createCode" data-translate-placeholder="enterRoomCode" placeholder="Enter Room Code" maxlength="6">
+      <input type="text" id="createName" data-translate-placeholder="yourName" placeholder="Your Name" maxlength="20">
+      
+      <!-- Game Mode Selection -->
+      <div class="subject-selection">
+        <h3 style="margin-bottom: 15px;" data-translate="selectGameMode">Select Game Mode:</h3>
+        <div class="subject-item" id="gameModeFF" style="border: 2px solid #667eea; background: #dbeafe;">
+          <input type="radio" name="gameMode" value="ffa" checked>
+          <label data-translate="freeForAll">🎯 Free for All (2+ players)</label>
+        </div>
+        <div class="subject-item" id="gameModeTeam" style="border: 2px solid #e5e7eb; background: #f9fafb;">
+          <input type="radio" name="gameMode" value="team">
+          <label data-translate="teamMode">👥 Team Mode (4 players exactly)</label>
+        </div>
+      </div>
+
+      <div class="subject-selection">
+        <h3 style="margin-bottom: 15px;" data-translate="selectSubjects">Select Subjects:</h3>
+        <div id="createSubjects"></div>
+      </div>
+
+      <button onclick="createRoom()" data-translate="createAndJoin">Create & Join</button>
+      <button onclick="showMultiMode()" data-translate="back">Back</button>
+    </div>
+
+    <div id="joinMultiScreen" class="screen">
+      <h2 data-translate="joinRoom">Join Room</h2>
+      <input type="text" id="joinCode" data-translate-placeholder="roomCode" placeholder="Room Code" maxlength="6">
+      <input type="text" id="joinName" data-translate-placeholder="yourName" placeholder="Your Name" maxlength="20">
+      
+      <!-- Team Selection (shown only for team mode rooms) -->
+      <div id="teamSelectionDiv" class="subject-selection" style="display: none;">
+        <h3 style="margin-bottom: 15px;" data-translate="selectTeam">Select Your Team:</h3>
+        <div class="team-select-item" id="joinTeamRed">
+          <input type="radio" name="joinTeam" value="red">
+          <label>🔴 <span data-translate="teamRed">Red Team</span></label>
+          <span id="redCount" class="team-count">0/2</span>
+        </div>
+        <div class="team-select-item" id="joinTeamBlue">
+          <input type="radio" name="joinTeam" value="blue">
+          <label>🔵 <span data-translate="teamBlue">Blue Team</span></label>
+          <span id="blueCount" class="team-count">0/2</span>
+        </div>
+      </div>
+      
+      <button onclick="joinRoom()" data-translate="joinRoomBtn">Join Room</button>
+      <button onclick="showMultiMode()" data-translate="back">Back</button>
+    </div>
+
+    <div id="lobbyScreen" class="screen">
+      <div class="room-code" id="roomCode"></div>
+      <div class="message" data-translate="waitingForPlayers">Waiting for players to join...</div>
+      <div class="players-list" id="playersList"></div>
+      <button id="startBtn" class="start-btn" onclick="startGame()" style="display: none;"
+        data-translate="startGame">Start Game</button>
+    </div>
+
+    <div id="soloGameScreen" class="screen">
+      <div class="solo-score" id="soloScore">Score: 0</div>
+      <div class="timer" id="soloTimer"></div>
+      <div id="soloMessageBox" class="message" style="display: none;"></div>
+      <div class="question-box">
+        <div class="question-text" id="soloQuestionText"></div>
+        <div id="soloOptionsBox"></div>
+      </div>
+    </div>
+
+    <div id="gameScreen" class="screen">
+      <div class="round-info" id="roundInfo"
+        style="text-align: center; font-size: 18px; font-weight: bold; color: #667eea; margin-bottom: 10px;">
+        Round 1/3 - Question 1/5
+      </div>
+      <div class="timer" id="timer"></div>
+      <div id="messageBox" class="message" style="display: none;"></div>
+      <div class="question-box">
+        <div class="question-text" id="questionText"></div>
+        <div class="buzzer-container">
+          <button id="buzzer" class="buzzer" onclick="buzzerPressed()" data-translate="buzz">BUZZ!</button>
+        </div>
+        <div id="optionsBox"></div>
+      </div>
+      <div class="scores" id="scoresBox"></div>
+    </div>
+
+    <div id="gameOverScreen" class="screen">
+      <h2 style="text-align: center; margin-bottom: 20px;" data-translate="gameOver">Game Over!</h2>
+      <div id="winnerBox" class="message"></div>
+      <div class="scores" id="finalScores"></div>
+      <button onclick="location.reload()" data-translate="playAgain">Play Again</button>
+    </div>
+  </div>
+
+  <script src="/static/game.js"></script>
+</body>
+
+</html>
