@@ -1,0 +1,606 @@
+{
+  "en": {
+    "science": [
+      {
+        "q": "What is the chemical symbol for gold?",
+        "options": ["Au", "Ag", "Fe", "Cu"],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "What planet is known as the Red Planet?",
+        "options": ["Venus", "Mars", "Jupiter", "Saturn"],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "What is the speed of light in vacuum?",
+        "options": ["299,792 km/s", "150,000 km/s", "500,000 km/s", "100,000 km/s"],
+        "correct": 0,
+        "time": 15
+      },
+      {
+        "q": "What is the largest organ in the human body?",
+        "options": ["Heart", "Brain", "Liver", "Skin"],
+        "correct": 3,
+        "time": 10
+      },
+      {
+        "q": "What is the process by which plants make food?",
+        "options": ["Respiration", "Photosynthesis", "Digestion", "Fermentation"],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "How many bones are in the adult human body?",
+        "options": ["206", "186", "256", "306"],
+        "correct": 0,
+        "time": 12
+      },
+      {
+        "q": "What is the hardest natural substance on Earth?",
+        "options": ["Gold", "Iron", "Diamond", "Platinum"],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "What gas do plants absorb from the atmosphere?",
+        "options": ["Oxygen", "Nitrogen", "Carbon Dioxide", "Hydrogen"],
+        "correct": 2,
+        "time": 10
+      }
+    ],
+    "history": [
+      {
+        "q": "In which year did World War II end?",
+        "options": ["1943", "1944", "1945", "1946"],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Who was the first President of the United States?",
+        "options": ["Thomas Jefferson", "George Washington", "John Adams", "Benjamin Franklin"],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "What year did the Berlin Wall fall?",
+        "options": ["1987", "1988", "1989", "1990"],
+        "correct": 2,
+        "time": 12
+      },
+      {
+        "q": "Who was the first person to walk on the moon?",
+        "options": ["Buzz Aldrin", "Neil Armstrong", "Yuri Gagarin", "John Glenn"],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "In which year did the Titanic sink?",
+        "options": ["1910", "1911", "1912", "1913"],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Who painted the Mona Lisa?",
+        "options": ["Michelangelo", "Leonardo da Vinci", "Raphael", "Donatello"],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "What ancient wonder was located in Alexandria?",
+        "options": ["Hanging Gardens", "Colossus", "Lighthouse", "Mausoleum"],
+        "correct": 2,
+        "time": 12
+      },
+      {
+        "q": "Who discovered America in 1492?",
+        "options": ["Amerigo Vespucci", "Christopher Columbus", "Ferdinand Magellan", "Vasco da Gama"],
+        "correct": 1,
+        "time": 10
+      }
+    ],
+    "geography": [
+      {
+        "q": "What is the capital of France?",
+        "options": ["London", "Berlin", "Paris", "Madrid"],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "What is the largest ocean on Earth?",
+        "options": ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"],
+        "correct": 3,
+        "time": 10
+      },
+      {
+        "q": "What is the longest river in the world?",
+        "options": ["Amazon", "Nile", "Yangtze", "Mississippi"],
+        "correct": 1,
+        "time": 12
+      },
+      {
+        "q": "Which country has the largest population?",
+        "options": ["India", "United States", "China", "Indonesia"],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "What is the smallest country in the world?",
+        "options": ["Monaco", "Vatican City", "San Marino", "Liechtenstein"],
+        "correct": 1,
+        "time": 12
+      },
+      {
+        "q": "What is the tallest mountain in the world?",
+        "options": ["K2", "Kangchenjunga", "Mount Everest", "Lhotse"],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Which continent is the Sahara Desert located on?",
+        "options": ["Asia", "Australia", "Africa", "South America"],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "What is the capital of Japan?",
+        "options": ["Seoul", "Beijing", "Tokyo", "Bangkok"],
+        "correct": 2,
+        "time": 10
+      }
+    ],
+    "sports": [
+      {
+        "q": "How many players are on a soccer team?",
+        "options": ["9", "10", "11", "12"],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "In which sport would you perform a slam dunk?",
+        "options": ["Volleyball", "Basketball", "Tennis", "Baseball"],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "How many rings are on the Olympic flag?",
+        "options": ["4", "5", "6", "7"],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "What is the maximum score in a single frame of bowling?",
+        "options": ["100", "200", "300", "400"],
+        "correct": 2,
+        "time": 12
+      },
+      {
+        "q": "In which country were the first modern Olympics held?",
+        "options": ["France", "Greece", "Italy", "England"],
+        "correct": 1,
+        "time": 12
+      },
+      {
+        "q": "How many Grand Slam tournaments are there in tennis?",
+        "options": ["3", "4", "5", "6"],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "What sport is known as 'The Sport of Kings'?",
+        "options": ["Polo", "Horse Racing", "Golf", "Cricket"],
+        "correct": 1,
+        "time": 12
+      },
+      {
+        "q": "How long is a marathon race?",
+        "options": ["26.2 miles", "20 miles", "30 miles", "25 miles"],
+        "correct": 0,
+        "time": 12
+      }
+    ],
+    "entertainment": [
+      {
+        "q": "Who directed the movie 'Titanic'?",
+        "options": ["Steven Spielberg", "James Cameron", "Martin Scorsese", "Christopher Nolan"],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "What is the highest-grossing film of all time?",
+        "options": ["Titanic", "Avatar", "Avengers: Endgame", "Star Wars"],
+        "correct": 1,
+        "time": 12
+      },
+      {
+        "q": "Who played Iron Man in the Marvel movies?",
+        "options": ["Chris Evans", "Robert Downey Jr.", "Chris Hemsworth", "Mark Ruffalo"],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "What year was the first Harry Potter book published?",
+        "options": ["1995", "1996", "1997", "1998"],
+        "correct": 2,
+        "time": 12
+      },
+      {
+        "q": "Which band sang 'Bohemian Rhapsody'?",
+        "options": ["The Beatles", "Led Zeppelin", "Queen", "Pink Floyd"],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Who is known as the King of Pop?",
+        "options": ["Elvis Presley", "Michael Jackson", "Prince", "Madonna"],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "What is the name of the coffee shop in the TV show 'Friends'?",
+        "options": ["Central Perk", "Java Joe's", "Coffee Bean", "Starbucks"],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "Which actor played Jack in the movie 'Titanic'?",
+        "options": ["Brad Pitt", "Leonardo DiCaprio", "Tom Cruise", "Johnny Depp"],
+        "correct": 1,
+        "time": 10
+      }
+    ],
+    "technology": [
+      {
+        "q": "Who founded Microsoft?",
+        "options": ["Steve Jobs", "Bill Gates", "Mark Zuckerberg", "Elon Musk"],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "What does CPU stand for?",
+        "options": ["Central Processing Unit", "Computer Personal Unit", "Central Program Utility", "Computer Processing Utility"],
+        "correct": 0,
+        "time": 12
+      },
+      {
+        "q": "What year was the first iPhone released?",
+        "options": ["2005", "2006", "2007", "2008"],
+        "correct": 2,
+        "time": 12
+      },
+      {
+        "q": "What does HTML stand for?",
+        "options": ["Hypertext Markup Language", "High Tech Modern Language", "Home Tool Markup Language", "Hyperlinks and Text Markup Language"],
+        "correct": 0,
+        "time": 15
+      },
+      {
+        "q": "Who is the founder of Tesla?",
+        "options": ["Jeff Bezos", "Elon Musk", "Bill Gates", "Steve Jobs"],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "What does WWW stand for?",
+        "options": ["World Wide Web", "World Web Wide", "Web World Wide", "Wide World Web"],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "In what year was Google founded?",
+        "options": ["1996", "1997", "1998", "1999"],
+        "correct": 2,
+        "time": 12
+      },
+      {
+        "q": "What does AI stand for?",
+        "options": ["Automated Intelligence", "Artificial Intelligence", "Advanced Interface", "Automatic Integration"],
+        "correct": 1,
+        "time": 10
+      }
+    ]
+  },
+  "fr": {
+    "science": [
+      {
+        "q": "Quel est le symbole chimique de l'or?",
+        "options": ["Au", "Ag", "Fe", "Cu"],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "Quelle planète est connue comme la planète rouge?",
+        "options": ["Vénus", "Mars", "Jupiter", "Saturne"],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Quelle est la vitesse de la lumière dans le vide?",
+        "options": ["299 792 km/s", "150 000 km/s", "500 000 km/s", "100 000 km/s"],
+        "correct": 0,
+        "time": 15
+      },
+      {
+        "q": "Quel est le plus grand organe du corps humain?",
+        "options": ["Cœur", "Cerveau", "Foie", "Peau"],
+        "correct": 3,
+        "time": 10
+      },
+      {
+        "q": "Quel est le processus par lequel les plantes fabriquent leur nourriture?",
+        "options": ["Respiration", "Photosynthèse", "Digestion", "Fermentation"],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Combien d'os y a-t-il dans le corps humain adulte?",
+        "options": ["206", "186", "256", "306"],
+        "correct": 0,
+        "time": 12
+      },
+      {
+        "q": "Quelle est la substance naturelle la plus dure sur Terre?",
+        "options": ["Or", "Fer", "Diamant", "Platine"],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Quel gaz les plantes absorbent-elles de l'atmosphère?",
+        "options": ["Oxygène", "Azote", "Dioxyde de carbone", "Hydrogène"],
+        "correct": 2,
+        "time": 10
+      }
+    ],
+    "history": [
+      {
+        "q": "En quelle année la Seconde Guerre mondiale s'est-elle terminée?",
+        "options": ["1943", "1944", "1945", "1946"],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Qui était le premier président des États-Unis?",
+        "options": ["Thomas Jefferson", "George Washington", "John Adams", "Benjamin Franklin"],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "En quelle année le mur de Berlin est-il tombé?",
+        "options": ["1987", "1988", "1989", "1990"],
+        "correct": 2,
+        "time": 12
+      },
+      {
+        "q": "Qui a été la première personne à marcher sur la Lune?",
+        "options": ["Buzz Aldrin", "Neil Armstrong", "Youri Gagarine", "John Glenn"],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "En quelle année le Titanic a-t-il coulé?",
+        "options": ["1910", "1911", "1912", "1913"],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Qui a peint la Joconde?",
+        "options": ["Michel-Ange", "Léonard de Vinci", "Raphaël", "Donatello"],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Quelle merveille antique se trouvait à Alexandrie?",
+        "options": ["Jardins suspendus", "Colosse", "Phare", "Mausolée"],
+        "correct": 2,
+        "time": 12
+      },
+      {
+        "q": "Qui a découvert l'Amérique en 1492?",
+        "options": ["Amerigo Vespucci", "Christophe Colomb", "Ferdinand Magellan", "Vasco de Gama"],
+        "correct": 1,
+        "time": 10
+      }
+    ],
+    "geography": [
+      {
+        "q": "Quelle est la capitale de la France?",
+        "options": ["Londres", "Berlin", "Paris", "Madrid"],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Quel est le plus grand océan de la Terre?",
+        "options": ["Océan Atlantique", "Océan Indien", "Océan Arctique", "Océan Pacifique"],
+        "correct": 3,
+        "time": 10
+      },
+      {
+        "q": "Quel est le plus long fleuve du monde?",
+        "options": ["Amazone", "Nil", "Yangtsé", "Mississippi"],
+        "correct": 1,
+        "time": 12
+      },
+      {
+        "q": "Quel pays a la plus grande population?",
+        "options": ["Inde", "États-Unis", "Chine", "Indonésie"],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Quel est le plus petit pays du monde?",
+        "options": ["Monaco", "Vatican", "Saint-Marin", "Liechtenstein"],
+        "correct": 1,
+        "time": 12
+      },
+      {
+        "q": "Quelle est la plus haute montagne du monde?",
+        "options": ["K2", "Kangchenjunga", "Mont Everest", "Lhotse"],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Sur quel continent se trouve le désert du Sahara?",
+        "options": ["Asie", "Australie", "Afrique", "Amérique du Sud"],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Quelle est la capitale du Japon?",
+        "options": ["Séoul", "Pékin", "Tokyo", "Bangkok"],
+        "correct": 2,
+        "time": 10
+      }
+    ],
+    "sports": [
+      {
+        "q": "Combien de joueurs y a-t-il dans une équipe de football?",
+        "options": ["9", "10", "11", "12"],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Dans quel sport effectue-t-on un smash?",
+        "options": ["Volleyball", "Basketball", "Tennis", "Baseball"],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Combien d'anneaux y a-t-il sur le drapeau olympique?",
+        "options": ["4", "5", "6", "7"],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Quel est le score maximum dans un seul cadre de bowling?",
+        "options": ["100", "200", "300", "400"],
+        "correct": 2,
+        "time": 12
+      },
+      {
+        "q": "Dans quel pays se sont tenus les premiers Jeux olympiques modernes?",
+        "options": ["France", "Grèce", "Italie", "Angleterre"],
+        "correct": 1,
+        "time": 12
+      },
+      {
+        "q": "Combien de tournois du Grand Chelem y a-t-il en tennis?",
+        "options": ["3", "4", "5", "6"],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Quel sport est connu comme le 'Sport des Rois'?",
+        "options": ["Polo", "Course de chevaux", "Golf", "Cricket"],
+        "correct": 1,
+        "time": 12
+      },
+      {
+        "q": "Quelle est la longueur d'un marathon?",
+        "options": ["42,195 km", "32 km", "48 km", "40 km"],
+        "correct": 0,
+        "time": 12
+      }
+    ],
+    "entertainment": [
+      {
+        "q": "Qui a réalisé le film 'Titanic'?",
+        "options": ["Steven Spielberg", "James Cameron", "Martin Scorsese", "Christopher Nolan"],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Quel est le film le plus rentable de tous les temps?",
+        "options": ["Titanic", "Avatar", "Avengers: Endgame", "Star Wars"],
+        "correct": 1,
+        "time": 12
+      },
+      {
+        "q": "Qui a joué Iron Man dans les films Marvel?",
+        "options": ["Chris Evans", "Robert Downey Jr.", "Chris Hemsworth", "Mark Ruffalo"],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "En quelle année le premier livre Harry Potter a-t-il été publié?",
+        "options": ["1995", "1996", "1997", "1998"],
+        "correct": 2,
+        "time": 12
+      },
+      {
+        "q": "Quel groupe a chanté 'Bohemian Rhapsody'?",
+        "options": ["The Beatles", "Led Zeppelin", "Queen", "Pink Floyd"],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Qui est connu comme le Roi de la Pop?",
+        "options": ["Elvis Presley", "Michael Jackson", "Prince", "Madonna"],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Quel est le nom du café dans la série 'Friends'?",
+        "options": ["Central Perk", "Java Joe's", "Coffee Bean", "Starbucks"],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "Quel acteur a joué Jack dans le film 'Titanic'?",
+        "options": ["Brad Pitt", "Leonardo DiCaprio", "Tom Cruise", "Johnny Depp"],
+        "correct": 1,
+        "time": 10
+      }
+    ],
+    "technology": [
+      {
+        "q": "Qui a fondé Microsoft?",
+        "options": ["Steve Jobs", "Bill Gates", "Mark Zuckerberg", "Elon Musk"],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Que signifie CPU?",
+        "options": ["Unité centrale de traitement", "Unité personnelle d'ordinateur", "Utilitaire de programme central", "Utilitaire de traitement informatique"],
+        "correct": 0,
+        "time": 12
+      },
+      {
+        "q": "En quelle année le premier iPhone a-t-il été lancé?",
+        "options": ["2005", "2006", "2007", "2008"],
+        "correct": 2,
+        "time": 12
+      },
+      {
+        "q": "Que signifie HTML?",
+        "options": ["Langage de balisage hypertexte", "Langage moderne de haute technologie", "Langage de balisage d'outils domestiques", "Langage de balisage d'hyperliens et de texte"],
+        "correct": 0,
+        "time": 15
+      },
+      {
+        "q": "Qui est le fondateur de Tesla?",
+        "options": ["Jeff Bezos", "Elon Musk", "Bill Gates", "Steve Jobs"],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Que signifie WWW?",
+        "options": ["World Wide Web", "Web World Wide", "Wide World Web", "Web Wide World"],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "En quelle année Google a-t-il été fondé?",
+        "options": ["1996", "1997", "1998", "1999"],
+        "correct": 2,
+        "time": 12
+      },
+      {
+        "q": "Que signifie IA?",
+        "options": ["Intelligence automatisée", "Intelligence artificielle", "Interface avancée", "Intégration automatique"],
+        "correct": 1,
+        "time": 10
+      }
+    ]
+  }
+}
