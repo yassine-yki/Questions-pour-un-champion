@@ -6,7 +6,7 @@ ICI vous trouverez tout les fichiers concernant ce projet.
 
 
 Structure du projet :
-📁 Game/
+📁 Game/                                                                                                                             
 │
 ├── main.py
 ├── questions.json
@@ -26,6 +26,10 @@ Structure du projet :
 ├──📁 __pycache__/
 │   
 │
+
+<img width="234" height="450" alt="image" src="https://github.com/user-attachments/assets/53549ad5-d16f-4ea3-b679-b6c8d2a6b8b6" />
+
+
 
 Explications  : 
 
