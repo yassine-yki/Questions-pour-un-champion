@@ -1,3 +1,6 @@
+
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/cd159175-b3b7-4170-8721-eb2f527b7c08" />
+
 GitHUb projet PISTE Questions pour un champion.
 ICI vous trouverez tout les fichiers concernant ce projet.
 
@@ -49,7 +52,7 @@ Explications  :
 
 
 
-<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/cd159175-b3b7-4170-8721-eb2f527b7c08" />
+
 
 
 
