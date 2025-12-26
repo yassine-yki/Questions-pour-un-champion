@@ -3,49 +3,89 @@
     "science": [
       {
         "q": "What is the chemical symbol for gold?",
-        "options": ["Au", "Ag", "Fe", "Cu"],
+        "options": [
+          "Au",
+          "Ag",
+          "Fe",
+          "Cu"
+        ],
         "correct": 0,
         "time": 10
       },
       {
         "q": "What planet is known as the Red Planet?",
-        "options": ["Venus", "Mars", "Jupiter", "Saturn"],
+        "options": [
+          "Venus",
+          "Mars",
+          "Jupiter",
+          "Saturn"
+        ],
         "correct": 1,
         "time": 10
       },
       {
         "q": "What is the speed of light in vacuum?",
-        "options": ["299,792 km/s", "150,000 km/s", "500,000 km/s", "100,000 km/s"],
+        "options": [
+          "299,792 km/s",
+          "150,000 km/s",
+          "500,000 km/s",
+          "100,000 km/s"
+        ],
         "correct": 0,
         "time": 15
       },
       {
         "q": "What is the largest organ in the human body?",
-        "options": ["Heart", "Brain", "Liver", "Skin"],
+        "options": [
+          "Heart",
+          "Brain",
+          "Liver",
+          "Skin"
+        ],
         "correct": 3,
         "time": 10
       },
       {
         "q": "What is the process by which plants make food?",
-        "options": ["Respiration", "Photosynthesis", "Digestion", "Fermentation"],
+        "options": [
+          "Respiration",
+          "Photosynthesis",
+          "Digestion",
+          "Fermentation"
+        ],
         "correct": 1,
         "time": 10
       },
       {
         "q": "How many bones are in the adult human body?",
-        "options": ["206", "186", "256", "306"],
+        "options": [
+          "206",
+          "186",
+          "256",
+          "306"
+        ],
         "correct": 0,
         "time": 12
       },
       {
         "q": "What is the hardest natural substance on Earth?",
-        "options": ["Gold", "Iron", "Diamond", "Platinum"],
+        "options": [
+          "Gold",
+          "Iron",
+          "Diamond",
+          "Platinum"
+        ],
         "correct": 2,
         "time": 10
       },
       {
         "q": "What gas do plants absorb from the atmosphere?",
-        "options": ["Oxygen", "Nitrogen", "Carbon Dioxide", "Hydrogen"],
+        "options": [
+          "Oxygen",
+          "Nitrogen",
+          "Carbon Dioxide",
+          "Hydrogen"
+        ],
         "correct": 2,
         "time": 10
       }
@@ -53,49 +93,89 @@
     "history": [
       {
         "q": "In which year did World War II end?",
-        "options": ["1943", "1944", "1945", "1946"],
+        "options": [
+          "1943",
+          "1944",
+          "1945",
+          "1946"
+        ],
         "correct": 2,
         "time": 10
       },
       {
         "q": "Who was the first President of the United States?",
-        "options": ["Thomas Jefferson", "George Washington", "John Adams", "Benjamin Franklin"],
+        "options": [
+          "Thomas Jefferson",
+          "George Washington",
+          "John Adams",
+          "Benjamin Franklin"
+        ],
         "correct": 1,
         "time": 10
       },
       {
         "q": "What year did the Berlin Wall fall?",
-        "options": ["1987", "1988", "1989", "1990"],
+        "options": [
+          "1987",
+          "1988",
+          "1989",
+          "1990"
+        ],
         "correct": 2,
         "time": 12
       },
       {
         "q": "Who was the first person to walk on the moon?",
-        "options": ["Buzz Aldrin", "Neil Armstrong", "Yuri Gagarin", "John Glenn"],
+        "options": [
+          "Buzz Aldrin",
+          "Neil Armstrong",
+          "Yuri Gagarin",
+          "John Glenn"
+        ],
         "correct": 1,
         "time": 10
       },
       {
         "q": "In which year did the Titanic sink?",
-        "options": ["1910", "1911", "1912", "1913"],
+        "options": [
+          "1910",
+          "1911",
+          "1912",
+          "1913"
+        ],
         "correct": 2,
         "time": 10
       },
       {
         "q": "Who painted the Mona Lisa?",
-        "options": ["Michelangelo", "Leonardo da Vinci", "Raphael", "Donatello"],
+        "options": [
+          "Michelangelo",
+          "Leonardo da Vinci",
+          "Raphael",
+          "Donatello"
+        ],
         "correct": 1,
         "time": 10
       },
       {
         "q": "What ancient wonder was located in Alexandria?",
-        "options": ["Hanging Gardens", "Colossus", "Lighthouse", "Mausoleum"],
+        "options": [
+          "Hanging Gardens",
+          "Colossus",
+          "Lighthouse",
+          "Mausoleum"
+        ],
         "correct": 2,
         "time": 12
       },
       {
         "q": "Who discovered America in 1492?",
-        "options": ["Amerigo Vespucci", "Christopher Columbus", "Ferdinand Magellan", "Vasco da Gama"],
+        "options": [
+          "Amerigo Vespucci",
+          "Christopher Columbus",
+          "Ferdinand Magellan",
+          "Vasco da Gama"
+        ],
         "correct": 1,
         "time": 10
       }
@@ -103,49 +183,89 @@
     "geography": [
       {
         "q": "What is the capital of France?",
-        "options": ["London", "Berlin", "Paris", "Madrid"],
+        "options": [
+          "London",
+          "Berlin",
+          "Paris",
+          "Madrid"
+        ],
         "correct": 2,
         "time": 10
       },
       {
         "q": "What is the largest ocean on Earth?",
-        "options": ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"],
+        "options": [
+          "Atlantic Ocean",
+          "Indian Ocean",
+          "Arctic Ocean",
+          "Pacific Ocean"
+        ],
         "correct": 3,
         "time": 10
       },
       {
         "q": "What is the longest river in the world?",
-        "options": ["Amazon", "Nile", "Yangtze", "Mississippi"],
+        "options": [
+          "Amazon",
+          "Nile",
+          "Yangtze",
+          "Mississippi"
+        ],
         "correct": 1,
         "time": 12
       },
       {
         "q": "Which country has the largest population?",
-        "options": ["India", "United States", "China", "Indonesia"],
+        "options": [
+          "India",
+          "United States",
+          "China",
+          "Indonesia"
+        ],
         "correct": 2,
         "time": 10
       },
       {
         "q": "What is the smallest country in the world?",
-        "options": ["Monaco", "Vatican City", "San Marino", "Liechtenstein"],
+        "options": [
+          "Monaco",
+          "Vatican City",
+          "San Marino",
+          "Liechtenstein"
+        ],
         "correct": 1,
         "time": 12
       },
       {
         "q": "What is the tallest mountain in the world?",
-        "options": ["K2", "Kangchenjunga", "Mount Everest", "Lhotse"],
+        "options": [
+          "K2",
+          "Kangchenjunga",
+          "Mount Everest",
+          "Lhotse"
+        ],
         "correct": 2,
         "time": 10
       },
       {
         "q": "Which continent is the Sahara Desert located on?",
-        "options": ["Asia", "Australia", "Africa", "South America"],
+        "options": [
+          "Asia",
+          "Australia",
+          "Africa",
+          "South America"
+        ],
         "correct": 2,
         "time": 10
       },
       {
         "q": "What is the capital of Japan?",
-        "options": ["Seoul", "Beijing", "Tokyo", "Bangkok"],
+        "options": [
+          "Seoul",
+          "Beijing",
+          "Tokyo",
+          "Bangkok"
+        ],
         "correct": 2,
         "time": 10
       }
@@ -153,49 +273,89 @@
     "sports": [
       {
         "q": "How many players are on a soccer team?",
-        "options": ["9", "10", "11", "12"],
+        "options": [
+          "9",
+          "10",
+          "11",
+          "12"
+        ],
         "correct": 2,
         "time": 10
       },
       {
         "q": "In which sport would you perform a slam dunk?",
-        "options": ["Volleyball", "Basketball", "Tennis", "Baseball"],
+        "options": [
+          "Volleyball",
+          "Basketball",
+          "Tennis",
+          "Baseball"
+        ],
         "correct": 1,
         "time": 10
       },
       {
         "q": "How many rings are on the Olympic flag?",
-        "options": ["4", "5", "6", "7"],
+        "options": [
+          "4",
+          "5",
+          "6",
+          "7"
+        ],
         "correct": 1,
         "time": 10
       },
       {
         "q": "What is the maximum score in a single frame of bowling?",
-        "options": ["100", "200", "300", "400"],
+        "options": [
+          "100",
+          "200",
+          "300",
+          "400"
+        ],
         "correct": 2,
         "time": 12
       },
       {
         "q": "In which country were the first modern Olympics held?",
-        "options": ["France", "Greece", "Italy", "England"],
+        "options": [
+          "France",
+          "Greece",
+          "Italy",
+          "England"
+        ],
         "correct": 1,
         "time": 12
       },
       {
         "q": "How many Grand Slam tournaments are there in tennis?",
-        "options": ["3", "4", "5", "6"],
+        "options": [
+          "3",
+          "4",
+          "5",
+          "6"
+        ],
         "correct": 1,
         "time": 10
       },
       {
         "q": "What sport is known as 'The Sport of Kings'?",
-        "options": ["Polo", "Horse Racing", "Golf", "Cricket"],
+        "options": [
+          "Polo",
+          "Horse Racing",
+          "Golf",
+          "Cricket"
+        ],
         "correct": 1,
         "time": 12
       },
       {
         "q": "How long is a marathon race?",
-        "options": ["26.2 miles", "20 miles", "30 miles", "25 miles"],
+        "options": [
+          "26.2 miles",
+          "20 miles",
+          "30 miles",
+          "25 miles"
+        ],
         "correct": 0,
         "time": 12
       }
@@ -203,49 +363,89 @@
     "entertainment": [
       {
         "q": "Who directed the movie 'Titanic'?",
-        "options": ["Steven Spielberg", "James Cameron", "Martin Scorsese", "Christopher Nolan"],
+        "options": [
+          "Steven Spielberg",
+          "James Cameron",
+          "Martin Scorsese",
+          "Christopher Nolan"
+        ],
         "correct": 1,
         "time": 10
       },
       {
         "q": "What is the highest-grossing film of all time?",
-        "options": ["Titanic", "Avatar", "Avengers: Endgame", "Star Wars"],
+        "options": [
+          "Titanic",
+          "Avatar",
+          "Avengers: Endgame",
+          "Star Wars"
+        ],
         "correct": 1,
         "time": 12
       },
       {
         "q": "Who played Iron Man in the Marvel movies?",
-        "options": ["Chris Evans", "Robert Downey Jr.", "Chris Hemsworth", "Mark Ruffalo"],
+        "options": [
+          "Chris Evans",
+          "Robert Downey Jr.",
+          "Chris Hemsworth",
+          "Mark Ruffalo"
+        ],
         "correct": 1,
         "time": 10
       },
       {
         "q": "What year was the first Harry Potter book published?",
-        "options": ["1995", "1996", "1997", "1998"],
+        "options": [
+          "1995",
+          "1996",
+          "1997",
+          "1998"
+        ],
         "correct": 2,
         "time": 12
       },
       {
         "q": "Which band sang 'Bohemian Rhapsody'?",
-        "options": ["The Beatles", "Led Zeppelin", "Queen", "Pink Floyd"],
+        "options": [
+          "The Beatles",
+          "Led Zeppelin",
+          "Queen",
+          "Pink Floyd"
+        ],
         "correct": 2,
         "time": 10
       },
       {
         "q": "Who is known as the King of Pop?",
-        "options": ["Elvis Presley", "Michael Jackson", "Prince", "Madonna"],
+        "options": [
+          "Elvis Presley",
+          "Michael Jackson",
+          "Prince",
+          "Madonna"
+        ],
         "correct": 1,
         "time": 10
       },
       {
         "q": "What is the name of the coffee shop in the TV show 'Friends'?",
-        "options": ["Central Perk", "Java Joe's", "Coffee Bean", "Starbucks"],
+        "options": [
+          "Central Perk",
+          "Java Joe's",
+          "Coffee Bean",
+          "Starbucks"
+        ],
         "correct": 0,
         "time": 10
       },
       {
         "q": "Which actor played Jack in the movie 'Titanic'?",
-        "options": ["Brad Pitt", "Leonardo DiCaprio", "Tom Cruise", "Johnny Depp"],
+        "options": [
+          "Brad Pitt",
+          "Leonardo DiCaprio",
+          "Tom Cruise",
+          "Johnny Depp"
+        ],
         "correct": 1,
         "time": 10
       }
@@ -253,50 +453,1644 @@
     "technology": [
       {
         "q": "Who founded Microsoft?",
-        "options": ["Steve Jobs", "Bill Gates", "Mark Zuckerberg", "Elon Musk"],
+        "options": [
+          "Steve Jobs",
+          "Bill Gates",
+          "Mark Zuckerberg",
+          "Elon Musk"
+        ],
         "correct": 1,
         "time": 10
       },
       {
         "q": "What does CPU stand for?",
-        "options": ["Central Processing Unit", "Computer Personal Unit", "Central Program Utility", "Computer Processing Utility"],
+        "options": [
+          "Central Processing Unit",
+          "Computer Personal Unit",
+          "Central Program Utility",
+          "Computer Processing Utility"
+        ],
         "correct": 0,
         "time": 12
       },
       {
         "q": "What year was the first iPhone released?",
-        "options": ["2005", "2006", "2007", "2008"],
+        "options": [
+          "2005",
+          "2006",
+          "2007",
+          "2008"
+        ],
         "correct": 2,
         "time": 12
       },
       {
         "q": "What does HTML stand for?",
-        "options": ["Hypertext Markup Language", "High Tech Modern Language", "Home Tool Markup Language", "Hyperlinks and Text Markup Language"],
+        "options": [
+          "Hypertext Markup Language",
+          "High Tech Modern Language",
+          "Home Tool Markup Language",
+          "Hyperlinks and Text Markup Language"
+        ],
         "correct": 0,
         "time": 15
       },
       {
         "q": "Who is the founder of Tesla?",
-        "options": ["Jeff Bezos", "Elon Musk", "Bill Gates", "Steve Jobs"],
+        "options": [
+          "Jeff Bezos",
+          "Elon Musk",
+          "Bill Gates",
+          "Steve Jobs"
+        ],
         "correct": 1,
         "time": 10
       },
       {
         "q": "What does WWW stand for?",
-        "options": ["World Wide Web", "World Web Wide", "Web World Wide", "Wide World Web"],
+        "options": [
+          "World Wide Web",
+          "World Web Wide",
+          "Web World Wide",
+          "Wide World Web"
+        ],
         "correct": 0,
         "time": 10
       },
       {
         "q": "In what year was Google founded?",
-        "options": ["1996", "1997", "1998", "1999"],
+        "options": [
+          "1996",
+          "1997",
+          "1998",
+          "1999"
+        ],
         "correct": 2,
         "time": 12
       },
       {
         "q": "What does AI stand for?",
-        "options": ["Automated Intelligence", "Artificial Intelligence", "Advanced Interface", "Automatic Integration"],
+        "options": [
+          "Automated Intelligence",
+          "Artificial Intelligence",
+          "Advanced Interface",
+          "Automatic Integration"
+        ],
         "correct": 1,
+        "time": 10
+      }
+    ],
+    "music": [
+      {
+        "q": "Which band released the album 'Abbey Road'?",
+        "options": [
+          "The Rolling Stones",
+          "The Beatles",
+          "Led Zeppelin",
+          "Pink Floyd"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "What instrument does a drummer play?",
+        "options": [
+          "Guitar",
+          "Piano",
+          "Drums",
+          "Violin"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Who is known as the 'King of Pop'?",
+        "options": [
+          "Elvis Presley",
+          "Prince",
+          "Michael Jackson",
+          "Freddie Mercury"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Which singer released 'Bad Guy' in 2019?",
+        "options": [
+          "Ariana Grande",
+          "Billie Eilish",
+          "Dua Lipa",
+          "Taylor Swift"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "How many strings does a standard guitar have?",
+        "options": [
+          "4",
+          "5",
+          "6",
+          "8"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Which country is K-Pop from?",
+        "options": [
+          "Japan",
+          "China",
+          "South Korea",
+          "Thailand"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Who sang 'Shape of You'?",
+        "options": [
+          "Justin Bieber",
+          "Ed Sheeran",
+          "Bruno Mars",
+          "The Weeknd"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "What genre is associated with Bob Marley?",
+        "options": [
+          "Jazz",
+          "Reggae",
+          "Blues",
+          "Rock"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Which artist is known for 'Bohemian Rhapsody'?",
+        "options": [
+          "Queen",
+          "ABBA",
+          "Elton John",
+          "David Bowie"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "What is the highest female singing voice called?",
+        "options": [
+          "Alto",
+          "Tenor",
+          "Soprano",
+          "Bass"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Which rapper released 'Lose Yourself'?",
+        "options": [
+          "Jay-Z",
+          "Kanye West",
+          "Eminem",
+          "Drake"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "What musical instrument has 88 keys?",
+        "options": [
+          "Organ",
+          "Piano",
+          "Accordion",
+          "Harpsichord"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Which band performed 'Smells Like Teen Spirit'?",
+        "options": [
+          "Pearl Jam",
+          "Nirvana",
+          "Soundgarden",
+          "Alice in Chains"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Who is Beyoncé's husband?",
+        "options": [
+          "Kanye West",
+          "Jay-Z",
+          "Drake",
+          "Pharrell Williams"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "What does 'BPM' stand for in music?",
+        "options": [
+          "Beats Per Minute",
+          "Bass Power Mode",
+          "Band Performance Mix",
+          "Basic Piano Method"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "Which singer is known as 'The Material Girl'?",
+        "options": [
+          "Cyndi Lauper",
+          "Madonna",
+          "Whitney Houston",
+          "Janet Jackson"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "What instrument is Yo-Yo Ma famous for playing?",
+        "options": [
+          "Violin",
+          "Cello",
+          "Viola",
+          "Double Bass"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Which band sang 'Sweet Child O' Mine'?",
+        "options": [
+          "Aerosmith",
+          "Bon Jovi",
+          "Guns N' Roses",
+          "Def Leppard"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Who released the album 'Thriller'?",
+        "options": [
+          "Prince",
+          "Michael Jackson",
+          "Stevie Wonder",
+          "Lionel Richie"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "What is Taylor Swift's first country single?",
+        "options": [
+          "Love Story",
+          "Tim McGraw",
+          "Teardrops on My Guitar",
+          "Our Song"
+        ],
+        "correct": 1,
+        "time": 10
+      }
+    ],
+    "food": [
+      {
+        "q": "What country is sushi originally from?",
+        "options": [
+          "China",
+          "Korea",
+          "Japan",
+          "Thailand"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "What is the main ingredient in guacamole?",
+        "options": [
+          "Tomato",
+          "Avocado",
+          "Onion",
+          "Pepper"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Which fruit is known as the 'king of fruits'?",
+        "options": [
+          "Mango",
+          "Durian",
+          "Pineapple",
+          "Jackfruit"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "What type of pasta is shaped like little ears?",
+        "options": [
+          "Penne",
+          "Fusilli",
+          "Orecchiette",
+          "Farfalle"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "What is the most consumed beverage in the world after water?",
+        "options": [
+          "Coffee",
+          "Tea",
+          "Beer",
+          "Milk"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Which country is the origin of croissants?",
+        "options": [
+          "France",
+          "Austria",
+          "Italy",
+          "Belgium"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "What gives bread its holes?",
+        "options": [
+          "Baking soda",
+          "Yeast",
+          "Salt",
+          "Sugar"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "What is tofu made from?",
+        "options": [
+          "Rice",
+          "Wheat",
+          "Soybeans",
+          "Corn"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Which spice is the most expensive in the world by weight?",
+        "options": [
+          "Vanilla",
+          "Saffron",
+          "Cardamom",
+          "Cinnamon"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "What is the main ingredient in hummus?",
+        "options": [
+          "Lentils",
+          "Chickpeas",
+          "Black beans",
+          "Kidney beans"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Which cheese is traditionally used on pizza?",
+        "options": [
+          "Cheddar",
+          "Parmesan",
+          "Mozzarella",
+          "Gouda"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "What country is paella from?",
+        "options": [
+          "Mexico",
+          "Portugal",
+          "Spain",
+          "Italy"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "What is the hottest chili pepper in the world?",
+        "options": [
+          "Ghost Pepper",
+          "Habanero",
+          "Carolina Reaper",
+          "Jalapeño"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Which nut is used to make marzipan?",
+        "options": [
+          "Walnut",
+          "Cashew",
+          "Almond",
+          "Pistachio"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "What is the French term for a chef's tall white hat?",
+        "options": [
+          "Chapeau",
+          "Toque",
+          "Bonnet",
+          "Casque"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Which vitamin is found in abundance in oranges?",
+        "options": [
+          "Vitamin A",
+          "Vitamin B",
+          "Vitamin C",
+          "Vitamin D"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "What is the main ingredient in falafel?",
+        "options": [
+          "Lentils",
+          "Chickpeas",
+          "Meat",
+          "Rice"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Which country invented ice cream?",
+        "options": [
+          "Italy",
+          "France",
+          "China",
+          "USA"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "What type of food is Brie?",
+        "options": [
+          "Bread",
+          "Cheese",
+          "Meat",
+          "Vegetable"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "What is wasabi made from?",
+        "options": [
+          "A root vegetable",
+          "Seaweed",
+          "Fish",
+          "Soybean"
+        ],
+        "correct": 0,
+        "time": 10
+      }
+    ],
+    "tv_shows": [
+      {
+        "q": "What is the name of the coffee shop in 'Friends'?",
+        "options": [
+          "Central Park",
+          "Central Perk",
+          "Coffee Central",
+          "The Coffee House"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "In which fictional city does 'The Simpsons' take place?",
+        "options": [
+          "Shelbyville",
+          "Springfield",
+          "Quahog",
+          "South Park"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "What is Walter White's alias in 'Breaking Bad'?",
+        "options": [
+          "Heisenberg",
+          "The Cook",
+          "Blue Sky",
+          "Mr. White"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "Which TV show features dragons and the Iron Throne?",
+        "options": [
+          "The Witcher",
+          "House of the Dragon",
+          "Game of Thrones",
+          "Lord of the Rings"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "What is the name of the main character in 'The Office' (US)?",
+        "options": [
+          "Dwight Schrute",
+          "Jim Halpert",
+          "Michael Scott",
+          "Andy Bernard"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Which show is set in Hawkins, Indiana?",
+        "options": [
+          "Stranger Things",
+          "Supernatural",
+          "The X-Files",
+          "Dark"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "What is the longest-running animated TV show in the US?",
+        "options": [
+          "Family Guy",
+          "South Park",
+          "The Simpsons",
+          "SpongeBob SquarePants"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "In 'Squid Game', what is the prize money?",
+        "options": [
+          "45.6 billion won",
+          "10 billion won",
+          "100 million won",
+          "1 trillion won"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "Which hospital is the setting for 'Grey's Anatomy'?",
+        "options": [
+          "Seattle Grace",
+          "Princeton-Plainsboro",
+          "Sacred Heart",
+          "County General"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "What is the name of the high school in 'Glee'?",
+        "options": [
+          "West Beverly High",
+          "McKinley High",
+          "Sunnydale High",
+          "Tree Hill High"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Which show features a chemistry teacher turned drug dealer?",
+        "options": [
+          "Ozark",
+          "Narcos",
+          "Breaking Bad",
+          "Weeds"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "What is Baby Yoda's real name in 'The Mandalorian'?",
+        "options": [
+          "Yoda Jr.",
+          "Grogu",
+          "Din",
+          "Kuiil"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Which reality show has tribes competing for a million dollars?",
+        "options": [
+          "Big Brother",
+          "The Amazing Race",
+          "Survivor",
+          "Fear Factor"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "In 'The Crown', which royal family is portrayed?",
+        "options": [
+          "Spanish",
+          "British",
+          "Swedish",
+          "Dutch"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "What color is SpongeBob SquarePants?",
+        "options": [
+          "Blue",
+          "Yellow",
+          "Green",
+          "Orange"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Which show features the Dunder Mifflin Paper Company?",
+        "options": [
+          "Mad Men",
+          "The Office",
+          "Silicon Valley",
+          "Suits"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "In 'Money Heist', what city name does the Professor use?",
+        "options": [
+          "Tokyo",
+          "Berlin",
+          "Moscow",
+          "All of the above"
+        ],
+        "correct": 3,
+        "time": 10
+      },
+      {
+        "q": "What is the name of Sheldon's catchphrase in 'The Big Bang Theory'?",
+        "options": [
+          "Bazinga!",
+          "Cowabunga!",
+          "Eureka!",
+          "Geronimo!"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "Which show is about a women's prison?",
+        "options": [
+          "Prison Break",
+          "Oz",
+          "Orange Is the New Black",
+          "Wentworth"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "What year did 'Friends' first premiere?",
+        "options": [
+          "1992",
+          "1994",
+          "1996",
+          "1998"
+        ],
+        "correct": 1,
+        "time": 10
+      }
+    ],
+    "anime": [
+      {
+        "q": "In 'Naruto', what is the name of the forbidden jutsu that Naruto learns from the Scroll of Seals?",
+        "options": [
+          "Shadow Clone Jutsu",
+          "Multi Shadow Clone Jutsu",
+          "Rasengan",
+          "Sexy Jutsu"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "In 'Death Note', how many days after writing a name does the victim die if no cause is specified?",
+        "options": [
+          "23 days",
+          "40 seconds",
+          "6 minutes 40 seconds",
+          "13 days"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "What is the name of the 10th opening song of 'One Piece'?",
+        "options": [
+          "We Are!",
+          "Share the World",
+          "We Go!",
+          "Wake Up!"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "In 'Dragon Ball Z', what is Vegeta's power level when he first arrives on Earth?",
+        "options": [
+          "8,000",
+          "18,000",
+          "24,000",
+          "30,000"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "In 'Attack on Titan', what is the name of Eren's founding Titan form in the final arc?",
+        "options": [
+          "War Hammer Titan",
+          "Colossal Titan",
+          "Founding Titan",
+          "Attack Titan"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "How many times does Subaru die in Season 1 of 'Re:Zero'?",
+        "options": [
+          "7",
+          "9",
+          "11",
+          "13"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "In 'My Hero Academia', what percentage of One For All could Deku initially use without breaking his bones?",
+        "options": [
+          "5%",
+          "8%",
+          "10%",
+          "15%"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "In 'Demon Slayer', what is the name of Muzan's first demon creation?",
+        "options": [
+          "Kokushibo",
+          "Tamayo",
+          "Upper Moon One",
+          "The First Demon"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "In 'Fullmetal Alchemist: Brotherhood', what is equivalent exchange's actual law number in alchemy?",
+        "options": [
+          "First Law",
+          "Second Law",
+          "Third Law",
+          "There is no numbered law"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "What is the name of the voice actor who plays Goku in the Japanese version of 'Dragon Ball'?",
+        "options": [
+          "Masako Nozawa",
+          "Ryo Horikawa",
+          "Toshio Furukawa",
+          "Mayumi Tanaka"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "In 'Hunter x Hunter', what is Killua's Nen type?",
+        "options": [
+          "Enhancer",
+          "Transmuter",
+          "Emitter",
+          "Conjurer"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "In 'One Piece', what is the name of the sword that Zoro received from Kuina?",
+        "options": [
+          "Shusui",
+          "Sandai Kitetsu",
+          "Wado Ichimonji",
+          "Enma"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "In 'Jujutsu Kaisen', what grade is Yuji Itadori officially registered as?",
+        "options": [
+          "Grade 1",
+          "Grade 2",
+          "Grade 3",
+          "Grade 4"
+        ],
+        "correct": 3,
+        "time": 10
+      },
+      {
+        "q": "In 'Naruto Shippuden', how many tails does the Ten-Tails actually have?",
+        "options": [
+          "1",
+          "9",
+          "10",
+          "0"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "In 'Bleach', what is the name of Aizen's Zanpakuto?",
+        "options": [
+          "Kyoka Suigetsu",
+          "Shinso",
+          "Wabisuke",
+          "Suzumushi"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "In 'Spy x Family', what is Anya's actual age when she claims to be 6?",
+        "options": [
+          "3",
+          "4",
+          "5",
+          "Unknown"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "In 'Tokyo Ghoul', what is Kaneki's identification number as a ghoul?",
+        "options": [
+          "Eyepatch",
+          "SS Rate",
+          "240",
+          "One-Eyed King"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "In 'Sword Art Online', how many floors does Aincrad have?",
+        "options": [
+          "50",
+          "75",
+          "100",
+          "120"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "In 'Chainsaw Man', what devil does Makima have a contract with?",
+        "options": [
+          "Gun Devil",
+          "Control Devil",
+          "Darkness Devil",
+          "She is the Control Devil"
+        ],
+        "correct": 3,
+        "time": 10
+      },
+      {
+        "q": "In 'Mob Psycho 100', what percentage does Mob need to reach before he loses control?",
+        "options": [
+          "50%",
+          "75%",
+          "100%",
+          "???%"
+        ],
+        "correct": 2,
+        "time": 10
+      }
+    ],
+    "riddles": [
+      {
+        "q": "I have cities, but no houses. I have mountains, but no trees. I have water, but no fish. What am I?",
+        "options": [
+          "A globe",
+          "A map",
+          "A painting",
+          "A dream"
+        ],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "What has hands but can't clap?",
+        "options": [
+          "A mannequin",
+          "A clock",
+          "A statue",
+          "A zombie"
+        ],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "I'm tall when I'm young and short when I'm old. What am I?",
+        "options": [
+          "A human",
+          "A candle",
+          "A tree",
+          "A pencil"
+        ],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "What can travel around the world while staying in a corner?",
+        "options": [
+          "A spider",
+          "A stamp",
+          "WiFi signal",
+          "A lazy cat"
+        ],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "What has a head and a tail but no body?",
+        "options": [
+          "A snake",
+          "A coin",
+          "A ghost",
+          "My ex"
+        ],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "I have teeth but I can't bite. What am I?",
+        "options": [
+          "A grandpa",
+          "A comb",
+          "A saw",
+          "A zipper"
+        ],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "What gets wetter the more it dries?",
+        "options": [
+          "A sponge",
+          "A towel",
+          "Your clothes in the rain",
+          "A lie"
+        ],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "What can you catch but never throw?",
+        "options": [
+          "A baseball",
+          "A cold",
+          "Feelings",
+          "Your boss in a lie"
+        ],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "What has legs but doesn't walk?",
+        "options": [
+          "A lazy person",
+          "A table",
+          "A dead spider",
+          "Monday motivation"
+        ],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "I speak without a mouth and hear without ears. I have no body, but I come alive with the wind. What am I?",
+        "options": [
+          "A ghost",
+          "An echo",
+          "A whisper",
+          "My internet connection"
+        ],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "What has keys but no locks?",
+        "options": [
+          "A keyboard",
+          "A piano",
+          "A janitor",
+          "Both A and B"
+        ],
+        "correct": 3,
+        "time": 15
+      },
+      {
+        "q": "The more you take, the more you leave behind. What am I?",
+        "options": [
+          "Money from your wallet",
+          "Footsteps",
+          "Regrets",
+          "Snacks from the fridge"
+        ],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "What can fill a room but takes up no space?",
+        "options": [
+          "Ego",
+          "Light",
+          "Awkward silence",
+          "Your mom's disappointment"
+        ],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "I have a neck but no head. What am I?",
+        "options": [
+          "A bottle",
+          "A shirt",
+          "A guitar",
+          "All of the above"
+        ],
+        "correct": 3,
+        "time": 15
+      },
+      {
+        "q": "What goes up but never comes down?",
+        "options": [
+          "A balloon",
+          "Your age",
+          "Gas prices",
+          "Both B and C"
+        ],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "What has one eye but can't see?",
+        "options": [
+          "A pirate",
+          "A needle",
+          "A potato",
+          "A cyclops with cataracts"
+        ],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "What can run but never walks, has a mouth but never talks?",
+        "options": [
+          "A politician",
+          "A river",
+          "A nose",
+          "My refrigerator"
+        ],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "What breaks but never falls, and what falls but never breaks?",
+        "options": [
+          "Heart and tears",
+          "Day and night",
+          "Promises and dreams",
+          "My WiFi and my hopes"
+        ],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "I can be cracked, made, told, and played. What am I?",
+        "options": [
+          "An egg",
+          "A joke",
+          "A record",
+          "Your alibi"
+        ],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "What has words but never speaks?",
+        "options": [
+          "A mime",
+          "A book",
+          "A shy person",
+          "Terms and conditions"
+        ],
+        "correct": 1,
+        "time": 15
+      }
+    ],
+    "pop_culture_2010s": [
+      {
+        "q": "What color was 'The Dress' that broke the internet in 2015?",
+        "options": [
+          "Black and Blue / White and Gold",
+          "Red and Black / Pink and White",
+          "Green and Brown / Blue and Gray",
+          "Purple and Black / Pink and Gray"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "Which song's dance move 'Gangnam Style' became a global phenomenon in 2012?",
+        "options": [
+          "BTS",
+          "PSY",
+          "BigBang",
+          "2NE1"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "What was the name of the app that let you make 6-second looping videos before it shut down?",
+        "options": [
+          "TikTok",
+          "Vine",
+          "Snapchat",
+          "Periscope"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Which celebrity 'broke the internet' with her Paper Magazine cover in 2014?",
+        "options": [
+          "Beyoncé",
+          "Nicki Minaj",
+          "Kim Kardashian",
+          "Rihanna"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "What challenge involved dumping ice water on yourself for ALS awareness in 2014?",
+        "options": [
+          "Ice Bucket Challenge",
+          "Cold Water Challenge",
+          "Freeze Challenge",
+          "ALS Splash Challenge"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "Which Netflix documentary about a murder case became a cultural phenomenon in 2015?",
+        "options": [
+          "The Jinx",
+          "Making a Murderer",
+          "Wild Wild Country",
+          "Tiger King"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "What was the name of the killer clown craze that terrorized people in 2016?",
+        "options": [
+          "Clown Apocalypse",
+          "Clown Sightings",
+          "Creepy Clown Epidemic",
+          "Clown Panic"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Which game caused people to walk into traffic and off cliffs in 2016?",
+        "options": [
+          "Candy Crush",
+          "Pokémon GO",
+          "Clash of Clans",
+          "Angry Birds"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "What phrase did Charlie Sheen make famous during his 2011 meltdown?",
+        "options": [
+          "YOLO",
+          "Winning",
+          "Stay Woke",
+          "No Cap"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Which Snapchat filter that swapped your face with another person went viral in 2016?",
+        "options": [
+          "Dog Filter",
+          "Face Swap",
+          "Rainbow Vomit",
+          "Flower Crown"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "What was the name of the viral video where a mom reacts to a Chewbacca mask in 2016?",
+        "options": [
+          "Chewbacca Lady",
+          "Chewbacca Mom",
+          "Happy Wookiee",
+          "Mask Mom"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Which artist's 'Lemonade' visual album sparked 'Who is Becky?' theories in 2016?",
+        "options": [
+          "Rihanna",
+          "Taylor Swift",
+          "Beyoncé",
+          "Adele"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "What dance move did Drake popularize in his 'Hotline Bling' video in 2015?",
+        "options": [
+          "The Dab",
+          "The Drake Dance",
+          "The Milly Rock",
+          "The Shoot"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Which fast food chain's tweet 'What do y'all call this?' about IHOP went viral in 2018?",
+        "options": [
+          "Burger King",
+          "Wendy's",
+          "McDonald's",
+          "Taco Bell"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "What phrase from Nicki Minaj became a meme format in 2018 meaning 'the real question is'?",
+        "options": [
+          "Anaconda who?",
+          "What's good, Miley?",
+          "But did you die?",
+          "The question is..."
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Which hairstyle did Miley Cyrus debut at the 2013 VMAs during her controversial performance?",
+        "options": [
+          "Shaved head",
+          "Blonde pixie cut",
+          "Blue bob",
+          "Dreadlocks"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "What was the name of the Fyre Festival disaster documentary released in 2019?",
+        "options": [
+          "Fyre Fraud",
+          "Fyre: The Greatest Party That Never Happened",
+          "Both A and B",
+          "Festival Fail"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Which YouTuber's feud with PewDiePie for most subscribers dominated 2018-2019?",
+        "options": [
+          "MrBeast",
+          "T-Series",
+          "Logan Paul",
+          "Shane Dawson"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "What was the name of the mannequin challenge trend where people froze in place in 2016?",
+        "options": [
+          "Freeze Frame Challenge",
+          "Mannequin Challenge",
+          "Statue Challenge",
+          "Frozen Challenge"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Which meme featured a woman yelling at a confused white cat at a dinner table in 2019?",
+        "options": [
+          "Woman Yelling at Cat",
+          "Angry Lady and Smudge",
+          "Table Cat",
+          "Dinner Argument Cat"
+        ],
+        "correct": 0,
+        "time": 10
+      }
+    ],
+    "pop_culture_morocco": [
+      {
+        "q": "Which Moroccan football player became a star at the 2022 World Cup and plays for PSG?",
+        "options": [
+          "Hakim Ziyech",
+          "Achraf Hakimi",
+          "Youssef En-Nesyri",
+          "Sofiane Boufal"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "What was the name of Morocco's historic achievement at the 2022 FIFA World Cup?",
+        "options": [
+          "Winning the tournament",
+          "First African team in semi-finals",
+          "First Arab team to win a match",
+          "Scoring 10 goals"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Which Moroccan singer is known as the 'King of Raï' and sang 'Didi'?",
+        "options": [
+          "Saad Lamjarred",
+          "Cheb Khaled",
+          "Faudel",
+          "Cheb Mami"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Which Moroccan city hosts the famous Mawazine music festival?",
+        "options": [
+          "Casablanca",
+          "Marrakech",
+          "Rabat",
+          "Tangier"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Which Moroccan singer's song 'LM3ALLEM' has over 1 billion views on YouTube?",
+        "options": [
+          "Douzi",
+          "Saad Lamjarred",
+          "Muslim",
+          "Hatim Ammor"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "What is the name of the traditional Moroccan TV series genre often aired during Ramadan?",
+        "options": [
+          "Mosalsal",
+          "Sitcom Maghrebi",
+          "Fawazir",
+          "Hakawati"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "Which Moroccan rapper is known for hits like 'Mabghitch' and 'Hayda'?",
+        "options": [
+          "Dizzy DROS",
+          "Muslim",
+          "ElGrandeToto",
+          "7liwa"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Which Moroccan actress starred in the French film 'Amélie' and 'Coco Before Chanel'?",
+        "options": [
+          "Leila Bekhti",
+          "Sofia Essaïdi",
+          "Audrey Tautou",
+          "Lubna Azabal"
+        ],
+        "correct": 3,
+        "time": 10
+      },
+      {
+        "q": "What is the name of the famous Moroccan comedy duo known for their Ramadan sketches?",
+        "options": [
+          "Duo Hamza",
+          "Fokaha",
+          "Daoudi et Bziz",
+          "Comedia"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Which Moroccan football club has won the most Botola Pro championships?",
+        "options": [
+          "Raja Casablanca",
+          "Wydad Casablanca",
+          "FAR Rabat",
+          "MAS Fez"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Which Moroccan singer represented Morocco at Eurovision with the song 'Comme Toi'?",
+        "options": [
+          "Samira Said",
+          "Sofia Essaïdi",
+          "Latifa Raafat",
+          "None - Morocco never competed"
+        ],
+        "correct": 3,
+        "time": 10
+      },
+      {
+        "q": "What is the name of Morocco's biggest YouTube star known for comedy videos?",
+        "options": [
+          "Amine Raghib",
+          "Yassine Jarram",
+          "Abdellah Abujad",
+          "Anas Tina"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "Which Moroccan city is known as the 'Hollywood of Africa' for its film studios?",
+        "options": [
+          "Casablanca",
+          "Ouarzazate",
+          "Marrakech",
+          "Tangier"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Which Moroccan designer is known internationally for his caftans and dressed celebrities like Beyoncé?",
+        "options": [
+          "Zuhair Murad",
+          "Elie Saab",
+          "Amine Bendriouich",
+          "Yahya"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "What is the name of the viral Moroccan wedding dance that took over social media?",
+        "options": [
+          "Chaabi",
+          "Reggada",
+          "Gnawa",
+          "Ahidous"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Which Moroccan TV channel is known for broadcasting the most popular Ramadan series?",
+        "options": [
+          "2M",
+          "Al Aoula",
+          "Medi1 TV",
+          "All of them compete"
+        ],
+        "correct": 3,
+        "time": 10
+      },
+      {
+        "q": "Which Moroccan goalkeeper became famous for his heroics at the 2022 World Cup?",
+        "options": [
+          "Munir Mohamedi",
+          "Yassine Bounou (Bono)",
+          "Ahmed Reda Tagnaouti",
+          "Anas Zniti"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "What is the name of the famous Casablanca derby between the two biggest clubs?",
+        "options": [
+          "El Clasico",
+          "Derby de Casa",
+          "Derbi Casablanca",
+          "The Moroccan Derby"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Which Moroccan artist collaborated with French Montana on multiple tracks?",
+        "options": [
+          "ElGrandeToto",
+          "7liwa",
+          "Manal",
+          "Saad Lamjarred"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "Which Moroccan phrase became a viral meme meaning 'What's wrong with you?'?",
+        "options": [
+          "Wach kayn chi mochkil?",
+          "Chnou had l'khbar?",
+          "Sir t9awed",
+          "Malk a sat?"
+        ],
+        "correct": 3,
         "time": 10
       }
     ]
@@ -305,49 +2099,89 @@
     "science": [
       {
         "q": "Quel est le symbole chimique de l'or?",
-        "options": ["Au", "Ag", "Fe", "Cu"],
+        "options": [
+          "Au",
+          "Ag",
+          "Fe",
+          "Cu"
+        ],
         "correct": 0,
         "time": 10
       },
       {
         "q": "Quelle planète est connue comme la planète rouge?",
-        "options": ["Vénus", "Mars", "Jupiter", "Saturne"],
+        "options": [
+          "Vénus",
+          "Mars",
+          "Jupiter",
+          "Saturne"
+        ],
         "correct": 1,
         "time": 10
       },
       {
         "q": "Quelle est la vitesse de la lumière dans le vide?",
-        "options": ["299 792 km/s", "150 000 km/s", "500 000 km/s", "100 000 km/s"],
+        "options": [
+          "299 792 km/s",
+          "150 000 km/s",
+          "500 000 km/s",
+          "100 000 km/s"
+        ],
         "correct": 0,
         "time": 15
       },
       {
         "q": "Quel est le plus grand organe du corps humain?",
-        "options": ["Cœur", "Cerveau", "Foie", "Peau"],
+        "options": [
+          "Cœur",
+          "Cerveau",
+          "Foie",
+          "Peau"
+        ],
         "correct": 3,
         "time": 10
       },
       {
         "q": "Quel est le processus par lequel les plantes fabriquent leur nourriture?",
-        "options": ["Respiration", "Photosynthèse", "Digestion", "Fermentation"],
+        "options": [
+          "Respiration",
+          "Photosynthèse",
+          "Digestion",
+          "Fermentation"
+        ],
         "correct": 1,
         "time": 10
       },
       {
         "q": "Combien d'os y a-t-il dans le corps humain adulte?",
-        "options": ["206", "186", "256", "306"],
+        "options": [
+          "206",
+          "186",
+          "256",
+          "306"
+        ],
         "correct": 0,
         "time": 12
       },
       {
         "q": "Quelle est la substance naturelle la plus dure sur Terre?",
-        "options": ["Or", "Fer", "Diamant", "Platine"],
+        "options": [
+          "Or",
+          "Fer",
+          "Diamant",
+          "Platine"
+        ],
         "correct": 2,
         "time": 10
       },
       {
         "q": "Quel gaz les plantes absorbent-elles de l'atmosphère?",
-        "options": ["Oxygène", "Azote", "Dioxyde de carbone", "Hydrogène"],
+        "options": [
+          "Oxygène",
+          "Azote",
+          "Dioxyde de carbone",
+          "Hydrogène"
+        ],
         "correct": 2,
         "time": 10
       }
@@ -355,49 +2189,89 @@
     "history": [
       {
         "q": "En quelle année la Seconde Guerre mondiale s'est-elle terminée?",
-        "options": ["1943", "1944", "1945", "1946"],
+        "options": [
+          "1943",
+          "1944",
+          "1945",
+          "1946"
+        ],
         "correct": 2,
         "time": 10
       },
       {
         "q": "Qui était le premier président des États-Unis?",
-        "options": ["Thomas Jefferson", "George Washington", "John Adams", "Benjamin Franklin"],
+        "options": [
+          "Thomas Jefferson",
+          "George Washington",
+          "John Adams",
+          "Benjamin Franklin"
+        ],
         "correct": 1,
         "time": 10
       },
       {
         "q": "En quelle année le mur de Berlin est-il tombé?",
-        "options": ["1987", "1988", "1989", "1990"],
+        "options": [
+          "1987",
+          "1988",
+          "1989",
+          "1990"
+        ],
         "correct": 2,
         "time": 12
       },
       {
         "q": "Qui a été la première personne à marcher sur la Lune?",
-        "options": ["Buzz Aldrin", "Neil Armstrong", "Youri Gagarine", "John Glenn"],
+        "options": [
+          "Buzz Aldrin",
+          "Neil Armstrong",
+          "Youri Gagarine",
+          "John Glenn"
+        ],
         "correct": 1,
         "time": 10
       },
       {
         "q": "En quelle année le Titanic a-t-il coulé?",
-        "options": ["1910", "1911", "1912", "1913"],
+        "options": [
+          "1910",
+          "1911",
+          "1912",
+          "1913"
+        ],
         "correct": 2,
         "time": 10
       },
       {
         "q": "Qui a peint la Joconde?",
-        "options": ["Michel-Ange", "Léonard de Vinci", "Raphaël", "Donatello"],
+        "options": [
+          "Michel-Ange",
+          "Léonard de Vinci",
+          "Raphaël",
+          "Donatello"
+        ],
         "correct": 1,
         "time": 10
       },
       {
         "q": "Quelle merveille antique se trouvait à Alexandrie?",
-        "options": ["Jardins suspendus", "Colosse", "Phare", "Mausolée"],
+        "options": [
+          "Jardins suspendus",
+          "Colosse",
+          "Phare",
+          "Mausolée"
+        ],
         "correct": 2,
         "time": 12
       },
       {
         "q": "Qui a découvert l'Amérique en 1492?",
-        "options": ["Amerigo Vespucci", "Christophe Colomb", "Ferdinand Magellan", "Vasco de Gama"],
+        "options": [
+          "Amerigo Vespucci",
+          "Christophe Colomb",
+          "Ferdinand Magellan",
+          "Vasco de Gama"
+        ],
         "correct": 1,
         "time": 10
       }
@@ -405,49 +2279,89 @@
     "geography": [
       {
         "q": "Quelle est la capitale de la France?",
-        "options": ["Londres", "Berlin", "Paris", "Madrid"],
+        "options": [
+          "Londres",
+          "Berlin",
+          "Paris",
+          "Madrid"
+        ],
         "correct": 2,
         "time": 10
       },
       {
         "q": "Quel est le plus grand océan de la Terre?",
-        "options": ["Océan Atlantique", "Océan Indien", "Océan Arctique", "Océan Pacifique"],
+        "options": [
+          "Océan Atlantique",
+          "Océan Indien",
+          "Océan Arctique",
+          "Océan Pacifique"
+        ],
         "correct": 3,
         "time": 10
       },
       {
         "q": "Quel est le plus long fleuve du monde?",
-        "options": ["Amazone", "Nil", "Yangtsé", "Mississippi"],
+        "options": [
+          "Amazone",
+          "Nil",
+          "Yangtsé",
+          "Mississippi"
+        ],
         "correct": 1,
         "time": 12
       },
       {
         "q": "Quel pays a la plus grande population?",
-        "options": ["Inde", "États-Unis", "Chine", "Indonésie"],
+        "options": [
+          "Inde",
+          "États-Unis",
+          "Chine",
+          "Indonésie"
+        ],
         "correct": 2,
         "time": 10
       },
       {
         "q": "Quel est le plus petit pays du monde?",
-        "options": ["Monaco", "Vatican", "Saint-Marin", "Liechtenstein"],
+        "options": [
+          "Monaco",
+          "Vatican",
+          "Saint-Marin",
+          "Liechtenstein"
+        ],
         "correct": 1,
         "time": 12
       },
       {
         "q": "Quelle est la plus haute montagne du monde?",
-        "options": ["K2", "Kangchenjunga", "Mont Everest", "Lhotse"],
+        "options": [
+          "K2",
+          "Kangchenjunga",
+          "Mont Everest",
+          "Lhotse"
+        ],
         "correct": 2,
         "time": 10
       },
       {
         "q": "Sur quel continent se trouve le désert du Sahara?",
-        "options": ["Asie", "Australie", "Afrique", "Amérique du Sud"],
+        "options": [
+          "Asie",
+          "Australie",
+          "Afrique",
+          "Amérique du Sud"
+        ],
         "correct": 2,
         "time": 10
       },
       {
         "q": "Quelle est la capitale du Japon?",
-        "options": ["Séoul", "Pékin", "Tokyo", "Bangkok"],
+        "options": [
+          "Séoul",
+          "Pékin",
+          "Tokyo",
+          "Bangkok"
+        ],
         "correct": 2,
         "time": 10
       }
@@ -455,49 +2369,89 @@
     "sports": [
       {
         "q": "Combien de joueurs y a-t-il dans une équipe de football?",
-        "options": ["9", "10", "11", "12"],
+        "options": [
+          "9",
+          "10",
+          "11",
+          "12"
+        ],
         "correct": 2,
         "time": 10
       },
       {
         "q": "Dans quel sport effectue-t-on un smash?",
-        "options": ["Volleyball", "Basketball", "Tennis", "Baseball"],
+        "options": [
+          "Volleyball",
+          "Basketball",
+          "Tennis",
+          "Baseball"
+        ],
         "correct": 1,
         "time": 10
       },
       {
         "q": "Combien d'anneaux y a-t-il sur le drapeau olympique?",
-        "options": ["4", "5", "6", "7"],
+        "options": [
+          "4",
+          "5",
+          "6",
+          "7"
+        ],
         "correct": 1,
         "time": 10
       },
       {
         "q": "Quel est le score maximum dans un seul cadre de bowling?",
-        "options": ["100", "200", "300", "400"],
+        "options": [
+          "100",
+          "200",
+          "300",
+          "400"
+        ],
         "correct": 2,
         "time": 12
       },
       {
         "q": "Dans quel pays se sont tenus les premiers Jeux olympiques modernes?",
-        "options": ["France", "Grèce", "Italie", "Angleterre"],
+        "options": [
+          "France",
+          "Grèce",
+          "Italie",
+          "Angleterre"
+        ],
         "correct": 1,
         "time": 12
       },
       {
         "q": "Combien de tournois du Grand Chelem y a-t-il en tennis?",
-        "options": ["3", "4", "5", "6"],
+        "options": [
+          "3",
+          "4",
+          "5",
+          "6"
+        ],
         "correct": 1,
         "time": 10
       },
       {
         "q": "Quel sport est connu comme le 'Sport des Rois'?",
-        "options": ["Polo", "Course de chevaux", "Golf", "Cricket"],
+        "options": [
+          "Polo",
+          "Course de chevaux",
+          "Golf",
+          "Cricket"
+        ],
         "correct": 1,
         "time": 12
       },
       {
         "q": "Quelle est la longueur d'un marathon?",
-        "options": ["42,195 km", "32 km", "48 km", "40 km"],
+        "options": [
+          "42,195 km",
+          "32 km",
+          "48 km",
+          "40 km"
+        ],
         "correct": 0,
         "time": 12
       }
@@ -505,49 +2459,89 @@
     "entertainment": [
       {
         "q": "Qui a réalisé le film 'Titanic'?",
-        "options": ["Steven Spielberg", "James Cameron", "Martin Scorsese", "Christopher Nolan"],
+        "options": [
+          "Steven Spielberg",
+          "James Cameron",
+          "Martin Scorsese",
+          "Christopher Nolan"
+        ],
         "correct": 1,
         "time": 10
       },
       {
         "q": "Quel est le film le plus rentable de tous les temps?",
-        "options": ["Titanic", "Avatar", "Avengers: Endgame", "Star Wars"],
+        "options": [
+          "Titanic",
+          "Avatar",
+          "Avengers: Endgame",
+          "Star Wars"
+        ],
         "correct": 1,
         "time": 12
       },
       {
         "q": "Qui a joué Iron Man dans les films Marvel?",
-        "options": ["Chris Evans", "Robert Downey Jr.", "Chris Hemsworth", "Mark Ruffalo"],
+        "options": [
+          "Chris Evans",
+          "Robert Downey Jr.",
+          "Chris Hemsworth",
+          "Mark Ruffalo"
+        ],
         "correct": 1,
         "time": 10
       },
       {
         "q": "En quelle année le premier livre Harry Potter a-t-il été publié?",
-        "options": ["1995", "1996", "1997", "1998"],
+        "options": [
+          "1995",
+          "1996",
+          "1997",
+          "1998"
+        ],
         "correct": 2,
         "time": 12
       },
       {
         "q": "Quel groupe a chanté 'Bohemian Rhapsody'?",
-        "options": ["The Beatles", "Led Zeppelin", "Queen", "Pink Floyd"],
+        "options": [
+          "The Beatles",
+          "Led Zeppelin",
+          "Queen",
+          "Pink Floyd"
+        ],
         "correct": 2,
         "time": 10
       },
       {
         "q": "Qui est connu comme le Roi de la Pop?",
-        "options": ["Elvis Presley", "Michael Jackson", "Prince", "Madonna"],
+        "options": [
+          "Elvis Presley",
+          "Michael Jackson",
+          "Prince",
+          "Madonna"
+        ],
         "correct": 1,
         "time": 10
       },
       {
         "q": "Quel est le nom du café dans la série 'Friends'?",
-        "options": ["Central Perk", "Java Joe's", "Coffee Bean", "Starbucks"],
+        "options": [
+          "Central Perk",
+          "Java Joe's",
+          "Coffee Bean",
+          "Starbucks"
+        ],
         "correct": 0,
         "time": 10
       },
       {
         "q": "Quel acteur a joué Jack dans le film 'Titanic'?",
-        "options": ["Brad Pitt", "Leonardo DiCaprio", "Tom Cruise", "Johnny Depp"],
+        "options": [
+          "Brad Pitt",
+          "Leonardo DiCaprio",
+          "Tom Cruise",
+          "Johnny Depp"
+        ],
         "correct": 1,
         "time": 10
       }
@@ -555,50 +2549,1644 @@
     "technology": [
       {
         "q": "Qui a fondé Microsoft?",
-        "options": ["Steve Jobs", "Bill Gates", "Mark Zuckerberg", "Elon Musk"],
+        "options": [
+          "Steve Jobs",
+          "Bill Gates",
+          "Mark Zuckerberg",
+          "Elon Musk"
+        ],
         "correct": 1,
         "time": 10
       },
       {
         "q": "Que signifie CPU?",
-        "options": ["Unité centrale de traitement", "Unité personnelle d'ordinateur", "Utilitaire de programme central", "Utilitaire de traitement informatique"],
+        "options": [
+          "Unité centrale de traitement",
+          "Unité personnelle d'ordinateur",
+          "Utilitaire de programme central",
+          "Utilitaire de traitement informatique"
+        ],
         "correct": 0,
         "time": 12
       },
       {
         "q": "En quelle année le premier iPhone a-t-il été lancé?",
-        "options": ["2005", "2006", "2007", "2008"],
+        "options": [
+          "2005",
+          "2006",
+          "2007",
+          "2008"
+        ],
         "correct": 2,
         "time": 12
       },
       {
         "q": "Que signifie HTML?",
-        "options": ["Langage de balisage hypertexte", "Langage moderne de haute technologie", "Langage de balisage d'outils domestiques", "Langage de balisage d'hyperliens et de texte"],
+        "options": [
+          "Langage de balisage hypertexte",
+          "Langage moderne de haute technologie",
+          "Langage de balisage d'outils domestiques",
+          "Langage de balisage d'hyperliens et de texte"
+        ],
         "correct": 0,
         "time": 15
       },
       {
         "q": "Qui est le fondateur de Tesla?",
-        "options": ["Jeff Bezos", "Elon Musk", "Bill Gates", "Steve Jobs"],
+        "options": [
+          "Jeff Bezos",
+          "Elon Musk",
+          "Bill Gates",
+          "Steve Jobs"
+        ],
         "correct": 1,
         "time": 10
       },
       {
         "q": "Que signifie WWW?",
-        "options": ["World Wide Web", "Web World Wide", "Wide World Web", "Web Wide World"],
+        "options": [
+          "World Wide Web",
+          "Web World Wide",
+          "Wide World Web",
+          "Web Wide World"
+        ],
         "correct": 0,
         "time": 10
       },
       {
         "q": "En quelle année Google a-t-il été fondé?",
-        "options": ["1996", "1997", "1998", "1999"],
+        "options": [
+          "1996",
+          "1997",
+          "1998",
+          "1999"
+        ],
         "correct": 2,
         "time": 12
       },
       {
         "q": "Que signifie IA?",
-        "options": ["Intelligence automatisée", "Intelligence artificielle", "Interface avancée", "Intégration automatique"],
+        "options": [
+          "Intelligence automatisée",
+          "Intelligence artificielle",
+          "Interface avancée",
+          "Intégration automatique"
+        ],
         "correct": 1,
+        "time": 10
+      }
+    ],
+    "music": [
+      {
+        "q": "Quel groupe a sorti l'album 'Abbey Road'?",
+        "options": [
+          "The Rolling Stones",
+          "The Beatles",
+          "Led Zeppelin",
+          "Pink Floyd"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "De quel instrument joue un batteur?",
+        "options": [
+          "Guitare",
+          "Piano",
+          "Batterie",
+          "Violon"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Qui est connu comme le 'Roi de la Pop'?",
+        "options": [
+          "Elvis Presley",
+          "Prince",
+          "Michael Jackson",
+          "Freddie Mercury"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Quelle chanteuse a sorti 'Bad Guy' en 2019?",
+        "options": [
+          "Ariana Grande",
+          "Billie Eilish",
+          "Dua Lipa",
+          "Taylor Swift"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Combien de cordes a une guitare standard?",
+        "options": [
+          "4",
+          "5",
+          "6",
+          "8"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "De quel pays vient la K-Pop?",
+        "options": [
+          "Japon",
+          "Chine",
+          "Corée du Sud",
+          "Thaïlande"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Qui a chanté 'Shape of You'?",
+        "options": [
+          "Justin Bieber",
+          "Ed Sheeran",
+          "Bruno Mars",
+          "The Weeknd"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Quel genre musical est associé à Bob Marley?",
+        "options": [
+          "Jazz",
+          "Reggae",
+          "Blues",
+          "Rock"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Quel artiste est connu pour 'Bohemian Rhapsody'?",
+        "options": [
+          "Queen",
+          "ABBA",
+          "Elton John",
+          "David Bowie"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "Comment s'appelle la voix féminine la plus aiguë?",
+        "options": [
+          "Alto",
+          "Ténor",
+          "Soprano",
+          "Basse"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Quel rappeur a sorti 'Lose Yourself'?",
+        "options": [
+          "Jay-Z",
+          "Kanye West",
+          "Eminem",
+          "Drake"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Quel instrument de musique a 88 touches?",
+        "options": [
+          "Orgue",
+          "Piano",
+          "Accordéon",
+          "Clavecin"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Quel groupe a interprété 'Smells Like Teen Spirit'?",
+        "options": [
+          "Pearl Jam",
+          "Nirvana",
+          "Soundgarden",
+          "Alice in Chains"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Qui est le mari de Beyoncé?",
+        "options": [
+          "Kanye West",
+          "Jay-Z",
+          "Drake",
+          "Pharrell Williams"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Que signifie 'BPM' en musique?",
+        "options": [
+          "Battements Par Minute",
+          "Bass Power Mode",
+          "Band Performance Mix",
+          "Basic Piano Method"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "Quelle chanteuse est surnommée 'The Material Girl'?",
+        "options": [
+          "Cyndi Lauper",
+          "Madonna",
+          "Whitney Houston",
+          "Janet Jackson"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "De quel instrument Yo-Yo Ma est-il célèbre?",
+        "options": [
+          "Violon",
+          "Violoncelle",
+          "Alto",
+          "Contrebasse"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Quel groupe a chanté 'Sweet Child O' Mine'?",
+        "options": [
+          "Aerosmith",
+          "Bon Jovi",
+          "Guns N' Roses",
+          "Def Leppard"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Qui a sorti l'album 'Thriller'?",
+        "options": [
+          "Prince",
+          "Michael Jackson",
+          "Stevie Wonder",
+          "Lionel Richie"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Quel est le premier single country de Taylor Swift?",
+        "options": [
+          "Love Story",
+          "Tim McGraw",
+          "Teardrops on My Guitar",
+          "Our Song"
+        ],
+        "correct": 1,
+        "time": 10
+      }
+    ],
+    "food": [
+      {
+        "q": "De quel pays vient le sushi à l'origine?",
+        "options": [
+          "Chine",
+          "Corée",
+          "Japon",
+          "Thaïlande"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Quel est l'ingrédient principal du guacamole?",
+        "options": [
+          "Tomate",
+          "Avocat",
+          "Oignon",
+          "Poivron"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Quel fruit est connu comme le 'roi des fruits'?",
+        "options": [
+          "Mangue",
+          "Durian",
+          "Ananas",
+          "Jacquier"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Quel type de pâtes a la forme de petites oreilles?",
+        "options": [
+          "Penne",
+          "Fusilli",
+          "Orecchiette",
+          "Farfalle"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Quelle est la boisson la plus consommée au monde après l'eau?",
+        "options": [
+          "Café",
+          "Thé",
+          "Bière",
+          "Lait"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "De quel pays vient le croissant à l'origine?",
+        "options": [
+          "France",
+          "Autriche",
+          "Italie",
+          "Belgique"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Qu'est-ce qui donne au pain ses trous?",
+        "options": [
+          "Bicarbonate de soude",
+          "Levure",
+          "Sel",
+          "Sucre"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Avec quoi est fabriqué le tofu?",
+        "options": [
+          "Riz",
+          "Blé",
+          "Soja",
+          "Maïs"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Quelle épice est la plus chère au monde au poids?",
+        "options": [
+          "Vanille",
+          "Safran",
+          "Cardamome",
+          "Cannelle"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Quel est l'ingrédient principal du houmous?",
+        "options": [
+          "Lentilles",
+          "Pois chiches",
+          "Haricots noirs",
+          "Haricots rouges"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Quel fromage est traditionnellement utilisé sur la pizza?",
+        "options": [
+          "Cheddar",
+          "Parmesan",
+          "Mozzarella",
+          "Gouda"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "De quel pays vient la paella?",
+        "options": [
+          "Mexique",
+          "Portugal",
+          "Espagne",
+          "Italie"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Quel est le piment le plus fort au monde?",
+        "options": [
+          "Ghost Pepper",
+          "Habanero",
+          "Carolina Reaper",
+          "Jalapeño"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Quelle noix est utilisée pour faire la pâte d'amande?",
+        "options": [
+          "Noix",
+          "Noix de cajou",
+          "Amande",
+          "Pistache"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Comment appelle-t-on la haute toque blanche d'un chef?",
+        "options": [
+          "Chapeau",
+          "Toque",
+          "Bonnet",
+          "Casque"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Quelle vitamine trouve-t-on en abondance dans les oranges?",
+        "options": [
+          "Vitamine A",
+          "Vitamine B",
+          "Vitamine C",
+          "Vitamine D"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Quel est l'ingrédient principal des falafels?",
+        "options": [
+          "Lentilles",
+          "Pois chiches",
+          "Viande",
+          "Riz"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Quel pays a inventé la glace?",
+        "options": [
+          "Italie",
+          "France",
+          "Chine",
+          "États-Unis"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Quel type d'aliment est le Brie?",
+        "options": [
+          "Pain",
+          "Fromage",
+          "Viande",
+          "Légume"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Avec quoi est fabriqué le wasabi?",
+        "options": [
+          "Un légume-racine",
+          "Algue",
+          "Poisson",
+          "Soja"
+        ],
+        "correct": 0,
+        "time": 10
+      }
+    ],
+    "tv_shows": [
+      {
+        "q": "Comment s'appelle le café dans 'Friends'?",
+        "options": [
+          "Central Park",
+          "Central Perk",
+          "Coffee Central",
+          "The Coffee House"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Dans quelle ville fictive se déroule 'Les Simpsons'?",
+        "options": [
+          "Shelbyville",
+          "Springfield",
+          "Quahog",
+          "South Park"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Quel est le pseudonyme de Walter White dans 'Breaking Bad'?",
+        "options": [
+          "Heisenberg",
+          "The Cook",
+          "Blue Sky",
+          "Mr. White"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "Quelle série met en scène des dragons et le Trône de Fer?",
+        "options": [
+          "The Witcher",
+          "House of the Dragon",
+          "Game of Thrones",
+          "Le Seigneur des Anneaux"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Comment s'appelle le personnage principal de 'The Office' (US)?",
+        "options": [
+          "Dwight Schrute",
+          "Jim Halpert",
+          "Michael Scott",
+          "Andy Bernard"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Quelle série se déroule à Hawkins, Indiana?",
+        "options": [
+          "Stranger Things",
+          "Supernatural",
+          "X-Files",
+          "Dark"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "Quelle est la série animée la plus longue aux États-Unis?",
+        "options": [
+          "Family Guy",
+          "South Park",
+          "Les Simpsons",
+          "Bob l'éponge"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Dans 'Squid Game', quel est le montant du prix?",
+        "options": [
+          "45,6 milliards de wons",
+          "10 milliards de wons",
+          "100 millions de wons",
+          "1 trillion de wons"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "Dans quel hôpital se déroule 'Grey's Anatomy'?",
+        "options": [
+          "Seattle Grace",
+          "Princeton-Plainsboro",
+          "Sacred Heart",
+          "County General"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "Comment s'appelle le lycée dans 'Glee'?",
+        "options": [
+          "West Beverly High",
+          "McKinley High",
+          "Sunnydale High",
+          "Tree Hill High"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Quelle série met en scène un professeur de chimie devenu dealer?",
+        "options": [
+          "Ozark",
+          "Narcos",
+          "Breaking Bad",
+          "Weeds"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Quel est le vrai nom de Baby Yoda dans 'The Mandalorian'?",
+        "options": [
+          "Yoda Jr.",
+          "Grogu",
+          "Din",
+          "Kuiil"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Quelle émission de télé-réalité oppose des tribus pour un million de dollars?",
+        "options": [
+          "Big Brother",
+          "The Amazing Race",
+          "Survivor",
+          "Fear Factor"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Dans 'The Crown', quelle famille royale est représentée?",
+        "options": [
+          "Espagnole",
+          "Britannique",
+          "Suédoise",
+          "Néerlandaise"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "De quelle couleur est Bob l'éponge?",
+        "options": [
+          "Bleu",
+          "Jaune",
+          "Vert",
+          "Orange"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Quelle série met en scène la société Dunder Mifflin Paper Company?",
+        "options": [
+          "Mad Men",
+          "The Office",
+          "Silicon Valley",
+          "Suits"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Dans 'La Casa de Papel', quels noms de villes le Professeur utilise-t-il?",
+        "options": [
+          "Tokyo",
+          "Berlin",
+          "Moscou",
+          "Toutes ces réponses"
+        ],
+        "correct": 3,
+        "time": 10
+      },
+      {
+        "q": "Quelle est la phrase culte de Sheldon dans 'The Big Bang Theory'?",
+        "options": [
+          "Bazinga!",
+          "Cowabunga!",
+          "Eureka!",
+          "Geronimo!"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "Quelle série se déroule dans une prison pour femmes?",
+        "options": [
+          "Prison Break",
+          "Oz",
+          "Orange Is the New Black",
+          "Wentworth"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "En quelle année 'Friends' a-t-il été diffusé pour la première fois?",
+        "options": [
+          "1992",
+          "1994",
+          "1996",
+          "1998"
+        ],
+        "correct": 1,
+        "time": 10
+      }
+    ],
+    "anime": [
+      {
+        "q": "Dans 'Naruto', comment s'appelle le jutsu interdit que Naruto apprend du Rouleau des Sceaux?",
+        "options": [
+          "Multi Clonage de l'Ombre",
+          "Super Multi Clonage de l'Ombre",
+          "Rasengan",
+          "Sexy Meta"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Dans 'Death Note', combien de temps après l'écriture d'un nom la victime meurt-elle si aucune cause n'est spécifiée?",
+        "options": [
+          "23 jours",
+          "40 secondes",
+          "6 minutes 40 secondes",
+          "13 jours"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Comment s'appelle la 10ème chanson d'ouverture de 'One Piece'?",
+        "options": [
+          "We Are!",
+          "Share the World",
+          "We Go!",
+          "Wake Up!"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Dans 'Dragon Ball Z', quel est le niveau de puissance de Vegeta quand il arrive sur Terre?",
+        "options": [
+          "8 000",
+          "18 000",
+          "24 000",
+          "30 000"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Dans 'L'Attaque des Titans', comment s'appelle la forme Titan d'Eren dans l'arc final?",
+        "options": [
+          "Titan Marteau d'Armes",
+          "Titan Colossal",
+          "Titan Originel",
+          "Titan Assaillant"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Combien de fois Subaru meurt-il dans la Saison 1 de 'Re:Zero'?",
+        "options": [
+          "7",
+          "9",
+          "11",
+          "13"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Dans 'My Hero Academia', quel pourcentage de One For All Deku pouvait-il utiliser sans se casser les os au début?",
+        "options": [
+          "5%",
+          "8%",
+          "10%",
+          "15%"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "Dans 'Demon Slayer', comment s'appelle la première création démoniaque de Muzan?",
+        "options": [
+          "Kokushibo",
+          "Tamayo",
+          "Lune Supérieure 1",
+          "Le Premier Démon"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Dans 'Fullmetal Alchemist: Brotherhood', quel est le numéro de la loi de l'échange équivalent en alchimie?",
+        "options": [
+          "Première Loi",
+          "Deuxième Loi",
+          "Troisième Loi",
+          "Il n'y a pas de numéro"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "Comment s'appelle la doubleuse qui joue Goku dans la version japonaise de 'Dragon Ball'?",
+        "options": [
+          "Masako Nozawa",
+          "Ryo Horikawa",
+          "Toshio Furukawa",
+          "Mayumi Tanaka"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "Dans 'Hunter x Hunter', quel est le type de Nen de Killua?",
+        "options": [
+          "Renforcement",
+          "Transformation",
+          "Émission",
+          "Matérialisation"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Dans 'One Piece', comment s'appelle l'épée que Zoro a reçue de Kuina?",
+        "options": [
+          "Shusui",
+          "Sandai Kitetsu",
+          "Wado Ichimonji",
+          "Enma"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Dans 'Jujutsu Kaisen', à quel grade Yuji Itadori est-il officiellement enregistré?",
+        "options": [
+          "Grade 1",
+          "Grade 2",
+          "Grade 3",
+          "Grade 4"
+        ],
+        "correct": 3,
+        "time": 10
+      },
+      {
+        "q": "Dans 'Naruto Shippuden', combien de queues le Démon à Dix Queues a-t-il réellement?",
+        "options": [
+          "1",
+          "9",
+          "10",
+          "0"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "Dans 'Bleach', comment s'appelle le Zanpakuto d'Aizen?",
+        "options": [
+          "Kyoka Suigetsu",
+          "Shinso",
+          "Wabisuke",
+          "Suzumushi"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "Dans 'Spy x Family', quel est l'âge réel d'Anya quand elle prétend avoir 6 ans?",
+        "options": [
+          "3 ans",
+          "4 ans",
+          "5 ans",
+          "Inconnu"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Dans 'Tokyo Ghoul', quel est le numéro d'identification de Kaneki en tant que goule?",
+        "options": [
+          "Cache-œil",
+          "Rang SS",
+          "240",
+          "Roi Borgne"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "Dans 'Sword Art Online', combien d'étages Aincrad possède-t-il?",
+        "options": [
+          "50",
+          "75",
+          "100",
+          "120"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Dans 'Chainsaw Man', avec quel démon Makima a-t-elle un contrat?",
+        "options": [
+          "Démon Pistolet",
+          "Démon du Contrôle",
+          "Démon des Ténèbres",
+          "Elle est le Démon du Contrôle"
+        ],
+        "correct": 3,
+        "time": 10
+      },
+      {
+        "q": "Dans 'Mob Psycho 100', quel pourcentage Mob doit-il atteindre avant de perdre le contrôle?",
+        "options": [
+          "50%",
+          "75%",
+          "100%",
+          "???%"
+        ],
+        "correct": 2,
+        "time": 10
+      }
+    ],
+    "riddles": [
+      {
+        "q": "J'ai des villes, mais pas de maisons. J'ai des montagnes, mais pas d'arbres. J'ai de l'eau, mais pas de poissons. Que suis-je?",
+        "options": [
+          "Un globe",
+          "Une carte",
+          "Un tableau",
+          "Un rêve"
+        ],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "Qu'est-ce qui a des mains mais ne peut pas applaudir?",
+        "options": [
+          "Un mannequin",
+          "Une horloge",
+          "Une statue",
+          "Un zombie"
+        ],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "Je suis grand quand je suis jeune et petit quand je suis vieux. Que suis-je?",
+        "options": [
+          "Un humain",
+          "Une bougie",
+          "Un arbre",
+          "Un crayon"
+        ],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "Qu'est-ce qui peut voyager autour du monde tout en restant dans un coin?",
+        "options": [
+          "Une araignée",
+          "Un timbre",
+          "Un signal WiFi",
+          "Un chat paresseux"
+        ],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "Qu'est-ce qui a une tête et une queue mais pas de corps?",
+        "options": [
+          "Un serpent",
+          "Une pièce de monnaie",
+          "Un fantôme",
+          "Mon ex"
+        ],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "J'ai des dents mais je ne peux pas mordre. Que suis-je?",
+        "options": [
+          "Un grand-père",
+          "Un peigne",
+          "Une scie",
+          "Une fermeture éclair"
+        ],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "Qu'est-ce qui devient plus mouillé en séchant?",
+        "options": [
+          "Une éponge",
+          "Une serviette",
+          "Tes vêtements sous la pluie",
+          "Un mensonge"
+        ],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "Qu'est-ce qu'on peut attraper mais jamais lancer?",
+        "options": [
+          "Une balle",
+          "Un rhume",
+          "Des sentiments",
+          "Ton patron en train de mentir"
+        ],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "Qu'est-ce qui a des jambes mais ne marche pas?",
+        "options": [
+          "Une personne paresseuse",
+          "Une table",
+          "Une araignée morte",
+          "La motivation du lundi"
+        ],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "Je parle sans bouche et j'entends sans oreilles. Je n'ai pas de corps, mais je prends vie avec le vent. Que suis-je?",
+        "options": [
+          "Un fantôme",
+          "Un écho",
+          "Un murmure",
+          "Ma connexion internet"
+        ],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "Qu'est-ce qui a des touches mais pas de serrures?",
+        "options": [
+          "Un clavier",
+          "Un piano",
+          "Un concierge",
+          "A et B"
+        ],
+        "correct": 3,
+        "time": 15
+      },
+      {
+        "q": "Plus tu en prends, plus tu en laisses derrière toi. Que suis-je?",
+        "options": [
+          "L'argent de ton portefeuille",
+          "Des pas",
+          "Des regrets",
+          "Des snacks du frigo"
+        ],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "Qu'est-ce qui peut remplir une pièce sans prendre de place?",
+        "options": [
+          "L'ego",
+          "La lumière",
+          "Un silence gênant",
+          "La déception de ta mère"
+        ],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "J'ai un cou mais pas de tête. Que suis-je?",
+        "options": [
+          "Une bouteille",
+          "Une chemise",
+          "Une guitare",
+          "Toutes ces réponses"
+        ],
+        "correct": 3,
+        "time": 15
+      },
+      {
+        "q": "Qu'est-ce qui monte mais ne descend jamais?",
+        "options": [
+          "Un ballon",
+          "Ton âge",
+          "Le prix de l'essence",
+          "B et C"
+        ],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "Qu'est-ce qui a un œil mais ne peut pas voir?",
+        "options": [
+          "Un pirate",
+          "Une aiguille",
+          "Une pomme de terre",
+          "Un cyclope avec des cataractes"
+        ],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "Qu'est-ce qui peut courir mais ne marche jamais, a une bouche mais ne parle jamais?",
+        "options": [
+          "Un politicien",
+          "Une rivière",
+          "Un nez",
+          "Mon réfrigérateur"
+        ],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "Qu'est-ce qui se brise mais ne tombe jamais, et qu'est-ce qui tombe mais ne se brise jamais?",
+        "options": [
+          "Cœur et larmes",
+          "Jour et nuit",
+          "Promesses et rêves",
+          "Mon WiFi et mes espoirs"
+        ],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "Je peux être cassé, fait, raconté et joué. Que suis-je?",
+        "options": [
+          "Un œuf",
+          "Une blague",
+          "Un disque",
+          "Ton alibi"
+        ],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "Qu'est-ce qui a des mots mais ne parle jamais?",
+        "options": [
+          "Un mime",
+          "Un livre",
+          "Une personne timide",
+          "Les conditions d'utilisation"
+        ],
+        "correct": 1,
+        "time": 15
+      }
+    ],
+    "pop_culture_2010s": [
+      {
+        "q": "De quelle couleur était 'La Robe' qui a cassé internet en 2015?",
+        "options": [
+          "Noir et Bleu / Blanc et Or",
+          "Rouge et Noir / Rose et Blanc",
+          "Vert et Marron / Bleu et Gris",
+          "Violet et Noir / Rose et Gris"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "Quel artiste a rendu la danse 'Gangnam Style' mondiale en 2012?",
+        "options": [
+          "BTS",
+          "PSY",
+          "BigBang",
+          "2NE1"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Comment s'appelait l'application de vidéos de 6 secondes avant sa fermeture?",
+        "options": [
+          "TikTok",
+          "Vine",
+          "Snapchat",
+          "Periscope"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Quelle célébrité a 'cassé internet' avec sa couverture Paper Magazine en 2014?",
+        "options": [
+          "Beyoncé",
+          "Nicki Minaj",
+          "Kim Kardashian",
+          "Rihanna"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Quel défi consistait à se verser de l'eau glacée pour la sensibilisation à la SLA en 2014?",
+        "options": [
+          "Ice Bucket Challenge",
+          "Cold Water Challenge",
+          "Freeze Challenge",
+          "ALS Splash Challenge"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "Quel documentaire Netflix sur une affaire de meurtre est devenu un phénomène en 2015?",
+        "options": [
+          "The Jinx",
+          "Making a Murderer",
+          "Wild Wild Country",
+          "Tiger King"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Comment appelait-on la vague de clowns effrayants qui terrorisait les gens en 2016?",
+        "options": [
+          "Clown Apocalypse",
+          "Clown Sightings",
+          "Creepy Clown Epidemic",
+          "Clown Panic"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Quel jeu a poussé les gens à marcher dans le trafic et tomber de falaises en 2016?",
+        "options": [
+          "Candy Crush",
+          "Pokémon GO",
+          "Clash of Clans",
+          "Angry Birds"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Quelle phrase Charlie Sheen a-t-il rendue célèbre lors de son effondrement en 2011?",
+        "options": [
+          "YOLO",
+          "Winning",
+          "Stay Woke",
+          "No Cap"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Quel filtre Snapchat qui échangeait les visages est devenu viral en 2016?",
+        "options": [
+          "Filtre Chien",
+          "Face Swap",
+          "Rainbow Vomit",
+          "Couronne de Fleurs"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Comment s'appelait la vidéo virale d'une maman avec un masque Chewbacca en 2016?",
+        "options": [
+          "Chewbacca Lady",
+          "Chewbacca Mom",
+          "Happy Wookiee",
+          "Mask Mom"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "L'album visuel 'Lemonade' de quelle artiste a lancé les théories 'Qui est Becky?' en 2016?",
+        "options": [
+          "Rihanna",
+          "Taylor Swift",
+          "Beyoncé",
+          "Adele"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Quel mouvement de danse Drake a-t-il popularisé dans son clip 'Hotline Bling' en 2015?",
+        "options": [
+          "Le Dab",
+          "La Drake Dance",
+          "Le Milly Rock",
+          "Le Shoot"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Quelle chaîne de fast-food est connue pour ses tweets sarcastiques viraux dans les années 2010?",
+        "options": [
+          "Burger King",
+          "Wendy's",
+          "McDonald's",
+          "Taco Bell"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Quelle phrase de Nicki Minaj 'What's good, Miley?' est devenue un mème en 2015?",
+        "options": [
+          "Aux MTV VMAs",
+          "Sur Twitter",
+          "Dans une interview",
+          "Sur Instagram"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "Quelle coiffure Miley Cyrus a-t-elle dévoilée aux VMAs 2013 lors de sa performance controversée?",
+        "options": [
+          "Crâne rasé",
+          "Coupe pixie blonde",
+          "Carré bleu",
+          "Dreadlocks"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Comment s'appelaient les documentaires sur le désastre du Fyre Festival sortis en 2019?",
+        "options": [
+          "Fyre Fraud",
+          "Fyre: The Greatest Party That Never Happened",
+          "Les deux",
+          "Festival Fail"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Quelle chaîne YouTube s'est battue avec PewDiePie pour le plus d'abonnés en 2018-2019?",
+        "options": [
+          "MrBeast",
+          "T-Series",
+          "Logan Paul",
+          "Shane Dawson"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Comment s'appelait le défi où les gens se figeaient comme des mannequins en 2016?",
+        "options": [
+          "Freeze Frame Challenge",
+          "Mannequin Challenge",
+          "Statue Challenge",
+          "Frozen Challenge"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Quel mème montrait une femme criant sur un chat blanc confus à table en 2019?",
+        "options": [
+          "Woman Yelling at Cat",
+          "Angry Lady and Smudge",
+          "Table Cat",
+          "Dinner Argument Cat"
+        ],
+        "correct": 0,
+        "time": 10
+      }
+    ],
+    "pop_culture_morocco": [
+      {
+        "q": "Quel footballeur marocain est devenu une star à la Coupe du Monde 2022 et joue au PSG?",
+        "options": [
+          "Hakim Ziyech",
+          "Achraf Hakimi",
+          "Youssef En-Nesyri",
+          "Sofiane Boufal"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Quel exploit historique le Maroc a-t-il réalisé à la Coupe du Monde 2022?",
+        "options": [
+          "Gagner le tournoi",
+          "Première équipe africaine en demi-finale",
+          "Première équipe arabe à gagner un match",
+          "Marquer 10 buts"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Quel chanteur est connu comme le 'Roi du Raï' et a chanté 'Didi'?",
+        "options": [
+          "Saad Lamjarred",
+          "Cheb Khaled",
+          "Faudel",
+          "Cheb Mami"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Quelle ville marocaine accueille le célèbre festival de musique Mawazine?",
+        "options": [
+          "Casablanca",
+          "Marrakech",
+          "Rabat",
+          "Tanger"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Quel chanteur marocain a dépassé 1 milliard de vues sur YouTube avec 'LM3ALLEM'?",
+        "options": [
+          "Douzi",
+          "Saad Lamjarred",
+          "Muslim",
+          "Hatim Ammor"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Comment appelle-t-on le genre de séries TV marocaines traditionnelles diffusées pendant le Ramadan?",
+        "options": [
+          "Mosalsal",
+          "Sitcom Maghrebi",
+          "Fawazir",
+          "Hakawati"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "Quel rappeur marocain est connu pour des hits comme 'Mabghitch' et 'Hayda'?",
+        "options": [
+          "Dizzy DROS",
+          "Muslim",
+          "ElGrandeToto",
+          "7liwa"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Quelle actrice marocaine a joué dans les films français 'Amélie' et 'Coco avant Chanel'?",
+        "options": [
+          "Leila Bekhti",
+          "Sofia Essaïdi",
+          "Audrey Tautou",
+          "Lubna Azabal"
+        ],
+        "correct": 3,
+        "time": 10
+      },
+      {
+        "q": "Comment s'appelle le célèbre duo comique marocain connu pour ses sketches du Ramadan?",
+        "options": [
+          "Duo Hamza",
+          "Fokaha",
+          "Daoudi et Bziz",
+          "Comedia"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Quel club de football marocain a remporté le plus de championnats Botola Pro?",
+        "options": [
+          "Raja Casablanca",
+          "Wydad Casablanca",
+          "FAR Rabat",
+          "MAS Fès"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Quel chanteur marocain a représenté le Maroc à l'Eurovision?",
+        "options": [
+          "Samira Said",
+          "Sofia Essaïdi",
+          "Latifa Raafat",
+          "Aucun - Le Maroc n'a jamais participé"
+        ],
+        "correct": 3,
+        "time": 10
+      },
+      {
+        "q": "Comment s'appelle la plus grande star YouTube marocaine connue pour ses vidéos comiques?",
+        "options": [
+          "Amine Raghib",
+          "Yassine Jarram",
+          "Abdellah Abujad",
+          "Anas Tina"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "Quelle ville marocaine est surnommée le 'Hollywood de l'Afrique' pour ses studios de cinéma?",
+        "options": [
+          "Casablanca",
+          "Ouarzazate",
+          "Marrakech",
+          "Tanger"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Quel créateur marocain est connu internationalement pour ses caftans et a habillé Beyoncé?",
+        "options": [
+          "Zuhair Murad",
+          "Elie Saab",
+          "Amine Bendriouich",
+          "Yahya"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Comment s'appelle la danse de mariage marocaine devenue virale sur les réseaux sociaux?",
+        "options": [
+          "Chaabi",
+          "Reggada",
+          "Gnawa",
+          "Ahidous"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Quelle chaîne TV marocaine est connue pour diffuser les séries Ramadan les plus populaires?",
+        "options": [
+          "2M",
+          "Al Aoula",
+          "Medi1 TV",
+          "Toutes sont en compétition"
+        ],
+        "correct": 3,
+        "time": 10
+      },
+      {
+        "q": "Quel gardien marocain est devenu célèbre pour ses exploits à la Coupe du Monde 2022?",
+        "options": [
+          "Munir Mohamedi",
+          "Yassine Bounou (Bono)",
+          "Ahmed Reda Tagnaouti",
+          "Anas Zniti"
+        ],
+        "correct": 1,
+        "time": 10
+      },
+      {
+        "q": "Comment s'appelle le célèbre derby de Casablanca entre les deux plus grands clubs?",
+        "options": [
+          "El Clasico",
+          "Derby de Casa",
+          "Derbi Casablanca",
+          "Le Derby Marocain"
+        ],
+        "correct": 2,
+        "time": 10
+      },
+      {
+        "q": "Quel artiste marocain a collaboré avec French Montana sur plusieurs morceaux?",
+        "options": [
+          "ElGrandeToto",
+          "7liwa",
+          "Manal",
+          "Saad Lamjarred"
+        ],
+        "correct": 0,
+        "time": 10
+      },
+      {
+        "q": "Quelle expression marocaine est devenue un mème viral signifiant 'Qu'est-ce qui ne va pas?'?",
+        "options": [
+          "Wach kayn chi mochkil?",
+          "Chnou had l'khbar?",
+          "Sir t9awed",
+          "Malk a sat?"
+        ],
+        "correct": 3,
         "time": 10
       }
     ]
