@@ -646,10 +646,10 @@ async def websocket_endpoint(ws: WebSocket, code: str):
 
                     correct = idx == q["correct"]
                     if correct:
-                        player["score"] += 100
+                        player["score"] += 1
                         # Add score to team if team mode
                         if room["game_mode"] == "team" and player.get("team"):
-                            room["teams"][player["team"]]["score"] += 100
+                            room["teams"][player["team"]]["score"] += 1
 
                     correct_answer = q["options"][q["correct"]]
                     message = get_text(lang, "correct") if correct else get_text(lang, "wrong", answer=correct_answer)
@@ -801,3 +801,4 @@ async def next_question(code: str):
     else:
         # Continue with next question
         await start_question(code)
+        
