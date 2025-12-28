@@ -4183,7 +4183,7 @@
         "options": [
           "Wach kayn chi mochkil?",
           "Chnou had l'khbar?",
-          "Sir t9awed",
+          "Malk Hakda?",
           "Malk a sat?"
         ],
         "correct": 3,
@@ -4192,3 +4192,4 @@
     ]
   }
 }
+
