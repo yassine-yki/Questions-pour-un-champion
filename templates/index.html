@@ -69,7 +69,7 @@
             --corner-decorations: 1;
             --dragon-fire: 1;
             --ember-effect: 1;
-            --bg-image: url('https://images.unsplash.com/photo-1599894019794-50339c9ad89c?w=1920&q=80');
+            --bg-image: url('https://plus.unsplash.com/premium_photo-1661878091370-4ccb8763756a?w=1920&q=80');
         }
 
         /* THEME: Ocean 🌊 */
@@ -129,7 +129,7 @@
             --corner-decorations: 0;
             --sakura-petals: 1;
             --soft-glow: 1;
-            --bg-image: url('https://images.unsplash.com/photo-1555050551-82f8d95a0614?w=1920&q=80');
+            --bg-image: url('https://images.unsplash.com/photo-1522383225653-ed111181a951?w=1920&q=80');
         }
 
         /* THEME: Midnight 🌙 */
@@ -157,10 +157,10 @@
             --particles-color: #e94560;
             --scanlines: 0;
             --corner-decorations: 1;
-            --bg-image: url('https://images.unsplash.com/photo-1523590564318-491748f70ea7?w=1920&q=80');
+            --bg-image: url('https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=1920&q=80');
         }
 
-        /* THEME: Clean Modern ⚪  (Simple) */ 
+        /* THEME: Clean Modern ⚪ */
         [data-theme="clean"] {
             --bg-primary: #f0f4f8;
             --bg-secondary: #ffffff;
@@ -1568,6 +1568,177 @@
         }
 
         /* ============================================
+           ROOM VISIBILITY TOGGLE
+           ============================================ */
+
+        .visibility-toggle {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .visibility-item {
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            opacity: 0.6;
+        }
+
+        .visibility-item:hover {
+            opacity: 0.8;
+            transform: scale(1.02);
+        }
+
+        .visibility-item.selected {
+            opacity: 1;
+            border-color: var(--accent-1);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+
+        .visibility-icon {
+            font-size: 24px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .visibility-item span:not(.visibility-icon) {
+            color: var(--text-primary);
+            font-weight: bold;
+            display: block;
+        }
+
+        .visibility-item small {
+            color: var(--text-secondary);
+            font-size: 11px;
+            display: block;
+            margin-top: 5px;
+        }
+
+        /* ============================================
+           PUBLIC ROOMS LIST
+           ============================================ */
+
+        .public-rooms-section {
+            margin-bottom: 20px;
+        }
+
+        .public-rooms-section h3 {
+            color: var(--accent-1);
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .public-rooms-list {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .public-room-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .public-room-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .public-room-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent-1);
+            transform: translateX(5px);
+        }
+
+        .public-room-info {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .public-room-host {
+            color: var(--text-primary);
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .public-room-details {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        .public-room-join {
+            background: var(--button-gradient);
+            color: var(--bg-primary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .public-room-join:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+        }
+
+        .no-rooms {
+            color: var(--text-secondary);
+            text-align: center;
+            font-style: italic;
+            padding: 20px;
+        }
+
+        .divider-or {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
+        }
+
+        .divider-or::before,
+        .divider-or::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 35%;
+            height: 1px;
+            background: var(--border-color);
+        }
+
+        .divider-or::before {
+            left: 0;
+        }
+
+        .divider-or::after {
+            right: 0;
+        }
+
+        .divider-or span {
+            background: var(--bg-secondary);
+            padding: 0 15px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            text-transform: uppercase;
+        }
+
+        /* ============================================
            SETTINGS MODAL
            ============================================ */
 
@@ -1757,6 +1928,107 @@
         @keyframes blink {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
+        }
+
+        /* ============================================
+           MUSIC CONTROLS
+           ============================================ */
+
+        .music-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .music-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--button-gradient);
+            border: 2px solid var(--accent-1);
+            cursor: pointer;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .music-btn:hover {
+            transform: scale(1.1);
+            box-shadow: var(--border-glow);
+        }
+
+        .music-btn.playing {
+            animation: musicPulse 1s ease-in-out infinite;
+            border-color: var(--success);
+            box-shadow: 0 0 20px var(--success);
+        }
+
+        @keyframes musicPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg-card);
+            padding: 10px 15px;
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+        }
+
+        .volume-control span {
+            font-size: 16px;
+        }
+
+        #volumeSlider {
+            width: 120px;
+            height: 6px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: linear-gradient(to right, var(--accent-1), var(--accent-2));
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        #volumeSlider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--accent-1);
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--accent-1);
+            transition: all 0.2s ease;
+        }
+
+        #volumeSlider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        #volumeSlider::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--accent-1);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 0 10px var(--accent-1);
+        }
+
+        .music-status {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 20px;
         }
 
         /* ============================================
@@ -2054,6 +2326,20 @@
             <h1 class="title">🎮 <span data-translate="createRoom">Create Room</span></h1>
             <p class="subtitle">★ Host a Game ★</p>
 
+            <label data-translate="roomVisibility">Room Visibility:</label>
+            <div class="visibility-toggle">
+                <div id="visibilityPrivate" class="visibility-item selected" onclick="selectVisibility('private')">
+                    <span class="visibility-icon">🔒</span>
+                    <span data-translate="privateRoom">Private</span>
+                    <small data-translate="privateDesc">Code required</small>
+                </div>
+                <div id="visibilityPublic" class="visibility-item" onclick="selectVisibility('public')">
+                    <span class="visibility-icon">🌐</span>
+                    <span data-translate="publicRoom">Public</span>
+                    <small data-translate="publicDesc">Visible to all</small>
+                </div>
+            </div>
+
             <label data-translate="roomCode">Room Code</label>
             <input type="text" id="createCode" placeholder="ABCD" maxlength="6" style="text-transform: uppercase;">
 
@@ -2085,6 +2371,18 @@
         <div id="joinMultiScreen" class="screen">
             <h1 class="title">🚀 <span data-translate="joinRoom">Join Room</span></h1>
             <p class="subtitle">★ Enter the Arena ★</p>
+
+            <!-- Public Rooms List -->
+            <div id="publicRoomsSection" class="public-rooms-section">
+                <h3>🌐 <span data-translate="publicRooms">Public Rooms</span></h3>
+                <div id="publicRoomsList" class="public-rooms-list">
+                    <p class="no-rooms" data-translate="noPublicRooms">No public rooms available</p>
+                </div>
+            </div>
+
+            <div class="divider-or">
+                <span data-translate="orJoinPrivate">OR join a private room</span>
+            </div>
 
             <label data-translate="roomCode">Room Code</label>
             <input type="text" id="joinCode" data-translate-placeholder="enterRoomCode" placeholder="Enter Room Code (e.g., ABCD)" maxlength="6" style="text-transform: uppercase;">
@@ -2218,6 +2516,32 @@
             </div>
             <p class="key-hint" id="keyHint" style="display: none;" data-translate="pressAnyKey">Press any key...</p>
 
+            <label data-translate="backgroundMusic">Background Music:</label>
+            <div class="music-controls">
+                <button class="music-btn" id="musicToggleBtn" onclick="toggleMusic()">
+                    <span id="musicIcon">🔇</span>
+                </button>
+                <div class="volume-control">
+                    <span>🔈</span>
+                    <input type="range" id="volumeSlider" min="0" max="100" value="30" onchange="setVolume(this.value)" oninput="setVolume(this.value)">
+                    <span>🔊</span>
+                </div>
+            </div>
+            <p class="music-status" id="musicStatus" data-translate="musicOff">Music: Off</p>
+
+            <label data-translate="soundEffects">Sound Effects:</label>
+            <div class="music-controls">
+                <button class="music-btn" id="sfxToggleBtn" onclick="toggleSfx()">
+                    <span id="sfxIcon">🔔</span>
+                </button>
+                <div class="volume-control">
+                    <span>🔈</span>
+                    <input type="range" id="sfxVolumeSlider" min="0" max="100" value="70" onchange="setSfxVolume(this.value)" oninput="setSfxVolume(this.value)">
+                    <span>🔊</span>
+                </div>
+            </div>
+            <p class="music-status" id="sfxStatus" data-translate="sfxOn">SFX: On</p>
+
             <div class="actions">
                 <button class="btn" onclick="closeSettings()" data-translate="done">Done</button>
             </div>
@@ -2236,4 +2560,3 @@
     </script>
 </body>
 </html>
-
