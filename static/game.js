@@ -24,7 +24,7 @@ const translations = {
         buzz: "BUZZ!",
         gameOver: "Game Over!",
         playAgain: "Play Again",
-        players: "Players:",
+        players: "Players",
         scores: "Scores:",
         finalScores: "Final Scores:",
         host: "HOST",
@@ -44,11 +44,27 @@ const translations = {
         buzzerKey: "Buzzer Key:",
         changeKey: "Change Key",
         pressAnyKey: "Press any key...",
+        backgroundMusic: "Background Music:",
+        musicOn: "Music: On",
+        musicOff: "Music: Off",
+        soundEffects: "Sound Effects:",
+        sfxOn: "SFX: On",
+        sfxOff: "SFX: Off",
         score: "Score",
         correct: "✅ Correct!",
         wrong: "❌ Wrong! Correct answer:",
         round: "Round",
         question: "Question",
+        // Public rooms translations
+        roomVisibility: "Room Visibility:",
+        privateRoom: "Private",
+        publicRoom: "Public",
+        privateDesc: "Code required",
+        publicDesc: "Visible to all",
+        publicRooms: "Public Rooms",
+        noPublicRooms: "No public rooms available",
+        orJoinPrivate: "OR join a private room",
+        join: "Join",
         subjects: {
             science: "🔬 Science",
             history: "📚 History",
@@ -88,7 +104,7 @@ const translations = {
         buzz: "BUZZ!",
         gameOver: "Jeu terminé!",
         playAgain: "Rejouer",
-        players: "Joueurs:",
+        players: "Joueurs",
         scores: "Scores:",
         finalScores: "Scores finaux:",
         host: "HÔTE",
@@ -108,11 +124,27 @@ const translations = {
         buzzerKey: "Touche Buzzer:",
         changeKey: "Changer",
         pressAnyKey: "Appuyez sur une touche...",
+        backgroundMusic: "Musique de fond:",
+        musicOn: "Musique: Activée",
+        musicOff: "Musique: Désactivée",
+        soundEffects: "Effets sonores:",
+        sfxOn: "SFX: Activés",
+        sfxOff: "SFX: Désactivés",
         score: "Score",
         correct: "✅ Correct !",
         wrong: "❌ Faux ! Bonne réponse:",
         round: "Manche",
         question: "Question",
+        // Public rooms translations
+        roomVisibility: "Visibilité de la salle:",
+        privateRoom: "Privée",
+        publicRoom: "Publique",
+        privateDesc: "Code requis",
+        publicDesc: "Visible par tous",
+        publicRooms: "Salles publiques",
+        noPublicRooms: "Aucune salle publique disponible",
+        orJoinPrivate: "OU rejoindre une salle privée",
+        join: "Rejoindre",
         subjects: {
             science: "🔬 Science",
             history: "📚 Histoire",
@@ -166,6 +198,106 @@ let buzzerKey = localStorage.getItem('triviaBuzzerKey') || 'Space';
 let buzzerKeyDisplay = localStorage.getItem('triviaBuzzerKeyDisplay') || 'SPACE';
 let isCapturingKey = false;
 
+// Music settings
+let musicPlayer = null;
+let isMusicPlaying = false;
+let musicVolume = parseInt(localStorage.getItem('triviaMusicVolume')) || 30;
+let sfxVolume = parseInt(localStorage.getItem('triviaSfxVolume')) || 70;
+let sfxEnabled = localStorage.getItem('triviaSfxEnabled') !== 'false';
+
+const themeMusicUrls = {
+    neon: '/static/music/neon.mp3',
+    dragon: '/static/music/dragon.mp3',
+    ocean: '/static/music/ocean.mp3',
+    sakura: '/static/music/sakura.mp3',
+    midnight: '/static/music/midnight.mp3',
+    clean: '/static/music/clean.mp3'
+};
+
+// Audio context for generating sound effects
+let audioContext = null;
+
+function getAudioContext() {
+    if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    return audioContext;
+}
+
+// Generate sound effects programmatically
+function playGeneratedSfx(type) {
+    if (!sfxEnabled) return;
+    
+    try {
+        const ctx = getAudioContext();
+        const gainNode = ctx.createGain();
+        gainNode.connect(ctx.destination);
+        gainNode.gain.value = sfxVolume / 100;
+        
+        const oscillator = ctx.createOscillator();
+        oscillator.connect(gainNode);
+        
+        switch(type) {
+            case 'buzzer':
+                oscillator.type = 'square';
+                oscillator.frequency.setValueAtTime(200, ctx.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.2);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                oscillator.start(ctx.currentTime);
+                oscillator.stop(ctx.currentTime + 0.3);
+                break;
+                
+            case 'correct':
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(523, ctx.currentTime);
+                oscillator.frequency.setValueAtTime(659, ctx.currentTime + 0.1);
+                oscillator.frequency.setValueAtTime(784, ctx.currentTime + 0.2);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+                oscillator.start(ctx.currentTime);
+                oscillator.stop(ctx.currentTime + 0.4);
+                break;
+                
+            case 'wrong':
+                oscillator.type = 'sawtooth';
+                oscillator.frequency.setValueAtTime(200, ctx.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(50, ctx.currentTime + 0.4);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+                oscillator.start(ctx.currentTime);
+                oscillator.stop(ctx.currentTime + 0.5);
+                break;
+                
+            case 'victory':
+                const notes = [523, 659, 784, 1047];
+                notes.forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.type = 'sine';
+                    osc.frequency.value = freq;
+                    gain.gain.value = (sfxVolume / 100) * 0.3;
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.8 + i * 0.15);
+                    osc.start(ctx.currentTime + i * 0.15);
+                    osc.stop(ctx.currentTime + 0.8 + i * 0.15);
+                });
+                return;
+                
+            case 'tick':
+                oscillator.type = 'sine';
+                oscillator.frequency.value = 800;
+                gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.05);
+                oscillator.start(ctx.currentTime);
+                oscillator.stop(ctx.currentTime + 0.05);
+                break;
+                
+            default:
+                return;
+        }
+    } catch(e) {
+        console.log('Audio generation error:', e);
+    }
+}
+
 // Solo game state
 let soloQuestions = [];
 let soloScore = 0;
@@ -189,6 +321,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Load buzzer key
     updateBuzzerKeyDisplay();
+    
+    // Initialize music
+    initMusic();
     
     applyTranslations();
     updateLanguageUI();
@@ -268,6 +403,174 @@ function updateBuzzerKeyDisplay() {
     if (changeBtn) changeBtn.disabled = false;
 }
 
+// ============================================
+// MUSIC SYSTEM
+// ============================================
+
+function initMusic() {
+    musicPlayer = new Audio();
+    musicPlayer.loop = true;
+    musicPlayer.volume = musicVolume / 100;
+    
+    // Add error listener for debugging
+    musicPlayer.addEventListener('error', (e) => {
+        console.log('Music error:', musicPlayer.error);
+        isMusicPlaying = false;
+        updateMusicUI();
+    });
+    
+    // Load the music for current theme
+    loadThemeMusic(selectedTheme);
+    
+    // Preload sound effects
+    preloadSoundEffects();
+    
+    // Update volume slider
+    const volumeSlider = document.getElementById('volumeSlider');
+    if (volumeSlider) {
+        volumeSlider.value = musicVolume;
+    }
+    
+    const sfxSlider = document.getElementById('sfxVolumeSlider');
+    if (sfxSlider) {
+        sfxSlider.value = sfxVolume;
+    }
+    
+    // Update SFX toggle
+    updateSfxToggleUI();
+    
+    // Update UI
+    updateMusicUI();
+}
+
+function preloadSoundEffects() {
+    // Sound effects are generated via Web Audio API, no preloading needed
+}
+
+function playSfx(soundName) {
+    if (!sfxEnabled) return;
+    playGeneratedSfx(soundName);
+}
+
+function toggleSfx() {
+    sfxEnabled = !sfxEnabled;
+    localStorage.setItem('triviaSfxEnabled', sfxEnabled);
+    updateSfxToggleUI();
+}
+
+function setSfxVolume(value) {
+    sfxVolume = parseInt(value);
+    localStorage.setItem('triviaSfxVolume', sfxVolume);
+    // Volume is applied when sounds are played
+}
+
+function updateSfxToggleUI() {
+    const sfxIcon = document.getElementById('sfxIcon');
+    const sfxToggleBtn = document.getElementById('sfxToggleBtn');
+    const sfxStatus = document.getElementById('sfxStatus');
+    
+    if (sfxIcon) {
+        sfxIcon.textContent = sfxEnabled ? '🔔' : '🔕';
+    }
+    
+    if (sfxToggleBtn) {
+        if (sfxEnabled) {
+            sfxToggleBtn.classList.add('enabled');
+            sfxToggleBtn.classList.remove('disabled');
+        } else {
+            sfxToggleBtn.classList.remove('enabled');
+            sfxToggleBtn.classList.add('disabled');
+        }
+    }
+    
+    if (sfxStatus) {
+        sfxStatus.textContent = sfxEnabled ? t('sfxOn') : t('sfxOff');
+    }
+}
+
+function loadThemeMusic(theme) {
+    const musicUrl = themeMusicUrls[theme] || themeMusicUrls.neon;
+    
+    if (musicPlayer) {
+        const wasPlaying = isMusicPlaying;
+        
+        // Pause current music
+        musicPlayer.pause();
+        
+        // Load new track
+        musicPlayer.src = musicUrl;
+        musicPlayer.load();
+        
+        // Resume if was playing
+        if (wasPlaying) {
+            musicPlayer.play().catch(e => console.log('Music autoplay prevented:', e));
+        }
+    }
+}
+
+function toggleMusic() {
+    if (!musicPlayer) {
+        initMusic();
+    }
+    
+    if (isMusicPlaying) {
+        musicPlayer.pause();
+        isMusicPlaying = false;
+        updateMusicUI();
+    } else {
+        // Make sure the source is set
+        if (!musicPlayer.src || musicPlayer.src === '') {
+            loadThemeMusic(selectedTheme);
+        }
+        
+        const playPromise = musicPlayer.play();
+        
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                isMusicPlaying = true;
+                updateMusicUI();
+            }).catch(e => {
+                console.log('Music play error:', e.message);
+                console.log('Music src:', musicPlayer.src);
+                console.log('Music ready state:', musicPlayer.readyState);
+                isMusicPlaying = false;
+                updateMusicUI();
+            });
+        }
+    }
+}
+
+function setVolume(value) {
+    musicVolume = parseInt(value);
+    localStorage.setItem('triviaMusicVolume', musicVolume);
+    
+    if (musicPlayer) {
+        musicPlayer.volume = musicVolume / 100;
+    }
+}
+
+function updateMusicUI() {
+    const musicIcon = document.getElementById('musicIcon');
+    const musicToggleBtn = document.getElementById('musicToggleBtn');
+    const musicStatus = document.getElementById('musicStatus');
+    
+    if (musicIcon) {
+        musicIcon.textContent = isMusicPlaying ? '🔊' : '🔇';
+    }
+    
+    if (musicToggleBtn) {
+        if (isMusicPlaying) {
+            musicToggleBtn.classList.add('playing');
+        } else {
+            musicToggleBtn.classList.remove('playing');
+        }
+    }
+    
+    if (musicStatus) {
+        musicStatus.textContent = isMusicPlaying ? t('musicOn') : t('musicOff');
+    }
+}
+
 function setupEventListeners() {
     const joinCodeInput = document.getElementById('joinCode');
     if (joinCodeInput) {
@@ -296,6 +599,9 @@ function setTheme(themeName) {
     localStorage.setItem('triviaTheme', themeName);
     updateThemeUI();
     updateParticlesColor();
+    
+    // Change music to match theme
+    loadThemeMusic(themeName);
 }
 
 function updateThemeUI() {
@@ -425,6 +731,99 @@ function showJoinMulti() {
     resetTeamButtonStyles();
     const joinCodeInput = document.getElementById('joinCode');
     if (joinCodeInput) joinCodeInput.value = '';
+    
+    // Connect to lobby for public rooms
+    connectToLobby();
+}
+
+// ============================================
+// PUBLIC ROOMS & LOBBY
+// ============================================
+
+let lobbyWs = null;
+let selectedRoomVisibility = 'private';
+
+function connectToLobby() {
+    if (lobbyWs && lobbyWs.readyState === WebSocket.OPEN) {
+        return;
+    }
+    
+    const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+    lobbyWs = new WebSocket(`${protocol}//${location.host}/ws/LOBBY`);
+    
+    lobbyWs.onopen = () => {
+        lobbyWs.send(JSON.stringify({ action: 'joinLobby' }));
+    };
+    
+    lobbyWs.onmessage = (e) => {
+        const { event, data } = JSON.parse(e.data);
+        if (event === 'publicRooms') {
+            renderPublicRooms(data);
+        }
+    };
+    
+    lobbyWs.onerror = (e) => {
+        console.log('Lobby connection error:', e);
+    };
+    
+    lobbyWs.onclose = () => {
+        lobbyWs = null;
+    };
+}
+
+function disconnectFromLobby() {
+    if (lobbyWs) {
+        lobbyWs.close();
+        lobbyWs = null;
+    }
+}
+
+function renderPublicRooms(rooms) {
+    const container = document.getElementById('publicRoomsList');
+    if (!container) return;
+    
+    if (!rooms || rooms.length === 0) {
+        container.innerHTML = `<p class="no-rooms" data-translate="noPublicRooms">${t('noPublicRooms')}</p>`;
+        return;
+    }
+    
+    container.innerHTML = rooms.map(room => `
+        <div class="public-room-item" onclick="joinPublicRoom('${room.code}')">
+            <div class="public-room-info">
+                <span class="public-room-host">🎮 ${room.hostName}</span>
+                <span class="public-room-details">
+                    ${room.gameMode === 'team' ? '👥 Team Mode' : '🎯 Free for All'} • 
+                    ${room.playerCount}/${room.maxPlayers} ${t('players')}
+                </span>
+            </div>
+            <button class="public-room-join">${t('join')}</button>
+        </div>
+    `).join('');
+}
+
+function joinPublicRoom(code) {
+    const joinCodeInput = document.getElementById('joinCode');
+    if (joinCodeInput) {
+        joinCodeInput.value = code;
+        // Trigger the room info check
+        checkRoomMode();
+    }
+}
+
+function selectVisibility(visibility) {
+    selectedRoomVisibility = visibility;
+    
+    const privateItem = document.getElementById('visibilityPrivate');
+    const publicItem = document.getElementById('visibilityPublic');
+    
+    if (privateItem) privateItem.classList.remove('selected');
+    if (publicItem) publicItem.classList.remove('selected');
+    
+    if (visibility === 'private' && privateItem) {
+        privateItem.classList.add('selected');
+    } else if (visibility === 'public' && publicItem) {
+        publicItem.classList.add('selected');
+    }
 }
 
 // ============================================
@@ -585,11 +984,16 @@ function handleSoloAnswer(idx) {
     const correct = idx === soloCurrentQuestion.correct;
     if (correct) {
         soloScore += 100;
+        playSfx('correct');
         const scoreEl = document.getElementById('soloScore');
         if (scoreEl) scoreEl.innerHTML = `${t('score')}: <span>${soloScore}</span>`;
         createConfetti(30);
         animateScore('soloScore');
-    } else { shakeScreen(); flashWrong(); }
+    } else { 
+        playSfx('wrong');
+        shakeScreen(); 
+        flashWrong(); 
+    }
 
     document.querySelectorAll('#soloOptionsBox .option').forEach((opt, i) => {
         opt.onclick = null;
@@ -603,6 +1007,7 @@ function handleSoloAnswer(idx) {
 }
 
 function handleSoloTimeout() {
+    playSfx('wrong');
     shakeScreen(); flashWrong();
     document.querySelectorAll('#soloOptionsBox .option').forEach((opt, i) => {
         opt.onclick = null;
@@ -616,6 +1021,7 @@ function handleSoloTimeout() {
 function showSoloGameOver() {
     clearInterval(timerInterval);
     showScreen('gameOverScreen');
+    playSfx('victory');
     celebrateVictory();
     const winnerBox = document.getElementById('winnerBox');
     if (winnerBox) winnerBox.textContent = `🏆 ${t('score')}: ${soloScore}`;
@@ -651,7 +1057,8 @@ function createRoom() {
     if (subjects.length === 0) { alert(t('alertSubjects')); return; }
     currentRoomCode = code;
     gameMode = 'multiplayer';
-    connectWebSocket(code, name, true, subjects, selectedGameMode);
+    const isPublic = selectedRoomVisibility === 'public';
+    connectWebSocket(code, name, true, subjects, selectedGameMode, isPublic);
 }
 
 async function checkRoomMode() {
@@ -711,14 +1118,17 @@ async function joinRoom() {
     if (roomGameMode === 'team' && !selectedJoinTeam) { alert(t('selectTeam')); return; }
     currentRoomCode = code;
     gameMode = 'multiplayer';
-    connectWebSocket(code, name, false, [], 'ffa', selectedJoinTeam);
+    connectWebSocket(code, name, false, [], 'ffa', false, selectedJoinTeam);
 }
 
-function connectWebSocket(code, playerName, isCreating, subjects, gm = 'ffa', team = null) {
+function connectWebSocket(code, playerName, isCreating, subjects, gm = 'ffa', isPublic = false, team = null) {
+    // Disconnect from lobby when joining a room
+    disconnectFromLobby();
+    
     ws = new WebSocket(getWebSocketUrl(code));
     ws.onopen = () => {
         if (isCreating) {
-            ws.send(JSON.stringify({ action: 'create', language: selectedLanguage, subjects: subjects, gameMode: gm }));
+            ws.send(JSON.stringify({ action: 'create', language: selectedLanguage, subjects: subjects, gameMode: gm, isPublic: isPublic }));
             setTimeout(() => ws.send(JSON.stringify({ action: 'join', playerName: playerName })), 100);
         } else ws.send(JSON.stringify({ action: 'join', playerName: playerName, team: team }));
     };
@@ -810,6 +1220,7 @@ function buzzerPressed() {
     const buzzer = document.getElementById('buzzer');
     if (!buzzer || buzzer.disabled || hasBuzzed) return;
     hasBuzzed = true; buzzer.disabled = true; buzzer.classList.add('buzzed');
+    playSfx('buzzer');
     animateBuzzerPress();
     if (ws?.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ action: 'buzz', userId, matchToken }));
 }
@@ -817,6 +1228,7 @@ function buzzerPressed() {
 function handleBuzzed(data) {
     const playerName = data.player || data;
     showMessage(`🔔 ${playerName} buzzed!`);
+    playSfx('buzzer');
     const buzzer = document.getElementById('buzzer');
     if (buzzer) { buzzer.disabled = true; buzzer.classList.add('buzzed'); buzzer.textContent = `${playerName} BUZZED!`; }
     const myName = document.getElementById('createName')?.value || document.getElementById('joinName')?.value;
@@ -837,7 +1249,16 @@ function showResult(data) {
         if (opt.textContent === data.answer) { opt.classList.add('correct'); animateCorrectOption(opt); }
     });
     const myName = document.getElementById('createName')?.value || document.getElementById('joinName')?.value;
-    if (data.answeredBy === myName) { if (data.correct) createConfetti(30); else { shakeScreen(); flashWrong(); } }
+    if (data.answeredBy === myName) { 
+        if (data.correct) { 
+            playSfx('correct');
+            createConfetti(30); 
+        } else { 
+            playSfx('wrong');
+            shakeScreen(); 
+            flashWrong(); 
+        } 
+    }
     updateScores(data.scores);
     if (data.teamScores) updateTeamScores(data.teamScores);
     showMessage(data.message || (data.correct ? '✅ Correct!' : `❌ Wrong! Answer: ${data.answer}`));
@@ -865,6 +1286,7 @@ function updateTeamScores(teamScores) {
 
 function showGameOver(data) {
     clearInterval(timerInterval); showScreen('gameOverScreen'); celebrateVictory();
+    playSfx('victory');
     const winnerBox = document.getElementById('winnerBox');
     if (winnerBox) winnerBox.textContent = data.winner ? `🏆 Winner: ${data.winner}` : (data.reason || 'Game Over!');
     const finalScores = document.getElementById('finalScores');
