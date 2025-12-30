@@ -15,7 +15,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 # === TRANSLATIONS ===
@@ -102,6 +101,30 @@ room_locks: Dict[str, asyncio.Lock] = {}
 def get_room(code: str) -> Optional[Dict]:
     return rooms.get(code)
 
+def get_public_rooms() -> List[Dict]:
+    """Get list of public rooms that are waiting for players"""
+    public_rooms = []
+    for code, room in rooms.items():
+        if room.get("is_public", False) and room.get("state") == "waiting":
+            public_rooms.append({
+                "code": code,
+                "hostName": room["players"][room["host"]]["name"] if room["host"] and room["host"] in room["players"] else "Unknown",
+                "playerCount": len(room["players"]),
+                "gameMode": room.get("game_mode", "ffa"),
+                "maxPlayers": 4
+            })
+    return public_rooms
+
+async def broadcast_public_rooms():
+    """Broadcast updated public rooms list to all clients in the lobby"""
+    public_rooms = get_public_rooms()
+    # Broadcast to all connections waiting in lobby (code = "LOBBY")
+    for user_id, ws in connections.get("LOBBY", {}).items():
+        try:
+            await ws.send_json({"event": "publicRooms", "data": public_rooms})
+        except Exception as e:
+            print(f"Error broadcasting public rooms to {user_id}: {e}")
+
 async def broadcast(code: str, event: str, data: Any, exclude: Optional[str] = None):
     for user_id, ws in connections.get(code, {}).items():
         if exclude and user_id == exclude:
@@ -126,9 +149,13 @@ def validate_player_name(name: str) -> bool:
     return 1 <= len(name) <= 20 and name.isprintable()
 
 async def cleanup_room(code: str):
+    was_public = rooms.get(code, {}).get("is_public", False)
     rooms.pop(code, None)
     connections.pop(code, None)
     room_locks.pop(code, None)
+    # Notify lobby if it was a public room
+    if was_public:
+        await broadcast_public_rooms()
 
 async def timer_task(code: str):
     room = get_room(code)
@@ -379,6 +406,11 @@ async def get_questions(language: str = "en", subjects: str = ""):
     random.shuffle(questions)
     return {"questions": questions[:20]}
 
+@app.get("/api/public-rooms")
+async def get_public_rooms_api():
+    """API endpoint to get list of public rooms"""
+    return {"rooms": get_public_rooms()}
+
 # === WEBSOCKET ===
 @app.websocket("/ws/{code}")
 async def websocket_endpoint(ws: WebSocket, code: str):
@@ -391,7 +423,27 @@ async def websocket_endpoint(ws: WebSocket, code: str):
             msg = await ws.receive_json()
             action = msg.get("action")
 
-            if action == "create":
+            # === LOBBY ACTIONS ===
+            if action == "joinLobby":
+                # Join the lobby to receive public room updates
+                user_id = str(uuid.uuid4())
+                if "LOBBY" not in connections:
+                    connections["LOBBY"] = {}
+                connections["LOBBY"][user_id] = ws
+                
+                # Send current public rooms
+                await ws.send_json({"event": "publicRooms", "data": get_public_rooms()})
+
+            elif action == "leaveLobby":
+                # Leave the lobby
+                if user_id and "LOBBY" in connections:
+                    connections["LOBBY"].pop(user_id, None)
+
+            elif action == "create":
+                # Remove from lobby if was there
+                if user_id and "LOBBY" in connections:
+                    connections["LOBBY"].pop(user_id, None)
+                
                 if code in rooms:
                     lang = msg.get("language", "en")
                     await ws.send_json({"event": "error", "data": get_text(lang, "room_exists")})
@@ -400,6 +452,7 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                 language = msg.get("language", "en")
                 subjects = msg.get("subjects", [])
                 game_mode = msg.get("gameMode", "ffa")
+                is_public = msg.get("isPublic", False)  # NEW: Public room option
                 
                 rooms[code] = {
                     "players": {},
@@ -418,12 +471,17 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                     "max_rounds": 3,
                     "questions_per_round": 5,
                     "game_mode": game_mode,
+                    "is_public": is_public,  # NEW: Store public status
                     "teams": {"red": {"score": 0, "active": True}, "blue": {"score": 0, "active": True}} if game_mode == "team" else None
                 }
                 connections[code] = {}
                 room_locks[code] = asyncio.Lock()
                 
-                await ws.send_json({"event": "roomCreated", "data": {"code": code, "language": language, "gameMode": game_mode}})
+                await ws.send_json({"event": "roomCreated", "data": {"code": code, "language": language, "gameMode": game_mode, "isPublic": is_public}})
+                
+                # Notify lobby about new public room
+                if is_public:
+                    await broadcast_public_rooms()
 
             
             elif action == "getRoomInfo":
@@ -453,6 +511,10 @@ async def websocket_endpoint(ws: WebSocket, code: str):
               return
             
             elif action == "join":
+                # Remove from lobby if was there
+                if user_id and "LOBBY" in connections:
+                    connections["LOBBY"].pop(user_id, None)
+                
                 room = get_room(code)
                 if not room:
                     lang = msg.get("language", "en")
@@ -542,6 +604,10 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                         "blue": sum(1 for p in room["players"].values() if p.get("team") == "blue")
                 }   if room["game_mode"] == "team" else None
                      })
+                
+                # Notify lobby about updated player count
+                if room.get("is_public"):
+                    await broadcast_public_rooms()
 
             elif action == "start":
                 room = get_room(code)
@@ -576,6 +642,11 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                     continue
                 
                 room["state"] = "question"
+                
+                # Remove from public rooms since game started
+                if room.get("is_public"):
+                    await broadcast_public_rooms()
+                
                 await broadcast(code, "gameStarting", {
                     "startedBy": player["name"],
                     "message": get_text(lang, "game_starting", player=player["name"])
@@ -669,6 +740,10 @@ async def websocket_endpoint(ws: WebSocket, code: str):
     except WebSocketDisconnect:
         pass
     finally:
+        # Clean up lobby connection
+        if user_id and "LOBBY" in connections:
+            connections["LOBBY"].pop(user_id, None)
+        
         if code in connections and user_id in connections[code]:
             connections[code].pop(user_id, None)
         
@@ -692,6 +767,10 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                 "remaining": len(room["players"]),
                 "message": get_text(lang, "player_left", player=player_name)
             })
+            
+            # Notify lobby about updated player count
+            if room.get("is_public"):
+                await broadcast_public_rooms()
             
             # Check based on game mode
             min_players = 4 if room.get("game_mode") == "team" else 2
@@ -801,4 +880,6 @@ async def next_question(code: str):
     else:
         # Continue with next question
         await start_question(code)
-        
+
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
