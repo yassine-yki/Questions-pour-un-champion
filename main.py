@@ -20,7 +20,7 @@ app.add_middleware(
 templates = Jinja2Templates(directory="templates")
 
 # === HUGGING FACE CONFIGURATION ===
-HF_API_TOKEN = "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"
+HF_API_TOKEN = "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"
 HF_API_URL = "https://router.huggingface.co/v1/chat/completions"
 HF_MODEL = "meta-llama/Llama-3.1-8B-Instruct"
 
