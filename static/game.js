@@ -1,4 +1,44 @@
 // ============================================
+// LANDING PAGE
+// ============================================
+
+
+console.log('=== GAME.JS VERSION 5.0 LOADED ===');
+
+// FAQ Toggle Function
+function toggleFaq(element) {
+    const faqItem = element.parentElement;
+    faqItem.classList.toggle('active');
+}
+
+// Generate random stars on landing page
+document.addEventListener('DOMContentLoaded', function() {
+    const starsContainer = document.getElementById('landingStars');
+    if (starsContainer) {
+        for (let i = 0; i < 50; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 2 + 's';
+            star.style.animationDuration = (1.5 + Math.random() * 1.5) + 's';
+            starsContainer.appendChild(star);
+        }
+    }
+});
+
+function enterGame() {
+    const landingPage = document.getElementById('landingPage');
+    if (landingPage) {
+        landingPage.classList.add('hidden');
+        // Remove from DOM after animation
+        setTimeout(() => {
+            landingPage.style.display = 'none';
+        }, 800);
+    }
+}
+
+// ============================================
 // TRANSLATIONS
 // ============================================
 
@@ -65,22 +105,36 @@ const translations = {
         noPublicRooms: "No public rooms available",
         orJoinPrivate: "OR join a private room",
         join: "Join",
+        // Voice chat translations
+        voiceChat: "Voice Chat",
+        joinVoice: "Join Voice",
+        leaveVoice: "Leave Voice",
+        voiceConnecting: "Connecting...",
+        voiceConnected: "Connected",
+        voiceDisconnected: "Disconnected",
+        // Custom category (AI) translations
+        customCategoryLabel: "🤖 Custom Category (AI)",
+        customCategoryPlaceholder: "E.g.: Harry Potter, Italian Cuisine, Football...",
+        customCategoryHint: "AI will generate questions on your chosen topic",
+        orDivider: "OR",
+        aiLoading: "Generating questions...",
+        aiLoadingText: "AI is preparing your questions about",
+        aiLoadingRetry: "AI is waking up... Attempt",
+        aiLoadingWait: "This may take a few seconds",
+        aiErrorTimeout: "AI is taking too long to respond. Please try again later or choose a predefined category.",
+        aiErrorGeneration: "Error generating questions. Please try again.",
+        aiErrorConnection: "Connection error. Please try again.",
         subjects: {
             science: "🔬 Science",
             history: "📚 History",
             geography: "🌍 Geography",
             sports: "⚽ Sports",
-            entertainment: "🎬 Entertainment",
             technology: "💻 Technology",
             food: "🍕 Food & Cooking",
             music: "🎵 Music",
             tv_shows: "📺 TV Shows",
             anime: "🎌 Anime",
-            riddles: "🧩 Riddles",
-            current_events: "📰 Current Events",
-            pop_culture: "🎭 Pop Culture",
-            pop_culture_2010s: "📱 2010s Pop Culture",
-            pop_culture_morocco: "🇲🇦 Moroccan Pop Culture"
+            riddles: "🧩 Riddles"
         }
     },
     fr: {
@@ -145,22 +199,37 @@ const translations = {
         noPublicRooms: "Aucune salle publique disponible",
         orJoinPrivate: "OU rejoindre une salle privée",
         join: "Rejoindre",
+        // Voice chat translations
+        voiceChat: "Chat Vocal",
+        joinVoice: "Rejoindre",
+        leaveVoice: "Quitter",
+        voiceConnecting: "Connexion...",
+        voiceConnected: "Connecté",
+        voiceDisconnected: "Déconnecté",
+        // Custom category (AI) translations
+        customCategoryLabel: "🤖 Catégorie Personnalisée (IA)",
+        customCategoryPlaceholder: "Ex: Harry Potter, Cuisine Italienne, Football...",
+        customCategoryHint: "L'IA générera des questions sur le thème de votre choix",
+        orDivider: "OU",
+        aiLoading: "Génération des questions...",
+        aiLoadingText: "L'IA prépare vos questions sur",
+        aiLoadingRetry: "L'IA se réveille... Tentative",
+        aiLoadingWait: "Cela peut prendre quelques secondes",
+        aiErrorTimeout: "L'IA prend trop de temps à répondre. Veuillez réessayer plus tard ou choisir une catégorie prédéfinie.",
+        aiErrorGeneration: "Erreur lors de la génération des questions. Veuillez réessayer.",
+        aiErrorConnection: "Erreur de connexion. Veuillez réessayer.",
         subjects: {
             science: "🔬 Science",
             history: "📚 Histoire",
             geography: "🌍 Géographie",
             sports: "⚽ Sports",
-            entertainment: "🎬 Divertissement",
             technology: "💻 Technologie",
             music: "🎵 Musique",
             food: "🍕 Cuisine & Alimentation",
             tv_shows: "📺 Séries TV",
             anime: "🎌 Anime",
-            riddles: "🧩 Devinettes",
-            current_events: "📰 Actualités",
-            pop_culture: "🎭 Culture Pop",
-            pop_culture_2010s: "📱 Culture Pop 2010s",
-            pop_culture_morocco: "🇲🇦 Culture Pop Marocaine"
+            riddles: "🧩 Devinettes"
+            
         }
     }
 };
@@ -170,9 +239,9 @@ const translations = {
 // ============================================
 
 const SUBJECTS = [
-    'science', 'history', 'geography', 'sports', 'entertainment', 
-    'technology', 'music', 'food', 'tv_shows', 'anime', 'riddles',
-    'current_events', 'pop_culture', 'pop_culture_2010s', 'pop_culture_morocco'
+    'science', 'history', 'geography', 'sports', 
+    'technology', 'music', 'food', 'tv_shows', 'anime', 'riddles'
+    
 ];
 
 let ws;
@@ -702,23 +771,35 @@ function closeSettings() {
 // ============================================
 
 function showScreen(screenId) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    const screen = document.getElementById(screenId);
-    if (screen) screen.classList.add('active');
+    const currentScreen = document.querySelector('.screen.active');
+    const newScreen = document.getElementById(screenId);
+    
+    if (currentScreen && currentScreen.id !== screenId) {
+        // Add exit animation to current screen
+        currentScreen.classList.add('exiting');
+        
+        setTimeout(() => {
+            currentScreen.classList.remove('active', 'exiting');
+            if (newScreen) newScreen.classList.add('active');
+        }, 250);
+    } else {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        if (newScreen) newScreen.classList.add('active');
+    }
 }
 
 function showHome() { showScreen('homeScreen'); }
 
 function showSoloSetup() {
     showScreen('soloSetupScreen');
-    setTimeout(renderSubjects, 50);
+    setTimeout(renderSubjects, 300);
 }
 
 function showMultiMode() { showScreen('multiModeScreen'); }
 
 function showCreateMulti() {
     showScreen('createMultiScreen');
-    setTimeout(renderSubjects, 50);
+    setTimeout(renderSubjects, 300);
 }
 
 function showJoinMulti() {
@@ -843,8 +924,9 @@ function selectGameMode(mode) {
 function renderSubjects() {
     const soloScreen = document.getElementById('soloSetupScreen');
     const createScreen = document.getElementById('createMultiScreen');
-    if (soloScreen?.classList.contains('active')) renderSubjectsToContainer('soloSubjects');
-    if (createScreen?.classList.contains('active')) renderSubjectsToContainer('createSubjects');
+    // Render to both containers regardless of active state
+    renderSubjectsToContainer('soloSubjects');
+    renderSubjectsToContainer('createSubjects');
 }
 
 function renderSubjectsToContainer(containerId) {
@@ -919,9 +1001,34 @@ function getWebSocketUrl(code) {
 async function startSoloGame() {
     const name = document.getElementById('soloName')?.value.trim();
     const subjects = getSelectedSubjects('soloSubjects');
+    const customCategoryEl = document.getElementById('customCategoryInput');
+    const customCategory = customCategoryEl ? customCategoryEl.value.trim() : '';
+    
+    console.log('startSoloGame called');
+    console.log('Name:', name);
+    console.log('Subjects:', subjects);
+    console.log('Custom Category Element:', customCategoryEl);
+    console.log('Custom Category Value:', customCategory);
+    
     if (!name) { alert(t('alertName')); return; }
-    if (subjects.length === 0) { alert(t('alertSubjects')); return; }
+    
+    // Check if using custom category or predefined subjects
+    if (customCategory && customCategory.length > 0) {
+        console.log('Using AI for custom category:', customCategory);
+        // Use AI to generate questions for custom category
+        await startSoloGameWithAI(name, customCategory);
+    } else if (subjects.length > 0) {
+        console.log('Using predefined subjects:', subjects);
+        // Use predefined questions from questions.json
+        await startSoloGameWithPredefined(name, subjects);
+    } else {
+        console.log('No category selected!');
+        alert(t('alertSubjects'));
+        return;
+    }
+}
 
+async function startSoloGameWithPredefined(name, subjects) {
     gameMode = 'solo';
     soloScore = 0;
     soloQuestionIndex = 0;
@@ -939,29 +1046,203 @@ async function startSoloGame() {
     }
 }
 
+async function startSoloGameWithAI(name, category, retryCount = 0) {
+    const MAX_RETRIES = 5;
+    
+    // Show loading modal
+    const loadingModal = document.getElementById('aiLoadingModal');
+    const loadingCategory = document.getElementById('aiLoadingCategory');
+    const loadingText = document.getElementById('aiLoadingText');
+    
+    if (loadingModal) loadingModal.style.display = 'flex';
+    if (loadingCategory) loadingCategory.textContent = category;
+    
+    // Update loading text based on retry count
+    if (loadingText) {
+        if (retryCount === 0) {
+            loadingText.innerHTML = `${t('aiLoadingText')} "<span id="aiLoadingCategory">${category}</span>"`;
+        } else {
+            loadingText.innerHTML = `${t('aiLoadingRetry')} ${retryCount}/${MAX_RETRIES} 🔄`;
+        }
+    }
+    
+    gameMode = 'solo';
+    soloScore = 0;
+    soloQuestionIndex = 0;
+    
+    try {
+        const response = await fetch('/api/generate-questions', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                category: category,
+                count: 10,
+                language: selectedLanguage
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success && data.questions && data.questions.length > 0) {
+            // Hide loading modal
+            if (loadingModal) loadingModal.style.display = 'none';
+            
+            // Transform AI questions to match game format
+            soloQuestions = data.questions.map((q, idx) => {
+                // Find the index of the correct answer in options
+                const correctIndex = q.options.findIndex(opt => opt === q.answer);
+                return {
+                    q: q.question,
+                    options: q.options,
+                    correct: correctIndex >= 0 ? correctIndex : 0,  // Default to 0 if not found
+                    time: 15  // Give a bit more time for AI questions
+                };
+            });
+            
+            showScreen('soloGameScreen');
+            showNextSoloQuestion();
+        } else if (data.retry && retryCount < MAX_RETRIES) {
+            // Model is loading, auto-retry after delay
+            console.log(`AI model loading, retry ${retryCount + 1}/${MAX_RETRIES}...`);
+            setTimeout(() => startSoloGameWithAI(name, category, retryCount + 1), 3000);
+        } else if (retryCount >= MAX_RETRIES) {
+            // Max retries reached
+            if (loadingModal) loadingModal.style.display = 'none';
+            alert(t('aiErrorTimeout'));
+        } else {
+            if (loadingModal) loadingModal.style.display = 'none';
+            alert(data.error || t('aiErrorGeneration'));
+        }
+    } catch (error) {
+        console.error('Error generating AI questions:', error);
+        if (retryCount < MAX_RETRIES) {
+            console.log(`Network error, retry ${retryCount + 1}/${MAX_RETRIES}...`);
+            setTimeout(() => startSoloGameWithAI(name, category, retryCount + 1), 3000);
+        } else {
+            if (loadingModal) loadingModal.style.display = 'none';
+            alert(t('aiErrorConnection'));
+        }
+    }
+}
+
+// Handle custom category input - deselect subjects when typing
+document.addEventListener('DOMContentLoaded', function() {
+    // Solo mode custom category
+    const customInput = document.getElementById('customCategoryInput');
+    const soloSubjectsContainer = document.getElementById('soloSubjects');
+    
+    if (customInput) {
+        customInput.addEventListener('input', function() {
+            if (this.value.trim()) {
+                // Deselect all subjects when custom category is entered
+                if (soloSubjectsContainer) {
+                    soloSubjectsContainer.classList.add('custom-category-active');
+                    soloSubjectsContainer.querySelectorAll('.subject-btn').forEach(btn => {
+                        btn.classList.remove('selected');
+                    });
+                }
+            } else {
+                if (soloSubjectsContainer) {
+                    soloSubjectsContainer.classList.remove('custom-category-active');
+                }
+            }
+        });
+    }
+    
+    // Clear custom input when selecting a predefined subject
+    if (soloSubjectsContainer) {
+        soloSubjectsContainer.addEventListener('click', function(e) {
+            if (e.target.classList.contains('subject-btn')) {
+                if (customInput) {
+                    customInput.value = '';
+                    soloSubjectsContainer.classList.remove('custom-category-active');
+                }
+            }
+        });
+    }
+    
+    // Multiplayer mode custom category
+    const customInputMulti = document.getElementById('customCategoryInputMulti');
+    const createSubjectsContainer = document.getElementById('createSubjects');
+    
+    if (customInputMulti) {
+        customInputMulti.addEventListener('input', function() {
+            if (this.value.trim()) {
+                // Deselect all subjects when custom category is entered
+                if (createSubjectsContainer) {
+                    createSubjectsContainer.classList.add('custom-category-active');
+                    createSubjectsContainer.querySelectorAll('.subject-btn').forEach(btn => {
+                        btn.classList.remove('selected');
+                    });
+                }
+            } else {
+                if (createSubjectsContainer) {
+                    createSubjectsContainer.classList.remove('custom-category-active');
+                }
+            }
+        });
+    }
+    
+    // Clear custom input when selecting a predefined subject (multiplayer)
+    if (createSubjectsContainer) {
+        createSubjectsContainer.addEventListener('click', function(e) {
+            if (e.target.classList.contains('subject-btn')) {
+                if (customInputMulti) {
+                    customInputMulti.value = '';
+                    createSubjectsContainer.classList.remove('custom-category-active');
+                }
+            }
+        });
+    }
+});
+
 function showNextSoloQuestion() {
     if (soloQuestionIndex >= soloQuestions.length) { showSoloGameOver(); return; }
 
     soloCurrentQuestion = soloQuestions[soloQuestionIndex];
+    
+    // Update score badge
     const scoreEl = document.getElementById('soloScore');
-    if (scoreEl) scoreEl.innerHTML = `${t('score')}: <span>${soloScore}</span>`;
+    if (scoreEl) {
+        const scoreValue = scoreEl.querySelector('.score-value');
+        if (scoreValue) {
+            scoreValue.textContent = soloScore;
+        }
+    }
+    
+    // Update question badge
+    const questionBadge = document.getElementById('soloQuestionBadge');
+    if (questionBadge) {
+        const questionValue = questionBadge.querySelector('.question-value');
+        if (questionValue) {
+            questionValue.textContent = `${soloQuestionIndex + 1}/${soloQuestions.length}`;
+        }
+    }
+    
     const questionText = document.getElementById('soloQuestionText');
     if (questionText) questionText.textContent = soloCurrentQuestion.q;
     const questionNumber = document.getElementById('soloQuestionNumber');
     if (questionNumber) questionNumber.textContent = `${t('question').toUpperCase()} #${soloQuestionIndex + 1}`;
 
     let timeLeft = soloCurrentQuestion.time || 10;
+    const maxTime = timeLeft;
     const timerEl = document.getElementById('soloTimer');
-    if (timerEl) { timerEl.innerHTML = `⏱️ <span>${timeLeft}</span>s`; timerEl.classList.remove('warning'); }
+    
+    // Use circular timer
+    if (timerEl) {
+        timerEl.innerHTML = createCircularTimer(timeLeft, maxTime);
+    }
 
     clearInterval(timerInterval);
     timerInterval = setInterval(() => {
         timeLeft--;
         if (timerEl) {
-            timerEl.innerHTML = `⏱️ <span>${timeLeft}</span>s`;
-            if (timeLeft <= 3) timerEl.classList.add('warning');
+            timerEl.innerHTML = createCircularTimer(timeLeft, maxTime);
         }
-        if (timeLeft <= 0) { clearInterval(timerInterval); timerEl?.classList.remove('warning'); handleSoloTimeout(); }
+        if (timeLeft <= 0) { 
+            clearInterval(timerInterval); 
+            handleSoloTimeout(); 
+        }
     }, 1000);
 
     const optionsBox = document.getElementById('soloOptionsBox');
@@ -972,6 +1253,8 @@ function showNextSoloQuestion() {
             div.className = 'option visible';
             div.textContent = option;
             div.onclick = () => handleSoloAnswer(idx);
+            // Add staggered animation
+            div.style.animationDelay = (idx * 0.1) + 's';
             optionsBox.appendChild(div);
         });
     }
@@ -980,15 +1263,22 @@ function showNextSoloQuestion() {
 
 function handleSoloAnswer(idx) {
     clearInterval(timerInterval);
-    document.getElementById('soloTimer')?.classList.remove('warning');
     const correct = idx === soloCurrentQuestion.correct;
     if (correct) {
         soloScore += 100;
         playSfx('correct');
         const scoreEl = document.getElementById('soloScore');
-        if (scoreEl) scoreEl.innerHTML = `${t('score')}: <span>${soloScore}</span>`;
+        if (scoreEl) {
+            const scoreValue = scoreEl.querySelector('.score-value');
+            if (scoreValue) {
+                scoreValue.textContent = soloScore;
+            }
+            // Add animation
+            scoreEl.classList.remove('updated');
+            void scoreEl.offsetWidth; // Trigger reflow
+            scoreEl.classList.add('updated');
+        }
         createConfetti(30);
-        animateScore('soloScore');
     } else { 
         playSfx('wrong');
         shakeScreen(); 
@@ -1049,16 +1339,106 @@ function hideSoloMessage() {
 // MULTIPLAYER GAME
 // ============================================
 
-function createRoom() {
+async function createRoom() {
     const code = document.getElementById('createCode')?.value.trim().toUpperCase();
     const name = document.getElementById('createName')?.value.trim();
     const subjects = getSelectedSubjects('createSubjects');
+    const customCategory = document.getElementById('customCategoryInputMulti')?.value.trim();
+    
     if (!code || !name) { alert(t('alertBothFields')); return; }
-    if (subjects.length === 0) { alert(t('alertSubjects')); return; }
-    currentRoomCode = code;
-    gameMode = 'multiplayer';
-    const isPublic = selectedRoomVisibility === 'public';
-    connectWebSocket(code, name, true, subjects, selectedGameMode, isPublic);
+    
+    // Check if using custom category or predefined subjects
+    if (customCategory) {
+        // Use AI to generate questions for custom category
+        await createRoomWithAI(code, name, customCategory);
+    } else if (subjects.length > 0) {
+        // Use predefined questions
+        currentRoomCode = code;
+        gameMode = 'multiplayer';
+        const isPublic = selectedRoomVisibility === 'public';
+        connectWebSocket(code, name, true, subjects, selectedGameMode, isPublic);
+    } else {
+        alert(t('alertSubjects'));
+        return;
+    }
+}
+
+async function createRoomWithAI(code, name, category, retryCount = 0) {
+    const MAX_RETRIES = 5;
+    
+    // Show loading modal
+    const loadingModal = document.getElementById('aiLoadingModal');
+    const loadingCategory = document.getElementById('aiLoadingCategory');
+    const loadingText = document.getElementById('aiLoadingText');
+    
+    if (loadingModal) loadingModal.style.display = 'flex';
+    if (loadingCategory) loadingCategory.textContent = category;
+    
+    // Update loading text based on retry count
+    if (loadingText) {
+        if (retryCount === 0) {
+            loadingText.innerHTML = `${t('aiLoadingText')} "<span id="aiLoadingCategory">${category}</span>"`;
+        } else {
+            loadingText.innerHTML = `${t('aiLoadingRetry')} ${retryCount}/${MAX_RETRIES} 🔄`;
+        }
+    }
+    
+    try {
+        const response = await fetch('/api/generate-questions', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                category: category,
+                count: 10,
+                language: selectedLanguage
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success && data.questions && data.questions.length > 0) {
+            // Hide loading modal
+            if (loadingModal) loadingModal.style.display = 'none';
+            
+            // Store AI questions temporarily
+            window.aiGeneratedQuestions = data.questions.map((q) => {
+                const correctIndex = q.options.findIndex(opt => opt === q.answer);
+                return {
+                    q: q.question,
+                    options: q.options,
+                    correct: correctIndex >= 0 ? correctIndex : 0,
+                    time: 15
+                };
+            });
+            
+            currentRoomCode = code;
+            gameMode = 'multiplayer';
+            const isPublic = selectedRoomVisibility === 'public';
+            // Pass 'ai_custom' as subject to signal using AI questions
+            // Parameters: code, name, isCreating, subjects, gm, isPublic, team, aiQuestions
+            connectWebSocket(code, name, true, ['ai_custom'], selectedGameMode, isPublic, null, window.aiGeneratedQuestions);
+        } else if (data.retry && retryCount < MAX_RETRIES) {
+            // Model is loading, auto-retry after delay
+            console.log(`AI model loading, retry ${retryCount + 1}/${MAX_RETRIES}...`);
+            setTimeout(() => createRoomWithAI(code, name, category, retryCount + 1), 3000);
+        } else if (retryCount >= MAX_RETRIES) {
+            // Max retries reached
+            if (loadingModal) loadingModal.style.display = 'none';
+            alert(t('aiErrorTimeout'));
+        } else {
+            if (loadingModal) loadingModal.style.display = 'none';
+            alert(data.error || t('aiErrorGeneration'));
+        }
+    } catch (error) {
+        console.error('Error generating AI questions:', error);
+        if (retryCount < MAX_RETRIES) {
+            console.log(`Network error, retry ${retryCount + 1}/${MAX_RETRIES}...`);
+            setTimeout(() => createRoomWithAI(code, name, category, retryCount + 1), 3000);
+        } else {
+            if (loadingModal) loadingModal.style.display = 'none';
+            alert(t('aiErrorConnection'));
+        }
+    }
 }
 
 async function checkRoomMode() {
@@ -1121,14 +1501,34 @@ async function joinRoom() {
     connectWebSocket(code, name, false, [], 'ffa', false, selectedJoinTeam);
 }
 
-function connectWebSocket(code, playerName, isCreating, subjects, gm = 'ffa', isPublic = false, team = null) {
+function connectWebSocket(code, playerName, isCreating, subjects, gm = 'ffa', isPublic = false, team = null, aiQuestions = null) {
     // Disconnect from lobby when joining a room
     disconnectFromLobby();
+    
+    // Debug logging
+    console.log('connectWebSocket called with:');
+    console.log('- code:', code);
+    console.log('- isCreating:', isCreating);
+    console.log('- aiQuestions:', aiQuestions);
+    console.log('- aiQuestions length:', aiQuestions ? aiQuestions.length : 0);
     
     ws = new WebSocket(getWebSocketUrl(code));
     ws.onopen = () => {
         if (isCreating) {
-            ws.send(JSON.stringify({ action: 'create', language: selectedLanguage, subjects: subjects, gameMode: gm, isPublic: isPublic }));
+            const createData = { 
+                action: 'create', 
+                language: selectedLanguage, 
+                subjects: subjects, 
+                gameMode: gm, 
+                isPublic: isPublic 
+            };
+            // Include AI questions if provided
+            if (aiQuestions && aiQuestions.length > 0) {
+                createData.aiQuestions = aiQuestions;
+                console.log('Adding aiQuestions to createData:', aiQuestions.length);
+            }
+            console.log('Sending createData:', JSON.stringify(createData).substring(0, 500));
+            ws.send(JSON.stringify(createData));
             setTimeout(() => ws.send(JSON.stringify({ action: 'join', playerName: playerName })), 100);
         } else ws.send(JSON.stringify({ action: 'join', playerName: playerName, team: team }));
     };
@@ -1174,7 +1574,16 @@ function updatePlayers(data) {
         const div = document.createElement('div'); div.className = 'player-item' + (player.isHost ? ' host' : '');
         let teamBadge = '';
         if (data.gameMode === 'team' && player.team) teamBadge = `<span class="team-badge team-${player.team}">${t('team' + player.team.charAt(0).toUpperCase() + player.team.slice(1))}</span>`;
-        div.innerHTML = `<span>${player.name}${teamBadge}</span>${player.isHost ? `<span class="host-badge">${t('host')}</span>` : ''}`;
+        
+        // Use avatar
+        const avatar = createAvatarHTML(player.name);
+        div.innerHTML = `
+            <div class="player-info">
+                ${avatar}
+                <span class="player-name">${player.name}${teamBadge}</span>
+            </div>
+            ${player.isHost ? `<span class="host-badge">${t('host')}</span>` : ''}
+        `;
         list.appendChild(div);
     });
     const startBtn = document.getElementById('startBtn');
@@ -1185,21 +1594,48 @@ function startGame() {
     if (ws?.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ action: 'start', userId, matchToken, language: selectedLanguage }));
 }
 
+let currentMaxTime = 10; // Store max time for circular timer
+
 function showQuestion(data) {
     hasBuzzed = false; canAnswer = false;
     document.getElementById('questionText').textContent = data.q;
+    
+    // Update round badge
     const roundInfo = document.getElementById('roundInfo');
-    if (roundInfo && data.round) roundInfo.innerHTML = `${t('round')}: <span>${data.round}/3</span> • Q: <span>${data.questionInRound}/${data.questionsPerRound}</span>`;
+    if (roundInfo && data.round) {
+        const roundValue = roundInfo.querySelector('.round-value');
+        if (roundValue) {
+            roundValue.textContent = `${data.round}/3`;
+        }
+    }
+    
+    // Update question badge
+    const questionBadge = document.getElementById('questionBadge');
+    if (questionBadge && data.questionInRound) {
+        const questionValue = questionBadge.querySelector('.question-value');
+        if (questionValue) {
+            questionValue.textContent = `${data.questionInRound}/${data.questionsPerRound}`;
+        }
+    }
 
     let timeLeft = data.time;
+    currentMaxTime = data.time;
     const timerEl = document.getElementById('timer');
-    if (timerEl) { timerEl.innerHTML = `⏱️ <span>${timeLeft}</span>s`; timerEl.classList.remove('warning'); }
+    
+    // Use circular timer
+    if (timerEl) {
+        timerEl.innerHTML = createCircularTimer(timeLeft, currentMaxTime);
+    }
 
     clearInterval(timerInterval);
     timerInterval = setInterval(() => {
         timeLeft--;
-        if (timerEl) { timerEl.innerHTML = `⏱️ <span>${timeLeft}</span>s`; if (timeLeft <= 3) timerEl.classList.add('warning'); }
-        if (timeLeft <= 0) { clearInterval(timerInterval); timerEl?.classList.remove('warning'); }
+        if (timerEl) {
+            timerEl.innerHTML = createCircularTimer(timeLeft, currentMaxTime);
+        }
+        if (timeLeft <= 0) { 
+            clearInterval(timerInterval);
+        }
     }, 1000);
 
     const buzzer = document.getElementById('buzzer');
@@ -1209,7 +1645,12 @@ function showQuestion(data) {
     if (optionsBox) {
         optionsBox.innerHTML = '';
         data.options.forEach((option, idx) => {
-            const div = document.createElement('div'); div.className = 'option'; div.textContent = option; div.onclick = () => answerQuestion(idx);
+            const div = document.createElement('div'); 
+            div.className = 'option'; 
+            div.textContent = option; 
+            div.onclick = () => answerQuestion(idx);
+            // Add staggered animation
+            div.style.animationDelay = (idx * 0.1) + 's';
             optionsBox.appendChild(div);
         });
     }
@@ -1244,9 +1685,18 @@ function answerQuestion(idx) {
 
 function showResult(data) {
     clearInterval(timerInterval);
-    document.querySelectorAll('#optionsBox .option').forEach(opt => {
-        opt.classList.add('visible'); opt.onclick = null;
-        if (opt.textContent === data.answer) { opt.classList.add('correct'); animateCorrectOption(opt); }
+    document.querySelectorAll('#optionsBox .option').forEach((opt, idx) => {
+        opt.classList.add('visible'); 
+        opt.onclick = null;
+        // Mark correct answer
+        if (opt.textContent === data.answer) { 
+            opt.classList.add('correct'); 
+            animateCorrectOption(opt); 
+        }
+        // Mark incorrect answer that was selected (if wrong)
+        if (!data.correct && data.selectedIdx !== undefined && idx === data.selectedIdx) {
+            opt.classList.add('incorrect');
+        }
     });
     const myName = document.getElementById('createName')?.value || document.getElementById('joinName')?.value;
     if (data.answeredBy === myName) { 
@@ -1270,8 +1720,28 @@ function updateScores(scores) {
     const teamDiv = document.getElementById('teamScoresDiv');
     scoresBox.innerHTML = `<h3>${t('scores')}</h3>`;
     if (teamDiv) scoresBox.insertBefore(teamDiv, scoresBox.firstChild);
+    
+    // Find max score for progress bars
+    const maxScore = Math.max(...Object.values(scores), 1);
+    
     Object.entries(scores).forEach(([name, score]) => {
-        const div = document.createElement('div'); div.className = 'score-row'; div.innerHTML = `<span>${name}</span><span>${score}</span>`;
+        const div = document.createElement('div'); 
+        div.className = 'score-row';
+        const avatar = createAvatarHTML(name);
+        const percentage = (score / maxScore) * 100;
+        
+        div.innerHTML = `
+            <div class="player-info">
+                ${avatar}
+                <span class="player-name">${name}</span>
+            </div>
+            <div class="player-score-container">
+                <div class="player-score-bar">
+                    <div class="player-score-fill" style="width: ${percentage}%"></div>
+                </div>
+                <span class="player-score-text">${score}</span>
+            </div>
+        `;
         scoresBox.appendChild(div);
     });
 }
@@ -1330,3 +1800,306 @@ function animateScore(id) { const el = document.getElementById(id); if (el) { el
 function animateBuzzerPress() { const b = document.getElementById('buzzer'); if (b) { b.classList.add('buzzer-press'); setTimeout(() => b.classList.remove('buzzer-press'), 300); } }
 function celebrateVictory() { createConfetti(100); const wb = document.getElementById('winnerBox'); if (wb) wb.classList.add('victory-animate'); }
 function animateCorrectOption(el) { if (el) { el.classList.add('correct-pulse'); setTimeout(() => el.classList.remove('correct-pulse'), 600); } }
+
+// ============================================
+// UI IMPROVEMENTS
+// ============================================
+
+// Button ripple effect
+document.addEventListener('click', function(e) {
+    const btn = e.target.closest('.btn');
+    if (btn) {
+        const rect = btn.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        btn.style.setProperty('--ripple-x', x + '%');
+        btn.style.setProperty('--ripple-y', y + '%');
+        btn.classList.remove('ripple');
+        void btn.offsetWidth; // Trigger reflow
+        btn.classList.add('ripple');
+        setTimeout(() => btn.classList.remove('ripple'), 600);
+    }
+});
+
+// Generate avatar color from name
+function getAvatarColor(name) {
+    const colors = [
+        '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7',
+        '#DDA0DD', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E9',
+        '#F8B500', '#FF6F61', '#6B5B95', '#88B04B', '#F7CAC9',
+        '#92A8D1', '#955251', '#B565A7', '#009B77', '#DD4124'
+    ];
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+        hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return colors[Math.abs(hash) % colors.length];
+}
+
+// Get initials from name
+function getInitials(name) {
+    return name.split(' ')
+        .map(word => word.charAt(0))
+        .join('')
+        .substring(0, 2)
+        .toUpperCase();
+}
+
+// Create avatar HTML
+function createAvatarHTML(name) {
+    const color = getAvatarColor(name);
+    const initials = getInitials(name);
+    return `<div class="player-avatar" style="background: ${color};">${initials}</div>`;
+}
+
+// Create circular timer HTML
+function createCircularTimer(time, maxTime) {
+    const percentage = (time / maxTime);
+    const circumference = 226; // 2 * PI * 36 (radius)
+    const offset = circumference * (1 - percentage);
+    
+    let colorClass = '';
+    if (percentage <= 0.25) colorClass = 'danger';
+    else if (percentage <= 0.5) colorClass = 'warning';
+    
+    return `
+        <div class="timer-container">
+            <div class="circular-timer">
+                <svg viewBox="0 0 80 80">
+                    <circle class="timer-bg" cx="40" cy="40" r="36"/>
+                    <circle class="timer-progress ${colorClass}" cx="40" cy="40" r="36" 
+                        style="stroke-dashoffset: ${offset}"/>
+                </svg>
+                <span class="timer-text ${colorClass}">${time}</span>
+            </div>
+        </div>
+    `;
+}
+
+// Update circular timer
+function updateCircularTimer(containerId, time, maxTime) {
+    const container = document.getElementById(containerId);
+    if (container) {
+        container.innerHTML = createCircularTimer(time, maxTime);
+    }
+}
+
+// ============================================
+// VOICE CHAT (AGORA)
+// ============================================
+
+const AGORA_APP_ID = 'bfb23a30fb7349438d544b129ce4bd51';
+let agoraClient = null;
+let localAudioTrack = null;
+let isInVoiceChat = false;
+let isMuted = false;
+let voiceParticipants = new Map(); // odUserId -> {name, odUserId}
+
+async function initAgoraClient() {
+    if (!window.AgoraRTC) {
+        console.error('Agora SDK not loaded');
+        return false;
+    }
+    
+    if (!agoraClient) {
+        agoraClient = AgoraRTC.createClient({ mode: 'rtc', codec: 'vp8' });
+        
+        // Handle user published (someone joins voice)
+        agoraClient.on('user-published', async (user, mediaType) => {
+            await agoraClient.subscribe(user, mediaType);
+            if (mediaType === 'audio') {
+                user.audioTrack.play();
+                addVoiceParticipant(user.uid, 'Player');
+            }
+        });
+        
+        // Handle user unpublished (someone leaves voice)
+        agoraClient.on('user-unpublished', (user) => {
+            removeVoiceParticipant(user.uid);
+        });
+        
+        // Handle user left
+        agoraClient.on('user-left', (user) => {
+            removeVoiceParticipant(user.uid);
+        });
+        
+        // Handle volume indicator for speaking animation
+        agoraClient.enableAudioVolumeIndicator();
+        agoraClient.on('volume-indicator', (volumes) => {
+            volumes.forEach(volume => {
+                const el = document.querySelector(`[data-odUserId="${volume.uid}"]`);
+                if (el) {
+                    if (volume.level > 5) {
+                        el.classList.remove('not-speaking');
+                    } else {
+                        el.classList.add('not-speaking');
+                    }
+                }
+            });
+        });
+    }
+    return true;
+}
+
+async function toggleVoiceChat() {
+    if (isInVoiceChat) {
+        await leaveVoiceChat();
+    } else {
+        await joinVoiceChat();
+    }
+}
+
+async function joinVoiceChat() {
+    try {
+        updateVoiceStatus('connecting', t('voiceConnecting'));
+        
+        const initialized = await initAgoraClient();
+        if (!initialized) {
+            alert('Voice chat not available');
+            updateVoiceStatus('disconnected', t('voiceDisconnected'));
+            return;
+        }
+        
+        // Use room code as channel name
+        const channelName = currentRoomCode || 'default';
+        
+        // Join the channel (null token for testing, odUserId is a random number)
+        const odUserId = Math.floor(Math.random() * 100000);
+        await agoraClient.join(AGORA_APP_ID, channelName, null, odUserId);
+        
+        // Create and publish local audio track
+        localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
+        await agoraClient.publish([localAudioTrack]);
+        
+        isInVoiceChat = true;
+        isMuted = false;
+        
+        // Update UI
+        updateVoiceStatus('connected', t('voiceConnected'));
+        updateVoiceButtons();
+        
+        // Add self to participants
+        const myName = document.getElementById('createName')?.value || 
+                       document.getElementById('joinName')?.value || 'You';
+        addVoiceParticipant(odUserId, myName + ' (You)');
+        
+    } catch (error) {
+        console.error('Failed to join voice chat:', error);
+        alert('Failed to join voice chat: ' + error.message);
+        updateVoiceStatus('disconnected', t('voiceDisconnected'));
+    }
+}
+
+async function leaveVoiceChat() {
+    try {
+        if (localAudioTrack) {
+            localAudioTrack.close();
+            localAudioTrack = null;
+        }
+        
+        if (agoraClient) {
+            await agoraClient.leave();
+        }
+        
+        isInVoiceChat = false;
+        isMuted = false;
+        voiceParticipants.clear();
+        
+        // Update UI
+        updateVoiceStatus('disconnected', t('voiceDisconnected'));
+        updateVoiceButtons();
+        renderVoiceParticipants();
+        
+    } catch (error) {
+        console.error('Failed to leave voice chat:', error);
+    }
+}
+
+function toggleMute() {
+    if (!localAudioTrack) return;
+    
+    isMuted = !isMuted;
+    localAudioTrack.setEnabled(!isMuted);
+    
+    const muteIcon = document.getElementById('muteIcon');
+    const muteBtn = document.getElementById('muteBtn');
+    
+    if (muteIcon) {
+        muteIcon.textContent = isMuted ? '🔇' : '🔊';
+    }
+    if (muteBtn) {
+        muteBtn.classList.toggle('muted', isMuted);
+    }
+}
+
+function updateVoiceStatus(status, text) {
+    const statusDot = document.querySelector('.status-dot');
+    const statusText = document.querySelector('.voice-status span:last-child');
+    
+    if (statusDot) {
+        statusDot.className = 'status-dot ' + status;
+    }
+    if (statusText) {
+        statusText.textContent = text;
+    }
+}
+
+function updateVoiceButtons() {
+    const joinBtn = document.getElementById('joinVoiceBtn');
+    const voiceIcon = document.getElementById('voiceIcon');
+    const voiceBtnText = document.getElementById('voiceBtnText');
+    const muteBtn = document.getElementById('muteBtn');
+    
+    if (isInVoiceChat) {
+        if (joinBtn) joinBtn.classList.add('active');
+        if (voiceIcon) voiceIcon.textContent = '📞';
+        if (voiceBtnText) voiceBtnText.textContent = t('leaveVoice');
+        if (muteBtn) muteBtn.style.display = 'flex';
+    } else {
+        if (joinBtn) joinBtn.classList.remove('active');
+        if (voiceIcon) voiceIcon.textContent = '🎤';
+        if (voiceBtnText) voiceBtnText.textContent = t('joinVoice');
+        if (muteBtn) muteBtn.style.display = 'none';
+    }
+}
+
+function addVoiceParticipant(odUserId, name) {
+    voiceParticipants.set(odUserId, { name, odUserId });
+    renderVoiceParticipants();
+}
+
+function removeVoiceParticipant(odUserId) {
+    voiceParticipants.delete(odUserId);
+    renderVoiceParticipants();
+}
+
+function renderVoiceParticipants() {
+    const container = document.getElementById('voiceParticipants');
+    if (!container) return;
+    
+    if (voiceParticipants.size === 0) {
+        container.innerHTML = '';
+        return;
+    }
+    
+    container.innerHTML = Array.from(voiceParticipants.values()).map(p => `
+        <div class="voice-participant not-speaking" data-odUserId="${p.odUserId}">
+            <span class="speaking-indicator"></span>
+            <span>${p.name}</span>
+        </div>
+    `).join('');
+}
+
+// Clean up voice chat when leaving game
+function cleanupVoiceChat() {
+    if (isInVoiceChat) {
+        leaveVoiceChat();
+    }
+}
+
+// Add cleanup when showing home screen
+const originalShowHome = showHome;
+showHome = function() {
+    cleanupVoiceChat();
+    originalShowHome();
+};
