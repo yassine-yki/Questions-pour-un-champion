@@ -7,6 +7,14 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import JSONResponse
 from typing import Dict, Any, Optional, List
 
+# Load environment variables from .env file (for local development)
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+    print("✅ Loaded .env file")
+except ImportError:
+    print("ℹ️  python-dotenv not installed, using system environment variables")
+
 app = FastAPI()
 
 app.add_middleware(
@@ -20,9 +28,16 @@ app.add_middleware(
 templates = Jinja2Templates(directory="templates")
 
 # === HUGGING FACE CONFIGURATION ===
-HF_API_TOKEN = "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"
+# Token is loaded from environment variable (never hardcode secrets!)
+HF_API_TOKEN = os.environ.get("HF_API_TOKEN")
 HF_API_URL = "https://router.huggingface.co/v1/chat/completions"
 HF_MODEL = "meta-llama/Llama-3.1-8B-Instruct"
+
+# Warning if token is not set
+if not HF_API_TOKEN:
+    print("⚠️  WARNING: HF_API_TOKEN environment variable is not set!")
+    print("   AI-generated questions will not work.")
+    print("   Set it with: export HF_API_TOKEN='your_token_here'")
 
 # Cache file path
 CACHE_FILE = "ai_questions_cache.json"
@@ -1026,14 +1041,14 @@ Règles:
                 if cached_count >= num_questions:
                     print(f"Using {cached_count} cached questions")
                     return random.sample(ai_questions_cache[cache_key], num_questions)
-                return None # type: ignore
+                return None
             
             if response.status_code != 200:
                 print(f"HF API error: {response.status_code} - {response.text}")
                 # Fallback to cache if available
                 if cached_count >= num_questions:
                     return random.sample(ai_questions_cache[cache_key], num_questions)
-                return None # type: ignore
+                return None
             
             result = response.json()
             print(f"HF API result: {result}")
@@ -1083,14 +1098,14 @@ Règles:
             if cached_count >= num_questions:
                 return random.sample(ai_questions_cache[cache_key], num_questions)
             
-            return None # type: ignore
+            return None
             
     except Exception as e:
         print(f"Error generating questions: {e}")
         # Fallback to cache if available
         if cached_count >= num_questions:
             return random.sample(ai_questions_cache[cache_key], num_questions)
-        return None # type: ignore
+        return None
 
 
 def get_cache_stats() -> Dict[str, Any]:
@@ -1130,15 +1145,15 @@ def parse_ai_response(text: str) -> List[Dict]:
                         "answer": q["answer"]
                     })
             
-            return valid_questions if valid_questions else None # type: ignore
+            return valid_questions if valid_questions else None
         
-        return None # type: ignore
+        return None
     except json.JSONDecodeError as e:
         print(f"JSON parse error: {e}")
-        return None # type: ignore
+        return None
     except Exception as e:
         print(f"Parse error: {e}")
-        return None # type: ignore
+        return None
 
 
 @app.post("/api/generate-questions")
@@ -1227,7 +1242,3 @@ async def cache_stats():
 
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
-
-
-# needs more testing
-
