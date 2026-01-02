@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🎯 Questions pour un Champion</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Press+Start+2P&family=Poppins:wght@400;600;700&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Press+Start+2P&family=Poppins:wght@400;600;700&family=Cinzel:wght@400;600;700&family=Creepster&display=swap" rel="stylesheet">
     <script src="https://download.agora.io/sdk/release/AgoraRTC_N-4.20.0.js"></script>
     <style>
         /* ============================================
@@ -70,37 +70,37 @@
             --corner-decorations: 1;
             --dragon-fire: 1;
             --ember-effect: 1;
-            --bg-image: url('https://plus.unsplash.com/premium_photo-1661878091370-4ccb8763756a?w=1920&q=80');
+            --bg-image: url('https://images.unsplash.com/photo-1599894019794-50339c9ad89c?w=1920&q=80');
         }
 
-        /* THEME: Ocean 🌊 */
-        [data-theme="ocean"] {
-            --bg-primary: #0a1628;
-            --bg-secondary: linear-gradient(180deg, #0a1628 0%, #0d2137 50%, #1a3a5c 100%);
-            --bg-card: rgba(10, 40, 80, 0.7);
-            --accent-1: #00b4d8;
-            --accent-2: #0077b6;
-            --accent-3: #90e0ef;
-            --danger: #ff6b6b;
-            --success: #00f5d4;
-            --warning: #ffd166;
-            --text-primary: #fff;
-            --text-secondary: #90e0ef;
-            --border-color: #00b4d8;
-            --border-glow: 0 0 25px rgba(0, 180, 216, 0.4), 0 0 50px rgba(0, 119, 182, 0.2);
-            --button-gradient: linear-gradient(135deg, #00b4d8, #0077b6);
-            --button-secondary: linear-gradient(135deg, #0077b6, #023e8a);
-            --buzzer-gradient: radial-gradient(circle at 30% 30%, #ff6b6b, #ee5a5a, #cc4444);
-            --buzzer-border: #ff6b6b;
-            --font-display: 'Poppins', sans-serif;
+        /* THEME: Horror 🩸 */
+        [data-theme="horror"] {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: linear-gradient(180deg, #0a0a0a 0%, #1a0a0a 50%, #0d0d0d 100%);
+            --bg-card: rgba(20, 10, 10, 0.9);
+            --accent-1: #8B0000;
+            --accent-2: #cc0000;
+            --accent-3: #ff4444;
+            --danger: #ff0000;
+            --success: #4a7c4e;
+            --warning: #8B4513;
+            --text-primary: #e8e8e8;
+            --text-secondary: #a0a0a0;
+            --border-color: #8B0000;
+            --border-glow: 0 0 25px rgba(139, 0, 0, 0.5), 0 0 50px rgba(139, 0, 0, 0.2);
+            --button-gradient: linear-gradient(135deg, #8B0000, #5c0000);
+            --button-secondary: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+            --buzzer-gradient: radial-gradient(circle at 30% 30%, #cc0000, #8B0000, #5c0000);
+            --buzzer-border: #ff0000;
+            --font-display: 'Creepster', cursive;
             --font-body: 'Poppins', sans-serif;
-            --pattern-opacity: 0.4;
-            --particles-color: #00b4d8;
-            --scanlines: 0;
+            --pattern-opacity: 0.5;
+            --particles-color: #8B0000;
+            --scanlines: 1;
             --corner-decorations: 0;
-            --wave-effect: 1;
-            --bubble-effect: 1;
-            --bg-image: url('https://images.unsplash.com/photo-1551244072-5d12893278ab?w=1920&q=80');
+            --flicker-effect: 1;
+            --fog-effect: 1;
+            --bg-image: url('https://images4.alphacoders.com/628/thumb-1920-628354.jpg');
         }
 
         /* THEME: Sakura 🌸 */
@@ -130,7 +130,7 @@
             --corner-decorations: 0;
             --sakura-petals: 1;
             --soft-glow: 1;
-            --bg-image: url('https://images.unsplash.com/photo-1522383225653-ed111181a951?w=1920&q=80');
+            --bg-image: url('https://images.unsplash.com/photo-1555050551-82f8d95a0614?w=1920&q=80');
         }
 
         /* THEME: Midnight 🌙 */
@@ -158,7 +158,7 @@
             --particles-color: #e94560;
             --scanlines: 0;
             --corner-decorations: 1;
-            --bg-image: url('https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=1920&q=80');
+            --bg-image: url('https://images.unsplash.com/photo-1523590564318-491748f70ea7?w=1920&q=80');
         }
 
         /* THEME: Clean Modern ⚪ */
@@ -216,7 +216,7 @@
 
         /* Background Images for themed backgrounds */
         [data-theme="neon"] body,
-        [data-theme="ocean"] body,
+        [data-theme="horror"] body,
         [data-theme="sakura"] body,
         [data-theme="midnight"] body,
         [data-theme="dragon"] body {
@@ -231,7 +231,7 @@
         [data-theme="sakura"] body::after,
         [data-theme="midnight"] body::after,
         [data-theme="neon"] body::after,
-        [data-theme="ocean"] body::after,
+        [data-theme="horror"] body::after,
         [data-theme="dragon"] body::after {
             content: '';
             position: fixed;
@@ -255,8 +255,8 @@
             background: linear-gradient(180deg, rgba(10, 10, 10, 0.80) 0%, rgba(10, 10, 30, 0.75) 50%, rgba(10, 10, 10, 0.80) 100%);
         }
 
-        [data-theme="ocean"] body::after {
-            background: linear-gradient(180deg, rgba(10, 22, 40, 0.70) 0%, rgba(13, 33, 55, 0.65) 50%, rgba(26, 58, 92, 0.70) 100%);
+        [data-theme="horror"] body::after {
+            background: linear-gradient(180deg, rgba(10, 10, 10, 0.85) 0%, rgba(26, 10, 10, 0.80) 50%, rgba(13, 13, 13, 0.85) 100%);
         }
 
         [data-theme="dragon"] body::after {
@@ -380,7 +380,7 @@
         }
 
         /* Dragon Title Styling */
-        [data-theme="dragon"] h1,
+        [data-theme="dragon"] h1:not(.hero-title),
         [data-theme="dragon"] .title {
             font-family: 'Cinzel', serif;
             font-weight: 700;
@@ -482,138 +482,226 @@
            OCEAN THEME SPECIAL EFFECTS 🌊
            ============================================ */
 
-        /* Ocean Wave Pattern */
-        [data-theme="ocean"] body::before {
+        /* ============================================
+           HORROR THEME SPECIAL EFFECTS 🩸
+           ============================================ */
+
+        /* Horror Fog Effect */
+        [data-theme="horror"] body::before {
             background: 
-                linear-gradient(180deg, transparent 0%, rgba(0, 180, 216, 0.05) 50%, transparent 100%),
-                url("data:image/svg+xml,%3Csvg width='100' height='20' viewBox='0 0 100 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 10 Q25 0 50 10 T100 10' fill='none' stroke='%2300b4d8' stroke-width='0.5' opacity='0.3'/%3E%3C/svg%3E");
-            background-size: 100% 100%, 100px 20px;
-            animation: waveMove 8s linear infinite;
-            opacity: 0.6;
+                radial-gradient(ellipse at 50% 100%, rgba(139, 0, 0, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 0% 50%, rgba(100, 100, 100, 0.1) 0%, transparent 40%),
+                radial-gradient(ellipse at 100% 50%, rgba(100, 100, 100, 0.1) 0%, transparent 40%);
+            animation: fogDrift 15s ease-in-out infinite alternate;
+            opacity: 0.8;
         }
 
-        @keyframes waveMove {
-            0% { background-position: 0 0, 0 0; }
-            100% { background-position: 0 0, 100px 0; }
+        @keyframes fogDrift {
+            0% { transform: translateX(-5%) scale(1); opacity: 0.6; }
+            50% { transform: translateX(5%) scale(1.1); opacity: 0.8; }
+            100% { transform: translateX(-5%) scale(1); opacity: 0.6; }
         }
 
-        /* Ocean Container */
-        [data-theme="ocean"] .container {
-            border: 2px solid rgba(0, 180, 216, 0.6);
-            background: linear-gradient(180deg, rgba(10, 40, 80, 0.95) 0%, rgba(26, 58, 92, 0.95) 100%);
+        /* Horror Container - Blood drip border */
+        [data-theme="horror"] .container {
+            border: 2px solid rgba(139, 0, 0, 0.7);
+            background: linear-gradient(180deg, rgba(20, 10, 10, 0.95) 0%, rgba(30, 15, 15, 0.95) 100%);
             box-shadow: 
-                0 0 30px rgba(0, 180, 216, 0.3),
-                inset 0 0 60px rgba(0, 180, 216, 0.05);
+                0 0 30px rgba(139, 0, 0, 0.4),
+                inset 0 0 60px rgba(139, 0, 0, 0.1),
+                0 5px 30px rgba(0, 0, 0, 0.8);
         }
 
-        /* Ocean Wave Border Animation */
-        [data-theme="ocean"] .container::before,
-        [data-theme="ocean"] .container::after {
+        /* Horror Blood Drip Border */
+        [data-theme="horror"] .container::before {
             content: '';
             position: absolute;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, transparent, #00b4d8, #90e0ef, #00b4d8, transparent);
-            opacity: 0.6;
+            top: -2px;
+            left: 10%;
+            width: 80%;
+            height: 20px;
+            background: url("data:image/svg+xml,%3Csvg width='200' height='20' viewBox='0 0 200 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0 L10 0 L10 8 Q10 15 5 15 Q0 15 0 8 Z M20 0 L35 0 L35 12 Q35 18 27.5 18 Q20 18 20 12 Z M45 0 L55 0 L55 6 Q55 10 50 10 Q45 10 45 6 Z M65 0 L90 0 L90 15 Q90 20 77.5 20 Q65 20 65 15 Z M100 0 L115 0 L115 10 Q115 16 107.5 16 Q100 16 100 10 Z M125 0 L135 0 L135 5 Q135 8 130 8 Q125 8 125 5 Z M145 0 L170 0 L170 14 Q170 19 157.5 19 Q145 19 145 14 Z M180 0 L195 0 L195 8 Q195 12 187.5 12 Q180 12 180 8 Z' fill='%238B0000'/%3E%3C/svg%3E") repeat-x;
+            opacity: 0.8;
+            animation: bloodDrip 4s ease-in-out infinite;
         }
 
-        [data-theme="ocean"] .container::before {
+        @keyframes bloodDrip {
+            0%, 100% { opacity: 0.7; transform: scaleY(1); }
+            50% { opacity: 0.9; transform: scaleY(1.1); }
+        }
+
+        /* Horror Flicker Effect */
+        [data-theme="horror"] .container::after {
+            content: '';
+            position: absolute;
             top: 0;
             left: 0;
-            animation: waveBorder 3s linear infinite;
-        }
-
-        [data-theme="ocean"] .container::after {
+            right: 0;
             bottom: 0;
-            left: 0;
-            animation: waveBorder 3s linear infinite reverse;
+            background: rgba(139, 0, 0, 0.03);
+            pointer-events: none;
+            animation: flicker 0.15s infinite;
+            border-radius: inherit;
         }
 
-        @keyframes waveBorder {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+        @keyframes flicker {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
         }
 
-        /* Ocean Title */
-        [data-theme="ocean"] h1,
-        [data-theme="ocean"] .title {
-            background: linear-gradient(135deg, #00b4d8, #90e0ef, #00b4d8);
+        /* Horror Title - Blood dripping text */
+        [data-theme="horror"] h1:not(.hero-title),
+        [data-theme="horror"] .title {
+            font-family: 'Creepster', cursive;
+            background: linear-gradient(180deg, #ff4444 0%, #8B0000 50%, #5c0000 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: shimmer 3s ease-in-out infinite;
-            background-size: 200% 200%;
+            text-shadow: none;
+            filter: drop-shadow(0 0 10px rgba(139, 0, 0, 0.5));
+            animation: bloodPulse 3s ease-in-out infinite;
         }
 
-        @keyframes shimmer {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+        @keyframes bloodPulse {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(139, 0, 0, 0.5)); }
+            50% { filter: drop-shadow(0 0 20px rgba(139, 0, 0, 0.8)); }
         }
 
-        /* Ocean Bubbles - Particles */
-        [data-theme="ocean"] .particle {
-            width: 8px;
+        /* Horror Particles - Blood drops */
+        [data-theme="horror"] .particle {
+            width: 4px;
             height: 8px;
-            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8), rgba(0, 180, 216, 0.4));
-            border-radius: 50%;
-            border: 1px solid rgba(144, 224, 239, 0.5);
-            animation: bubble 10s infinite;
-            box-shadow: 
-                inset 2px 2px 4px rgba(255,255,255,0.4),
-                0 0 10px rgba(0, 180, 216, 0.3);
+            background: linear-gradient(180deg, #cc0000, #8B0000);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: bloodFall 8s infinite;
+            box-shadow: 0 0 10px rgba(139, 0, 0, 0.5);
         }
 
-        @keyframes bubble {
+        @keyframes bloodFall {
             0% { 
-                transform: translateY(100vh) scale(0.5); 
+                transform: translateY(-10vh) scale(0.5); 
                 opacity: 0; 
             }
-            10% { opacity: 0.8; }
-            50% { 
-                transform: translateY(50vh) scale(1) translateX(20px); 
-            }
-            90% { opacity: 0.8; }
+            10% { opacity: 0.9; }
+            90% { opacity: 0.9; }
             100% { 
-                transform: translateY(-10vh) scale(0.8) translateX(-20px); 
+                transform: translateY(110vh) scale(1); 
                 opacity: 0; 
             }
         }
 
-        /* Ocean Buttons */
-        [data-theme="ocean"] .btn {
+        /* Horror Buttons - Eerie glow */
+        [data-theme="horror"] .btn {
             position: relative;
             overflow: hidden;
+            box-shadow: 0 0 15px rgba(139, 0, 0, 0.4);
         }
 
-        [data-theme="ocean"] .btn::before {
+        [data-theme="horror"] .btn:hover {
+            box-shadow: 0 0 25px rgba(139, 0, 0, 0.7), 0 0 50px rgba(139, 0, 0, 0.3);
+        }
+
+        [data-theme="horror"] .btn::before {
             content: '';
             position: absolute;
             top: 0;
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            animation: waveShine 2s infinite;
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 0, 0.2), transparent);
+            animation: eerieShine 4s infinite;
         }
 
-        @keyframes waveShine {
+        @keyframes eerieShine {
             0% { left: -100%; }
             50%, 100% { left: 100%; }
         }
 
-        /* Ocean Fish Decoration */
-        [data-theme="ocean"] .settings-btn::after {
-            content: '🐠';
+        /* Horror Skull Decoration */
+        [data-theme="horror"] .settings-btn::after {
+            content: '💀';
             position: absolute;
             top: 40px;
             right: 0;
             font-size: 20px;
-            animation: swim 4s ease-in-out infinite;
+            animation: skullFloat 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 5px rgba(139, 0, 0, 0.5));
         }
 
-        @keyframes swim {
-            0%, 100% { transform: translateX(0) scaleX(1); }
-            50% { transform: translateX(-30px) scaleX(-1); }
+        @keyframes skullFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        /* Horror Scanlines */
+        [data-theme="horror"] .game-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.1) 0px,
+                rgba(0, 0, 0, 0.1) 1px,
+                transparent 1px,
+                transparent 3px
+            );
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0.3;
+        }
+
+        /* Horror Input Fields */
+        [data-theme="horror"] input,
+        [data-theme="horror"] select {
+            background: rgba(20, 10, 10, 0.9);
+            border-color: rgba(139, 0, 0, 0.5);
+        }
+
+        [data-theme="horror"] input:focus,
+        [data-theme="horror"] select:focus {
+            border-color: #cc0000;
+            box-shadow: 0 0 15px rgba(139, 0, 0, 0.5);
+        }
+
+        /* Horror Cards */
+        [data-theme="horror"] .room-card,
+        [data-theme="horror"] .player-item,
+        [data-theme="horror"] .option-btn {
+            border-color: rgba(139, 0, 0, 0.4);
+            background: rgba(20, 10, 10, 0.8);
+        }
+
+        [data-theme="horror"] .room-card:hover,
+        [data-theme="horror"] .player-item:hover {
+            border-color: #8B0000;
+            box-shadow: 0 0 20px rgba(139, 0, 0, 0.4);
+        }
+
+        /* Horror Correct/Wrong animations */
+        [data-theme="horror"] .option-btn.correct {
+            background: linear-gradient(135deg, #2d4a2d, #1a3a1a) !important;
+            border-color: #4a7c4e !important;
+            animation: correctPulseHorror 0.5s ease;
+        }
+
+        [data-theme="horror"] .option-btn.wrong {
+            background: linear-gradient(135deg, #5c0000, #3a0000) !important;
+            border-color: #ff0000 !important;
+            animation: wrongShakeHorror 0.5s ease;
+        }
+
+        @keyframes correctPulseHorror {
+            0%, 100% { box-shadow: 0 0 10px rgba(74, 124, 78, 0.5); }
+            50% { box-shadow: 0 0 30px rgba(74, 124, 78, 0.8); }
+        }
+
+        @keyframes wrongShakeHorror {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
         }
 
         /* ============================================
@@ -690,7 +778,7 @@
         }
 
         /* Sakura Title */
-        [data-theme="sakura"] h1,
+        [data-theme="sakura"] h1:not(.hero-title),
         [data-theme="sakura"] .title {
             color: #ffb7c5;
             text-shadow: 
@@ -816,7 +904,7 @@
         }
 
         /* Midnight Title with aurora colors */
-        [data-theme="midnight"] h1,
+        [data-theme="midnight"] h1:not(.hero-title),
         [data-theme="midnight"] .title {
             background: linear-gradient(135deg, #e94560, #ffc857, #06d6a0, #533a7b);
             background-size: 300% 300%;
@@ -988,19 +1076,16 @@
             justify-content: space-between;
             align-items: center;
             padding: 20px 60px;
-            background: rgba(250, 247, 242, 0.95);
+            background: rgba(196, 192, 182, 0.95);
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            border-bottom: 1px solid rgba(61, 74, 58, 0.1);
         }
 
         .nav-logo {
             font-family: 'Cinzel', serif;
             font-size: 24px;
             font-weight: 700;
-            background: linear-gradient(135deg, #D4451A, #E86A33);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #3D4A3A;
         }
 
         .nav-links {
@@ -1009,7 +1094,7 @@
         }
 
         .nav-links a {
-            color: #666;
+            color: #5C5A56;
             text-decoration: none;
             font-size: 14px;
             font-weight: 500;
@@ -1019,7 +1104,7 @@
         }
 
         .nav-links a:hover {
-            color: #D4451A;
+            color: #3D4A3A;
         }
 
         .nav-links a::after {
@@ -1029,7 +1114,7 @@
             left: 0;
             width: 0;
             height: 2px;
-            background: linear-gradient(90deg, #D4451A, #E86A33);
+            background: #D4A84B;
             transition: width 0.3s ease;
         }
 
@@ -1069,85 +1154,54 @@
             line-height: 1.6;
         }
 
-        /* Hero Section */
+        /* Hero Section - Earthy Organic Design */
         .hero-section {
             position: relative;
             min-height: 100vh;
-            display: flex;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding-top: 80px;
-            background: radial-gradient(ellipse at 50% 0%, rgba(212, 69, 26, 0.08) 0%, transparent 50%),
-                        radial-gradient(ellipse at 80% 50%, rgba(232, 106, 51, 0.06) 0%, transparent 40%),
-                        radial-gradient(ellipse at 20% 80%, rgba(139, 90, 43, 0.06) 0%, transparent 40%),
-                        #FAF7F2;
+            padding: 100px 80px;
+            background: #C4C0B6;
+            overflow: hidden;
         }
 
-        .hero-bg {
+        .hero-section::before {
+            content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('/static/game-stage.png') center center / cover no-repeat;
-            opacity: 0.08;
-            z-index: 0;
-        }
-
-        .hero-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, 
-                rgba(250, 247, 242, 0.3) 0%, 
-                rgba(250, 247, 242, 0.5) 50%, 
-                rgba(250, 247, 242, 1) 100%);
+            top: -50%;
+            right: -20%;
+            width: 80%;
+            height: 150%;
+            background: #3D4A3A;
+            border-radius: 0 0 0 50%;
             z-index: 1;
         }
 
-        .landing-stars {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 2;
-        }
-
-        .star {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: #D4451A;
-            border-radius: 50%;
-            animation: starSparkle 3s ease-in-out infinite;
-            box-shadow: 0 0 10px rgba(212, 69, 26, 0.4);
-        }
-
-        @keyframes starSparkle {
-            0%, 100% { opacity: 0.2; transform: scale(0.8); }
-            50% { opacity: 0.8; transform: scale(1.5); }
-        }
-
-        .hero-content {
+        .hero-left {
             position: relative;
             z-index: 10;
-            max-width: 900px;
-            padding: 0 20px;
+            padding-right: 60px;
+        }
+
+        .hero-right {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .hero-badge {
-            display: inline-block;
-            padding: 10px 24px;
-            background: rgba(212, 69, 26, 0.08);
-            border: 1px solid rgba(212, 69, 26, 0.2);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(61, 74, 58, 0.1);
+            border: 1px solid rgba(61, 74, 58, 0.2);
             border-radius: 50px;
-            color: #D4451A;
-            font-size: 13px;
+            color: #3D4A3A;
+            font-size: 12px;
             font-weight: 600;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -1155,26 +1209,54 @@
             animation: fadeInUp 0.8s ease forwards;
         }
 
+        .hero-badge::before {
+            content: '🎯';
+            font-size: 14px;
+        }
+
         .hero-title {
             font-family: 'Cinzel', serif;
-            font-size: 72px;
+            font-size: 68px;
             font-weight: 700;
-            color: #2D2A26;
+            color: #2D2A26 !important;
             margin-bottom: 25px;
-            line-height: 1.1;
+            line-height: 1.05;
             letter-spacing: -2px;
             animation: fadeInUp 0.8s ease 0.1s forwards;
             opacity: 0;
+            /* Override theme styles that use background-clip text */
+            background: none !important;
+            -webkit-background-clip: unset !important;
+            -webkit-text-fill-color: #2D2A26 !important;
+            background-clip: unset !important;
+            text-shadow: none !important;
+            filter: none !important;
+        }
+
+        .hero-title span {
+            color: #3D3929 !important;
+            -webkit-text-fill-color: #3D3929 !important;
+            position: relative;
+        }
+
+        .hero-title span::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 0;
+            width: 100%;
+            height: 12px;
+            background: #D4A84B;
+            z-index: -1;
+            opacity: 0.4;
         }
 
         .hero-subtitle {
-            font-size: 20px;
-            color: #7A756E;
+            font-size: 18px;
+            color: #5C5A56;
             margin-bottom: 40px;
-            line-height: 1.7;
-            max-width: 650px;
-            margin-left: auto;
-            margin-right: auto;
+            line-height: 1.8;
+            max-width: 500px;
             animation: fadeInUp 0.8s ease 0.2s forwards;
             opacity: 0;
         }
@@ -1190,62 +1272,411 @@
             }
         }
 
-        .hero-features {
+        .hero-stats {
             display: flex;
-            justify-content: center;
-            gap: 50px;
-            margin-bottom: 50px;
-            flex-wrap: wrap;
+            gap: 40px;
+            margin-bottom: 40px;
             animation: fadeInUp 0.8s ease 0.3s forwards;
             opacity: 0;
         }
 
-        .hero-feature {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        .hero-stat {
+            text-align: left;
+        }
+
+        .hero-stat-value {
+            font-family: 'Cinzel', serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: #3D4A3A;
+            line-height: 1;
+        }
+
+        .hero-stat-label {
+            font-size: 13px;
             color: #7A756E;
-            font-size: 15px;
-            padding: 12px 20px;
-            background: rgba(255, 255, 255, 0.7);
-            border-radius: 8px;
-            border: 1px solid rgba(0, 0, 0, 0.06);
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
-        }
-
-        .hero-feature:hover {
-            background: rgba(212, 69, 26, 0.08);
-            border-color: rgba(212, 69, 26, 0.2);
-            color: #2D2A26;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(212, 69, 26, 0.1);
-        }
-
-        .feature-icon {
-            font-size: 20px;
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .hero-buttons {
             display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
+            gap: 16px;
             animation: fadeInUp 0.8s ease 0.4s forwards;
             opacity: 0;
         }
 
         .landing-btn {
-            padding: 18px 45px;
+            padding: 18px 40px;
             font-family: 'Poppins', sans-serif;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
-            letter-spacing: 1px;
-            border-radius: 8px;
+            letter-spacing: 0.5px;
+            border-radius: 50px;
             cursor: pointer;
             transition: all 0.3s ease;
             text-decoration: none;
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .landing-btn.primary {
+            color: #2D2A26;
+            background: #D4A84B;
+            border: none;
+            box-shadow: 0 10px 40px rgba(212, 168, 75, 0.3);
+        }
+
+        .landing-btn.primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(212, 168, 75, 0.4);
+            background: #E0B85A;
+        }
+
+        .landing-btn.secondary {
+            color: #3D4A3A;
+            background: transparent;
+            border: 2px solid rgba(61, 74, 58, 0.3);
+        }
+
+        .landing-btn.secondary:hover {
+            background: rgba(61, 74, 58, 0.1);
+            border-color: #3D4A3A;
+        }
+
+        /* Hero Card - Game Preview */
+        .hero-card {
+            background: #F5F3EE;
+            border-radius: 32px;
+            padding: 40px;
+            width: 420px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15);
+            animation: floatCard 6s ease-in-out infinite;
+            position: relative;
+        }
+
+        @keyframes floatCard {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .hero-card::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%233D4A3A' opacity='0.1'%3E%3Cpath d='M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z'/%3E%3C/svg%3E") no-repeat center;
+            opacity: 0.2;
+        }
+
+        .hero-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .hero-card-title {
+            font-family: 'Cinzel', serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: #2D2A26;
+        }
+
+        .hero-card-rating {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #D4A84B;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #2D2A26;
+        }
+
+        .hero-card-question {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .hero-card-question-text {
+            font-size: 15px;
+            font-weight: 600;
+            color: #2D2A26;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .hero-card-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .hero-card-option {
+            padding: 12px 16px;
+            background: #F5F3EE;
+            border-radius: 10px;
+            font-size: 13px;
+            color: #5C5A56;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hero-card-option::before {
+            content: '';
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 2px solid #C4C0B6;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .hero-card-option:hover {
+            background: #E8E5DE;
+        }
+
+        .hero-card-option.correct {
+            background: rgba(61, 74, 58, 0.15);
+            color: #3D4A3A;
+            font-weight: 600;
+        }
+
+        .hero-card-option.correct::before {
+            background: #3D4A3A;
+            border-color: #3D4A3A;
+            box-shadow: inset 0 0 0 3px #F5F3EE;
+        }
+
+        .hero-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .hero-card-timer {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #7A756E;
+        }
+
+        .hero-card-timer-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: conic-gradient(#D4A84B 75%, #E8E5DE 0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+            color: #2D2A26;
+            position: relative;
+        }
+
+        .hero-card-timer-circle::before {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: #F5F3EE;
+            border-radius: 50%;
+        }
+
+        .hero-card-timer-circle span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-card-buzzer {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #E74C3C, #C0392B);
+            border: 3px solid #D4A84B;
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.3),
+                        inset 0 -4px 10px rgba(0, 0, 0, 0.2),
+                        inset 0 4px 10px rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            animation: pulseBuzzer 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseBuzzer {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); box-shadow: 0 12px 35px rgba(231, 76, 60, 0.4), inset 0 -4px 10px rgba(0, 0, 0, 0.2), inset 0 4px 10px rgba(255, 255, 255, 0.2); }
+        }
+
+        .hero-card-buzzer:hover {
+            transform: scale(0.95) !important;
+        }
+
+        /* Floating decorative elements */
+        .hero-float-element {
+            position: absolute;
+            z-index: 5;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .hero-float-1 {
+            top: 15%;
+            left: 5%;
+            width: 80px;
+            height: 80px;
+            background: rgba(212, 168, 75, 0.2);
+            border-radius: 50%;
+            animation-delay: 0s;
+        }
+
+        .hero-float-2 {
+            bottom: 20%;
+            left: 15%;
+            width: 50px;
+            height: 50px;
+            background: rgba(61, 74, 58, 0.15);
+            border-radius: 12px;
+            animation-delay: 2s;
+        }
+
+        .hero-float-3 {
+            top: 30%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            background: rgba(212, 168, 75, 0.15);
+            border-radius: 24px;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            color: #7A756E;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            z-index: 10;
+        }
+
+        .scroll-arrow {
+            margin-top: 10px;
+            animation: bounce 2s ease-in-out infinite;
+            font-size: 20px;
+            color: #3D4A3A;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+
+        /* Responsive Hero */
+        @media (max-width: 1100px) {
+            .hero-section {
+                grid-template-columns: 1fr;
+                text-align: center;
+                padding: 120px 40px 80px;
+            }
+
+            .hero-section::before {
+                top: auto;
+                bottom: -30%;
+                right: -30%;
+                width: 100%;
+                height: 60%;
+                border-radius: 50% 50% 0 0;
+            }
+
+            .hero-left {
+                padding-right: 0;
+                margin-bottom: 50px;
+            }
+
+            .hero-title {
+                font-size: 48px;
+            }
+
+            .hero-subtitle {
+                max-width: 100%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .hero-card {
+                width: 100%;
+                max-width: 380px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .hero-section {
+                padding: 100px 20px 60px;
+            }
+
+            .hero-title {
+                font-size: 36px;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 20px;
+                align-items: center;
+            }
+
+            .hero-stat {
+                text-align: center;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .landing-btn {
+                width: 100%;
+                max-width: 280px;
+                justify-content: center;
+            }
+
+            .hero-float-element {
+                display: none;
+            }
         }
 
         .landing-btn.primary {
@@ -1294,6 +1725,303 @@
         @keyframes bounce {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(10px); }
+        }
+
+        /* Features Section - Bento Grid */
+        .features-section {
+            background: linear-gradient(180deg, #E8E4DB 0%, #F5F3EE 100%);
+            position: relative;
+            padding: 100px 60px;
+        }
+
+        .features-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(61, 74, 58, 0.15), transparent);
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: auto auto auto;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .bento-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(61, 74, 58, 0.08);
+            border-radius: 24px;
+            padding: 30px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        }
+
+        .bento-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #3D4A3A, #D4A84B);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+            transform-origin: left;
+        }
+
+        .bento-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+            border-color: rgba(61, 74, 58, 0.15);
+        }
+
+        .bento-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        /* Bento Grid Positions */
+        .bento-card.large {
+            grid-column: span 2;
+            grid-row: span 2;
+            padding: 40px;
+        }
+
+        .bento-card.wide {
+            grid-column: span 2;
+        }
+
+        .bento-card.tall {
+            grid-row: span 2;
+        }
+
+        /* Card Content */
+        .bento-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(61, 74, 58, 0.1), rgba(212, 168, 75, 0.1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 26px;
+            transition: all 0.3s ease;
+        }
+
+        .bento-card:hover .bento-icon {
+            background: linear-gradient(135deg, #3D4A3A, #4A5947);
+            transform: scale(1.1) rotate(-5deg);
+            box-shadow: 0 10px 30px rgba(61, 74, 58, 0.3);
+        }
+
+        .bento-card:hover .bento-icon span {
+            filter: brightness(0) invert(1);
+        }
+
+        .bento-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: #2D2A26;
+            margin-bottom: 10px;
+        }
+
+        .bento-card.large .bento-title {
+            font-size: 26px;
+        }
+
+        .bento-description {
+            font-size: 14px;
+            color: #7A756E;
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+
+        .bento-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: auto;
+        }
+
+        .bento-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 5px 10px;
+            background: rgba(61, 74, 58, 0.08);
+            border-radius: 20px;
+            font-size: 11px;
+            color: #3D4A3A;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Visual Elements in Cards */
+        .bento-visual {
+            margin-top: 20px;
+            background: linear-gradient(135deg, #F5F3EE, #E8E4DB);
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 140px;
+        }
+
+        .bento-card.large .bento-visual {
+            min-height: 200px;
+            margin-top: 30px;
+        }
+
+        /* Demo Buzzer Animation */
+        .demo-buzzer {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #E74C3C, #C0392B);
+            border: 4px solid #D4A84B;
+            box-shadow: 0 10px 30px rgba(231, 76, 60, 0.3),
+                        inset 0 -5px 15px rgba(0, 0, 0, 0.3),
+                        inset 0 5px 15px rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            animation: pulse-buzzer 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-buzzer {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); box-shadow: 0 15px 40px rgba(231, 76, 60, 0.5), inset 0 -5px 15px rgba(0, 0, 0, 0.3), inset 0 5px 15px rgba(255, 255, 255, 0.2); }
+        }
+
+        .demo-buzzer:hover {
+            transform: scale(0.95) !important;
+        }
+
+        /* Mini Question Card */
+        .mini-question {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+            font-size: 12px;
+            color: #2D2A26;
+            max-width: 200px;
+        }
+
+        .mini-question .q-text {
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .mini-option {
+            padding: 8px 12px;
+            background: #F5F3EE;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            font-size: 11px;
+            color: #7A756E;
+        }
+
+        .mini-option.correct {
+            background: rgba(61, 74, 58, 0.15);
+            color: #3D4A3A;
+        }
+
+        /* Stats Mini Display */
+        .mini-stats {
+            display: flex;
+            gap: 20px;
+        }
+
+        .mini-stat {
+            text-align: center;
+        }
+
+        .mini-stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #3D4A3A;
+            line-height: 1;
+        }
+
+        .mini-stat-label {
+            font-size: 10px;
+            color: #7A756E;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+
+        /* Mode Icons */
+        .mode-icons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .mode-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+
+        .mode-icon:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Responsive Bento */
+        @media (max-width: 1024px) {
+            .bento-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .bento-card.large {
+                grid-column: span 2;
+                grid-row: span 1;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .features-section {
+                padding: 80px 20px;
+            }
+
+            .bento-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .bento-card.large,
+            .bento-card.wide {
+                grid-column: span 1;
+            }
+            
+            .bento-card.tall {
+                grid-row: span 1;
+            }
         }
 
         /* Team Section */
@@ -1409,10 +2137,11 @@
             line-height: 1.6;
         }
 
-        /* Tech Section */
+        /* Tech Section with Marquee */
         .tech-section {
             background: linear-gradient(180deg, #F5F0E8 0%, #FAF7F2 100%);
             position: relative;
+            overflow: hidden;
         }
 
         .tech-section::before {
@@ -1425,72 +2154,139 @@
             background: linear-gradient(90deg, transparent, rgba(232, 106, 51, 0.2), transparent);
         }
 
-        .tech-grid {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 25px;
-            max-width: 1000px;
-            margin: 0 auto;
+        /* Marquee Container */
+        .tech-marquee-wrapper {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            padding: 20px 0;
         }
 
-        .tech-item {
+        .tech-marquee-wrapper::before,
+        .tech-marquee-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 150px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .tech-marquee-wrapper::before {
+            left: 0;
+            background: linear-gradient(90deg, #F5F0E8, transparent);
+        }
+
+        .tech-marquee-wrapper::after {
+            right: 0;
+            background: linear-gradient(-90deg, #FAF7F2, transparent);
+        }
+
+        .tech-marquee {
+            display: flex;
+            gap: 40px;
+            animation: marquee 30s linear infinite;
+            width: max-content;
+        }
+
+        .tech-marquee:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes marquee {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .tech-marquee-item {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 12px;
-            padding: 30px 35px;
-            background: rgba(255, 255, 255, 0.8);
+            padding: 25px 35px;
+            background: rgba(255, 255, 255, 0.9);
             border: 1px solid rgba(0, 0, 0, 0.06);
-            border-radius: 12px;
+            border-radius: 16px;
             transition: all 0.3s ease;
-            min-width: 120px;
+            min-width: 130px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+            flex-shrink: 0;
         }
 
-        .tech-item:hover {
-            transform: translateY(-5px);
+        .tech-marquee-item:hover {
+            transform: translateY(-5px) scale(1.05);
             background: #fff;
             border-color: rgba(212, 69, 26, 0.2);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
         }
 
-        .tech-item img {
-            width: 50px;
-            height: 50px;
+        .tech-marquee-item img {
+            width: 48px;
+            height: 48px;
             object-fit: contain;
-            filter: grayscale(30%) brightness(0.9);
+            filter: grayscale(40%) brightness(0.95);
             transition: filter 0.3s ease;
         }
 
-        .tech-item:hover img {
+        .tech-marquee-item:hover img {
             filter: grayscale(0%) brightness(1);
         }
 
-        .tech-icon-placeholder {
-            width: 50px;
-            height: 50px;
+        .tech-marquee-item .tech-icon-placeholder {
+            width: 48px;
+            height: 48px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 36px;
-            filter: grayscale(30%);
+            font-size: 34px;
+            filter: grayscale(40%);
             transition: filter 0.3s ease;
         }
 
-        .tech-item:hover .tech-icon-placeholder {
+        .tech-marquee-item:hover .tech-icon-placeholder {
             filter: grayscale(0%);
         }
 
-        .tech-item span {
+        .tech-marquee-item span {
             font-size: 13px;
             color: #7A756E;
-            font-weight: 500;
+            font-weight: 600;
             transition: color 0.3s ease;
         }
 
-        .tech-item:hover span {
+        .tech-marquee-item:hover span {
             color: #2D2A26;
+        }
+
+        /* Static grid fallback for small screens */
+        .tech-grid-static {
+            display: none;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .tech-grid-static .tech-marquee-item {
+            min-width: 100px;
+            padding: 20px 25px;
+        }
+
+        @media (max-width: 768px) {
+            .tech-marquee-wrapper {
+                display: none;
+            }
+
+            .tech-grid-static {
+                display: flex;
+            }
         }
 
         /* FAQ Section */
@@ -1577,32 +2373,106 @@
 
         /* Footer */
         .landing-footer {
-            background: #F0EBE3;
+            background: #3D3929;
             padding: 60px 60px;
             text-align: center;
-            border-top: 1px solid rgba(0, 0, 0, 0.06);
+            border-top: none;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
         }
 
         .footer-logo {
             font-family: 'Cinzel', serif;
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 700;
-            background: linear-gradient(135deg, #D4451A, #E86A33);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 15px;
+            color: #F5F3EE;
+            margin-bottom: 5px;
         }
 
-        .footer-text {
-            color: #7A756E;
+        .footer-tagline {
+            color: rgba(245, 243, 238, 0.6);
             font-size: 14px;
             margin-bottom: 10px;
         }
 
+        .footer-links {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .footer-link {
+            color: rgba(245, 243, 238, 0.7);
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-link:hover {
+            color: #D4A84B;
+        }
+
+        .footer-link svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .footer-link.github-link {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .footer-link.github-link:hover {
+            background: rgba(212, 168, 75, 0.2);
+            border-color: #D4A84B;
+            color: #D4A84B;
+            transform: translateY(-2px);
+        }
+
+        .footer-divider {
+            width: 100px;
+            height: 1px;
+            background: rgba(245, 243, 238, 0.15);
+            margin: 10px 0;
+        }
+
+        .footer-text {
+            color: rgba(245, 243, 238, 0.5);
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
         .footer-copyright {
-            color: #A09A93;
+            color: rgba(245, 243, 238, 0.4);
             font-size: 12px;
+        }
+
+        .footer-made-with {
+            color: rgba(245, 243, 238, 0.5);
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .footer-made-with span {
+            color: #E74C3C;
         }
 
         /* Responsive */
@@ -1913,7 +2783,7 @@
             line-height: 1.5;
         }
 
-        [data-theme="neon"] h1,
+        [data-theme="neon"] h1:not(.hero-title),
         [data-theme="neon"] .title {
             animation: flicker 3s infinite;
         }
@@ -3214,8 +4084,8 @@
         .theme-option[data-theme="dragon"] {
             background: linear-gradient(135deg, #1a0a0a, #2d1010);
         }
-        .theme-option[data-theme="ocean"] {
-            background: linear-gradient(135deg, #0a1628, #1a3a5c);
+        .theme-option[data-theme="horror"] {
+            background: linear-gradient(135deg, #0a0a0a, #2a0a0a);
         }
         .theme-option[data-theme="sakura"] {
             background: linear-gradient(135deg, #2d1f2d, #4a2c4a);
@@ -3624,6 +4494,7 @@
             <div class="nav-logo">🎯 QPUC</div>
             <div class="nav-links">
                 <a href="#hero">Accueil</a>
+                <a href="#features">Fonctionnalités</a>
                 <a href="#team">Équipe</a>
                 <a href="#tech">Technologies</a>
                 <a href="#faq">FAQ</a>
@@ -3632,39 +4503,215 @@
 
         <!-- Hero Section -->
         <section id="hero" class="landing-section hero-section">
-            <div class="hero-bg"></div>
-            <div class="hero-overlay"></div>
-            <div class="landing-stars" id="landingStars"></div>
-            <div class="hero-content">
-                <div class="hero-badge">🏆 Le Jeu de Quiz Ultime</div>
-                <h1 class="hero-title">Questions pour un Champion</h1>
-                <p class="hero-subtitle">Testez vos connaissances, défiez vos amis et devenez le champion ultime dans ce jeu de quiz multijoueur en temps réel.</p>
-                <div class="hero-features">
-                    <div class="hero-feature">
-                        <span class="feature-icon">🎮</span>
-                        <span>Mode Solo & Multijoueur</span>
+            <!-- Floating decorative elements -->
+            <div class="hero-float-element hero-float-1"></div>
+            <div class="hero-float-element hero-float-2"></div>
+            <div class="hero-float-element hero-float-3"></div>
+
+            <!-- Left Content -->
+            <div class="hero-left">
+                <div class="hero-badge">Le Jeu de Quiz Ultime</div>
+                <h1 class="hero-title">Questions pour un <span>Champion</span></h1>
+                <p class="hero-subtitle">Testez vos connaissances, défiez vos amis et devenez le champion ultime dans ce jeu de quiz multijoueur en temps réel avec IA intégrée.</p>
+                
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">1000+</div>
+                        <div class="hero-stat-label">Questions</div>
                     </div>
-                    <div class="hero-feature">
-                        <span class="feature-icon">🤖</span>
-                        <span>Questions IA personnalisées</span>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">10+</div>
+                        <div class="hero-stat-label">Catégories</div>
                     </div>
-                    <div class="hero-feature">
-                        <span class="feature-icon">🎤</span>
-                        <span>Chat vocal intégré</span>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">∞</div>
+                        <div class="hero-stat-label">Sujets IA</div>
                     </div>
                 </div>
+
                 <div class="hero-buttons">
                     <button class="landing-btn primary" onclick="enterGame()">
-                        ⚔️ ENTRER DANS L'ARÈNE
+                        Jouer Maintenant
+                        <span>→</span>
                     </button>
-                    <a href="#team" class="landing-btn secondary">
-                        En savoir plus
+                    <a href="#features" class="landing-btn secondary">
+                        Découvrir
                     </a>
                 </div>
             </div>
+
+            <!-- Right Content - Game Preview Card -->
+            <div class="hero-right">
+                <div class="hero-card">
+                    <div class="hero-card-header">
+                        <div class="hero-card-title">Quiz en cours</div>
+                        <div class="hero-card-rating">⭐ 4.9</div>
+                    </div>
+                    
+                    <div class="hero-card-question">
+                        <div class="hero-card-question-text">🌍 Quelle est la capitale de l'Australie ?</div>
+                        <div class="hero-card-options">
+                            <div class="hero-card-option">Sydney</div>
+                            <div class="hero-card-option">Melbourne</div>
+                            <div class="hero-card-option correct">Canberra</div>
+                            <div class="hero-card-option">Perth</div>
+                        </div>
+                    </div>
+
+                    <div class="hero-card-footer">
+                        <div class="hero-card-timer">
+                            <div class="hero-card-timer-circle"><span>12</span></div>
+                            <span>secondes</span>
+                        </div>
+                        <div class="hero-card-buzzer">BUZZ!</div>
+                    </div>
+                </div>
+            </div>
+
             <div class="scroll-indicator">
                 <span>Défiler</span>
                 <div class="scroll-arrow">↓</div>
+            </div>
+        </section>
+
+        <!-- Features Section - Bento Grid -->
+        <section id="features" class="landing-section features-section">
+            <div class="section-header">
+                <h2 class="section-title">Fonctionnalités</h2>
+                <p class="section-subtitle">Découvrez tout ce qui rend notre jeu unique et passionnant</p>
+            </div>
+            <div class="bento-grid">
+                <!-- Large Card: Multiplayer -->
+                <div class="bento-card large">
+                    <div class="bento-icon"><span>⚡</span></div>
+                    <h3 class="bento-title">Multijoueur en Temps Réel</h3>
+                    <p class="bento-description">
+                        Affrontez vos amis ou des joueurs du monde entier avec une synchronisation instantanée. 
+                        Créez des salles privées ou rejoignez des parties publiques pour des duels épiques.
+                    </p>
+                    <div class="bento-tags">
+                        <span class="bento-tag">WebSocket</span>
+                        <span class="bento-tag">Temps réel</span>
+                        <span class="bento-tag">Salles privées</span>
+                    </div>
+                    <div class="bento-visual">
+                        <div class="mini-stats">
+                            <div class="mini-stat">
+                                <div class="mini-stat-value">50ms</div>
+                                <div class="mini-stat-label">Latence</div>
+                            </div>
+                            <div class="mini-stat">
+                                <div class="mini-stat-value">∞</div>
+                                <div class="mini-stat-label">Joueurs</div>
+                            </div>
+                            <div class="mini-stat">
+                                <div class="mini-stat-value">24/7</div>
+                                <div class="mini-stat-label">En ligne</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Questions -->
+                <div class="bento-card">
+                    <div class="bento-icon"><span>🤖</span></div>
+                    <h3 class="bento-title">Questions IA</h3>
+                    <p class="bento-description">
+                        Générez des quiz sur n'importe quel sujet grâce à l'intelligence artificielle.
+                    </p>
+                    <div class="bento-tags">
+                        <span class="bento-tag">Hugging Face</span>
+                        <span class="bento-tag">Illimité</span>
+                    </div>
+                </div>
+
+                <!-- Voice Chat -->
+                <div class="bento-card">
+                    <div class="bento-icon"><span>🎤</span></div>
+                    <h3 class="bento-title">Chat Vocal</h3>
+                    <p class="bento-description">
+                        Communiquez en temps réel avec les autres joueurs pendant la partie.
+                    </p>
+                    <div class="bento-tags">
+                        <span class="bento-tag">Agora</span>
+                        <span class="bento-tag">HD Audio</span>
+                    </div>
+                </div>
+
+                <!-- Buzzer - Wide Card -->
+                <div class="bento-card wide">
+                    <div class="bento-icon"><span>🔴</span></div>
+                    <h3 class="bento-title">Système de Buzzer</h3>
+                    <p class="bento-description">
+                        Soyez le premier à buzzer ! Réactivité maximale avec précision à la milliseconde.
+                    </p>
+                    <div class="bento-visual">
+                        <div class="demo-buzzer">BUZZ!</div>
+                    </div>
+                </div>
+
+                <!-- Game Modes - Tall Card -->
+                <div class="bento-card tall">
+                    <div class="bento-icon"><span>🎮</span></div>
+                    <h3 class="bento-title">Modes de Jeu</h3>
+                    <p class="bento-description">
+                        Solo, Free-For-All ou Équipes - choisissez votre style de jeu préféré.
+                    </p>
+                    <div class="bento-visual">
+                        <div class="mode-icons">
+                            <div class="mode-icon">👤</div>
+                            <div class="mode-icon">⚔️</div>
+                            <div class="mode-icon">👥</div>
+                        </div>
+                    </div>
+                    <div class="bento-tags">
+                        <span class="bento-tag">Solo</span>
+                        <span class="bento-tag">FFA</span>
+                        <span class="bento-tag">Équipes</span>
+                    </div>
+                </div>
+
+                <!-- Themes -->
+                <div class="bento-card">
+                    <div class="bento-icon"><span>🎨</span></div>
+                    <h3 class="bento-title">Thèmes</h3>
+                    <p class="bento-description">
+                        Personnalisez avec des thèmes visuels uniques.
+                    </p>
+                    <div class="bento-tags">
+                        <span class="bento-tag">4+ thèmes</span>
+                    </div>
+                </div>
+
+                <!-- Categories - Wide Card -->
+                <div class="bento-card wide">
+                    <div class="bento-icon"><span>📚</span></div>
+                    <h3 class="bento-title">Catégories Diverses</h3>
+                    <p class="bento-description">
+                        Plus de 10 catégories : Science, Histoire, Sport, Géographie, Cinéma, Musique et bien plus.
+                    </p>
+                    <div class="bento-visual">
+                        <div class="mini-question">
+                            <div class="q-text">🌍 Quelle est la capitale du Japon ?</div>
+                            <div class="mini-option">A. Pékin</div>
+                            <div class="mini-option correct">B. Tokyo ✓</div>
+                            <div class="mini-option">C. Séoul</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Leaderboard -->
+                <div class="bento-card">
+                    <div class="bento-icon"><span>🏆</span></div>
+                    <h3 class="bento-title">Classements</h3>
+                    <p class="bento-description">
+                        Suivez vos scores et grimpez dans le classement.
+                    </p>
+                    <div class="bento-tags">
+                        <span class="bento-tag">Scores</span>
+                        <span class="bento-tag">Stats</span>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -3726,42 +4773,116 @@
             </div>
         </section>
 
-        <!-- Technologies Section -->
+        <!-- Technologies Section with Marquee -->
         <section id="tech" class="landing-section tech-section">
             <div class="section-header">
                 <h2 class="section-title">Technologies Utilisées</h2>
                 <p class="section-subtitle">Construit avec des technologies modernes et performantes</p>
             </div>
-            <div class="tech-grid">
-                <div class="tech-item" title="Python">
+            
+            <!-- Marquee for desktop -->
+            <div class="tech-marquee-wrapper">
+                <div class="tech-marquee">
+                    <!-- First set of items -->
+                    <div class="tech-marquee-item" title="Python">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python">
+                        <span>Python</span>
+                    </div>
+                    <div class="tech-marquee-item" title="FastAPI">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" alt="FastAPI">
+                        <span>FastAPI</span>
+                    </div>
+                    <div class="tech-marquee-item" title="JavaScript">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript">
+                        <span>JavaScript</span>
+                    </div>
+                    <div class="tech-marquee-item" title="HTML5">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5">
+                        <span>HTML5</span>
+                    </div>
+                    <div class="tech-marquee-item" title="CSS3">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3">
+                        <span>CSS3</span>
+                    </div>
+                    <div class="tech-marquee-item" title="WebSocket">
+                        <div class="tech-icon-placeholder">🔌</div>
+                        <span>WebSocket</span>
+                    </div>
+                    <div class="tech-marquee-item" title="Hugging Face">
+                        <div class="tech-icon-placeholder">🤗</div>
+                        <span>Hugging Face</span>
+                    </div>
+                    <div class="tech-marquee-item" title="Agora Voice">
+                        <div class="tech-icon-placeholder">🎤</div>
+                        <span>Agora Voice</span>
+                    </div>
+                    <!-- Duplicate set for seamless loop -->
+                    <div class="tech-marquee-item" title="Python">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python">
+                        <span>Python</span>
+                    </div>
+                    <div class="tech-marquee-item" title="FastAPI">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" alt="FastAPI">
+                        <span>FastAPI</span>
+                    </div>
+                    <div class="tech-marquee-item" title="JavaScript">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript">
+                        <span>JavaScript</span>
+                    </div>
+                    <div class="tech-marquee-item" title="HTML5">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5">
+                        <span>HTML5</span>
+                    </div>
+                    <div class="tech-marquee-item" title="CSS3">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3">
+                        <span>CSS3</span>
+                    </div>
+                    <div class="tech-marquee-item" title="WebSocket">
+                        <div class="tech-icon-placeholder">🔌</div>
+                        <span>WebSocket</span>
+                    </div>
+                    <div class="tech-marquee-item" title="Hugging Face">
+                        <div class="tech-icon-placeholder">🤗</div>
+                        <span>Hugging Face</span>
+                    </div>
+                    <div class="tech-marquee-item" title="Agora Voice">
+                        <div class="tech-icon-placeholder">🎤</div>
+                        <span>Agora Voice</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Static grid for mobile -->
+            <div class="tech-grid-static">
+                <div class="tech-marquee-item" title="Python">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python">
                     <span>Python</span>
                 </div>
-                <div class="tech-item" title="FastAPI">
+                <div class="tech-marquee-item" title="FastAPI">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" alt="FastAPI">
                     <span>FastAPI</span>
                 </div>
-                <div class="tech-item" title="JavaScript">
+                <div class="tech-marquee-item" title="JavaScript">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript">
                     <span>JavaScript</span>
                 </div>
-                <div class="tech-item" title="HTML5">
+                <div class="tech-marquee-item" title="HTML5">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5">
                     <span>HTML5</span>
                 </div>
-                <div class="tech-item" title="CSS3">
+                <div class="tech-marquee-item" title="CSS3">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3">
                     <span>CSS3</span>
                 </div>
-                <div class="tech-item" title="WebSocket">
+                <div class="tech-marquee-item" title="WebSocket">
                     <div class="tech-icon-placeholder">🔌</div>
                     <span>WebSocket</span>
                 </div>
-                <div class="tech-item" title="Hugging Face">
+                <div class="tech-marquee-item" title="Hugging Face">
                     <div class="tech-icon-placeholder">🤗</div>
                     <span>Hugging Face</span>
                 </div>
-                <div class="tech-item" title="Agora">
+                <div class="tech-marquee-item" title="Agora Voice">
                     <div class="tech-icon-placeholder">🎤</div>
                     <span>Agora Voice</span>
                 </div>
@@ -3836,8 +4957,26 @@
         <footer class="landing-footer">
             <div class="footer-content">
                 <div class="footer-logo">🎯 Questions pour un Champion</div>
-                <p class="footer-text">Créé avec ❤️ par l'équipe 3X2</p>
-                <p class="footer-copyright">© 2025 Tous droits réservés</p>
+                <p class="footer-tagline">Le jeu de quiz multijoueur ultime</p>
+                
+                <div class="footer-links">
+                    <a href="https://github.com/ZakariaeOuworkaround/QPUC" target="_blank" class="footer-link github-link">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                        GitHub Repository
+                    </a>
+                    <a href="#features" class="footer-link">Fonctionnalités</a>
+                    <a href="#team" class="footer-link">Équipe</a>
+                    <a href="#faq" class="footer-link">FAQ</a>
+                </div>
+
+                <div class="footer-divider"></div>
+
+                <div class="footer-made-with">
+                    Créé avec <span>❤️</span> par l'équipe QPUC
+                </div>
+                <p class="footer-copyright">© 2025 Questions pour un Champion - Tous droits réservés</p>
             </div>
         </footer>
     </div>
@@ -4169,9 +5308,9 @@
                     <span class="theme-icon">🐉</span>
                     <span class="theme-name">Dragon</span>
                 </div>
-                <div class="theme-option" data-theme="ocean" onclick="setTheme('ocean')">
-                    <span class="theme-icon">🌊</span>
-                    <span class="theme-name">Ocean</span>
+                <div class="theme-option" data-theme="horror" onclick="setTheme('horror')">
+                    <span class="theme-icon">🩸</span>
+                    <span class="theme-name">Horror</span>
                 </div>
                 <div class="theme-option" data-theme="sakura" onclick="setTheme('sakura')">
                     <span class="theme-icon">🌸</span>
