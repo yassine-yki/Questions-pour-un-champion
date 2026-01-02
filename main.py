@@ -1,8 +1,10 @@
-import uuid, random, json, asyncio, time
+import uuid, random, json, asyncio, time, os, re
+import httpx
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import JSONResponse
 from typing import Dict, Any, Optional, List
 
 app = FastAPI()
@@ -16,6 +18,42 @@ app.add_middleware(
 )
 
 templates = Jinja2Templates(directory="templates")
+
+# === HUGGING FACE CONFIGURATION ===
+HF_API_TOKEN = "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"
+HF_API_URL = "https://router.huggingface.co/v1/chat/completions"
+HF_MODEL = "meta-llama/Llama-3.1-8B-Instruct"
+
+# Cache file path
+CACHE_FILE = "ai_questions_cache.json"
+
+# Cache for AI-generated questions
+ai_questions_cache: Dict[str, List[Dict]] = {}
+
+# Load cache from file on startup
+def load_cache_from_file():
+    global ai_questions_cache
+    try:
+        if os.path.exists(CACHE_FILE):
+            with open(CACHE_FILE, "r", encoding="utf-8") as f:
+                ai_questions_cache = json.load(f)
+                total_questions = sum(len(q) for q in ai_questions_cache.values())
+                print(f"✅ Loaded {total_questions} cached questions from {len(ai_questions_cache)} categories")
+    except Exception as e:
+        print(f"⚠️ Could not load cache: {e}")
+        ai_questions_cache = {}
+
+# Save cache to file
+def save_cache_to_file():
+    try:
+        with open(CACHE_FILE, "w", encoding="utf-8") as f:
+            json.dump(ai_questions_cache, f, ensure_ascii=False, indent=2)
+        print(f"💾 Cache saved: {sum(len(q) for q in ai_questions_cache.values())} questions")
+    except Exception as e:
+        print(f"⚠️ Could not save cache: {e}")
+
+# Load cache on startup
+load_cache_from_file()
 
 # === TRANSLATIONS ===
 TRANSLATIONS = {
@@ -170,7 +208,8 @@ async def timer_task(code: str):
             return
         await asyncio.sleep(0.1)
     
-    if not room["answered"] and room["buzzed"]:
+    # Time's up - handle both buzzed and no-buzz cases
+    if not room["answered"]:
         async with room_locks[code]:
             if not room["answered"]:
                 room["answered"] = True
@@ -453,6 +492,13 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                 subjects = msg.get("subjects", [])
                 game_mode = msg.get("gameMode", "ffa")
                 is_public = msg.get("isPublic", False)  # NEW: Public room option
+                ai_questions = msg.get("aiQuestions", None)  # NEW: AI-generated questions
+                
+                # Debug logging
+                print(f"Creating room {code}")
+                print(f"AI Questions received: {ai_questions is not None}")
+                if ai_questions:
+                    print(f"Number of AI questions: {len(ai_questions)}")
                 
                 rooms[code] = {
                     "players": {},
@@ -472,6 +518,7 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                     "questions_per_round": 5,
                     "game_mode": game_mode,
                     "is_public": is_public,  # NEW: Store public status
+                    "ai_questions": ai_questions,  # NEW: Store AI questions
                     "teams": {"red": {"score": 0, "active": True}, "blue": {"score": 0, "active": True}} if game_mode == "team" else None
                 }
                 connections[code] = {}
@@ -731,7 +778,8 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                         "answeredBy": player["name"],
                         "message": message,
                         "scores": {p["name"]: p["score"] for p in room["players"].values()},
-                        "teamScores": room.get("teams") if room["game_mode"] == "team" else None
+                        "teamScores": room.get("teams") if room["game_mode"] == "team" else None,
+                        "selectedIdx": idx
                     })
 
                     await asyncio.sleep(3)
@@ -790,19 +838,33 @@ async def start_question(code: str):
     
     lang = room.get("language", "en")
     subjects = room.get("subjects", [])
+    ai_questions = room.get("ai_questions", None)
+    
+    # Debug logging
+    print(f"start_question called for room {code}")
+    print(f"AI questions in room: {ai_questions is not None}")
+    if ai_questions:
+        print(f"Number of AI questions: {len(ai_questions)}")
+    print(f"Available questions: {len(room['available'])}")
 
     if not room["available"]:
-        questions = []
-        for subject in subjects:
-            if subject in ALL_QUESTIONS.get(lang, {}):
-                questions.extend(ALL_QUESTIONS[lang][subject])
-        
-        if not questions:
-            for subject in ALL_QUESTIONS.get(lang, {}).keys():
-                questions.extend(ALL_QUESTIONS[lang][subject])
-        
-        room["available"] = questions.copy()
-        random.shuffle(room["available"])
+        # Check if we have AI-generated questions
+        if ai_questions and len(ai_questions) > 0:
+            room["available"] = ai_questions.copy()
+            random.shuffle(room["available"])
+        else:
+            # Use predefined questions from questions.json
+            questions = []
+            for subject in subjects:
+                if subject in ALL_QUESTIONS.get(lang, {}):
+                    questions.extend(ALL_QUESTIONS[lang][subject])
+            
+            if not questions:
+                for subject in ALL_QUESTIONS.get(lang, {}).keys():
+                    questions.extend(ALL_QUESTIONS[lang][subject])
+            
+            room["available"] = questions.copy()
+            random.shuffle(room["available"])
 
     if not room["available"]:
         if room["game_mode"] == "team":
@@ -880,6 +942,288 @@ async def next_question(code: str):
     else:
         # Continue with next question
         await start_question(code)
+
+
+# === AI QUESTION GENERATION ===
+
+# Minimum questions needed before we stop generating new ones
+MIN_CACHE_SIZE = 90
+QUESTIONS_PER_GAME = 10
+
+async def generate_ai_questions(category: str, num_questions: int = 10, language: str = "fr") -> List[Dict]:
+    """Generate trivia questions using Hugging Face API with smart caching"""
+    
+    cache_key = f"{category.lower().strip()}_{language}"
+    
+    # Check how many questions we have cached
+    cached_count = len(ai_questions_cache.get(cache_key, []))
+    
+    # HYBRID LOGIC:
+    # If we have enough cached questions (>= MIN_CACHE_SIZE), just return random selection
+    # If we have some but not enough, generate more and add to pool
+    # If we have none, generate fresh
+    
+    if cached_count >= MIN_CACHE_SIZE:
+        # We have enough! Return random selection instantly
+        print(f"Cache hit for '{category}': {cached_count} questions available")
+        return random.sample(ai_questions_cache[cache_key], num_questions)
+    
+    # We need more questions - generate new ones
+    print(f"Generating more questions for '{category}' (current cache: {cached_count})")
+    
+    # Generate more questions to build up the pool
+    questions_to_generate = 15  # Generate 15 at a time to build cache faster
+    
+    lang_instruction = "en français" if language == "fr" else "in English"
+    
+    system_prompt = f"""Tu es un générateur de questions de quiz. Tu dois générer exactement {questions_to_generate} questions de trivia.
+
+IMPORTANT: Réponds UNIQUEMENT avec un tableau JSON valide, sans aucun texte avant ou après.
+
+Format EXACT requis:
+[
+  {{
+    "question": "La question ici?",
+    "options": ["Option A", "Option B", "Option C", "Option D"],
+    "answer": "La bonne réponse (doit être identique à une des options)"
+  }}
+]
+
+Règles:
+- Chaque question doit avoir exactement 4 options
+- La réponse doit être exactement une des 4 options
+- Les questions doivent être variées et intéressantes
+- Assure-toi que les faits sont corrects
+- NE PAS répéter de questions similaires"""
+
+    user_prompt = f"Génère {questions_to_generate} questions de trivia sur le thème: \"{category}\" {lang_instruction}. Réponds uniquement avec le JSON."
+
+    headers = {
+        "Authorization": f"Bearer {HF_API_TOKEN}",
+        "Content-Type": "application/json"
+    }
+    
+    payload = {
+        "model": HF_MODEL,
+        "messages": [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt}
+        ],
+        "max_tokens": 2500,
+        "temperature": 0.8
+    }
+    
+    try:
+        async with httpx.AsyncClient(timeout=120.0) as client:
+            print(f"Calling HF API for category: {category}")
+            response = await client.post(HF_API_URL, headers=headers, json=payload)
+            
+            print(f"HF API response status: {response.status_code}")
+            
+            if response.status_code == 503 or response.status_code == 500:
+                # Model is loading - if we have some cached, use those
+                print(f"Model loading (503/500), cached_count: {cached_count}")
+                if cached_count >= num_questions:
+                    print(f"Using {cached_count} cached questions")
+                    return random.sample(ai_questions_cache[cache_key], num_questions)
+                return None # type: ignore
+            
+            if response.status_code != 200:
+                print(f"HF API error: {response.status_code} - {response.text}")
+                # Fallback to cache if available
+                if cached_count >= num_questions:
+                    return random.sample(ai_questions_cache[cache_key], num_questions)
+                return None # type: ignore
+            
+            result = response.json()
+            print(f"HF API result: {result}")
+            
+            # Parse chat completions response format
+            generated_text = ""
+            if isinstance(result, dict):
+                # New chat completions format
+                if "choices" in result and len(result["choices"]) > 0:
+                    generated_text = result["choices"][0].get("message", {}).get("content", "")
+                # Old format fallback
+                elif "generated_text" in result:
+                    generated_text = result["generated_text"]
+            elif isinstance(result, list) and len(result) > 0:
+                generated_text = result[0].get("generated_text", "")
+            
+            if not generated_text:
+                generated_text = str(result)
+            
+            print(f"Generated text length: {len(generated_text)}")
+            print(f"Generated text preview: {generated_text[:500]}...")
+            
+            # Parse JSON from response
+            new_questions = parse_ai_response(generated_text)
+            
+            if new_questions:
+                # Initialize cache for this category if needed
+                if cache_key not in ai_questions_cache:
+                    ai_questions_cache[cache_key] = []
+                
+                # Add new questions, avoiding duplicates
+                existing_questions = {q["question"] for q in ai_questions_cache[cache_key]}
+                unique_new = [q for q in new_questions if q["question"] not in existing_questions]
+                
+                ai_questions_cache[cache_key].extend(unique_new)
+                
+                total_cached = len(ai_questions_cache[cache_key])
+                print(f"Added {len(unique_new)} new questions. Total cached for '{category}': {total_cached}")
+                
+                # Save cache to file for persistence
+                save_cache_to_file()
+                
+                # Return random selection from the full pool
+                return random.sample(ai_questions_cache[cache_key], min(num_questions, total_cached))
+            
+            # If parsing failed but we have cache, use it
+            if cached_count >= num_questions:
+                return random.sample(ai_questions_cache[cache_key], num_questions)
+            
+            return None # type: ignore
+            
+    except Exception as e:
+        print(f"Error generating questions: {e}")
+        # Fallback to cache if available
+        if cached_count >= num_questions:
+            return random.sample(ai_questions_cache[cache_key], num_questions)
+        return None # type: ignore
+
+
+def get_cache_stats() -> Dict[str, Any]:
+    """Get statistics about the question cache"""
+    stats = {}
+    for key, questions in ai_questions_cache.items():
+        stats[key] = {
+            "count": len(questions),
+            "ready": len(questions) >= MIN_CACHE_SIZE
+        }
+    return stats
+
+
+def parse_ai_response(text: str) -> List[Dict]:
+    """Parse AI response to extract questions JSON"""
+    try:
+        # Try to find JSON array in the response
+        # Look for [ ... ] pattern
+        json_match = re.search(r'\[[\s\S]*\]', text)
+        if json_match:
+            json_str = json_match.group()
+            questions = json.loads(json_str)
+            
+            # Validate questions format
+            valid_questions = []
+            for q in questions:
+                if (isinstance(q, dict) and 
+                    "question" in q and 
+                    "options" in q and 
+                    "answer" in q and
+                    isinstance(q["options"], list) and 
+                    len(q["options"]) == 4 and
+                    q["answer"] in q["options"]):
+                    valid_questions.append({
+                        "question": q["question"],
+                        "options": q["options"],
+                        "answer": q["answer"]
+                    })
+            
+            return valid_questions if valid_questions else None # type: ignore
+        
+        return None # type: ignore
+    except json.JSONDecodeError as e:
+        print(f"JSON parse error: {e}")
+        return None # type: ignore
+    except Exception as e:
+        print(f"Parse error: {e}")
+        return None # type: ignore
+
+
+@app.post("/api/generate-questions")
+async def api_generate_questions(request: Request):
+    """API endpoint to generate custom category questions"""
+    try:
+        data = await request.json()
+        category = data.get("category", "").strip()
+        num_questions = min(data.get("count", 10), 20)  # Max 20 questions
+        language = data.get("language", "fr")
+        
+        if not category:
+            return JSONResponse(
+                status_code=400,
+                content={"error": "Category is required"}
+            )
+        
+        if len(category) > 100:
+            return JSONResponse(
+                status_code=400,
+                content={"error": "Category too long (max 100 characters)"}
+            )
+        
+        questions = await generate_ai_questions(category, num_questions, language)
+        
+        if questions:
+            return JSONResponse(content={
+                "success": True,
+                "questions": questions,
+                "category": category,
+                "count": len(questions)
+            })
+        else:
+            return JSONResponse(
+                status_code=503,
+                content={
+                    "error": "Could not generate questions. The AI model might be loading. Please try again in a few seconds.",
+                    "retry": True
+                }
+            )
+            
+    except Exception as e:
+        print(f"API error: {e}")
+        return JSONResponse(
+            status_code=500,
+            content={"error": "Internal server error"}
+        )
+
+
+@app.get("/api/check-model")
+async def check_model_status():
+    """Check if the HF model is ready"""
+    headers = {"Authorization": f"Bearer {HF_API_TOKEN}"}
+    
+    try:
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            response = await client.post(
+                HF_API_URL, 
+                headers=headers, 
+                json={"inputs": "test", "parameters": {"max_new_tokens": 1}}
+            )
+            
+            if response.status_code == 503:
+                return JSONResponse(content={"ready": False, "message": "Model is loading..."})
+            elif response.status_code == 200:
+                return JSONResponse(content={"ready": True, "message": "Model is ready"})
+            else:
+                return JSONResponse(content={"ready": False, "message": f"Error: {response.status_code}"})
+    except Exception as e:
+        return JSONResponse(content={"ready": False, "message": str(e)})
+
+
+@app.get("/api/cache-stats")
+async def cache_stats():
+    """Get AI question cache statistics"""
+    stats = get_cache_stats()
+    total_questions = sum(len(q) for q in ai_questions_cache.values())
+    total_categories = len(ai_questions_cache)
+    
+    return JSONResponse(content={
+        "total_questions": total_questions,
+        "total_categories": total_categories,
+        "min_cache_size": MIN_CACHE_SIZE,
+        "categories": stats
+    })
 
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
