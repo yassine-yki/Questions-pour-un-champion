@@ -2,7 +2,7 @@
 // LANDING PAGE
 // ============================================
 
-
+// VERSION CHECK - Remove after debugging
 console.log('=== GAME.JS VERSION 5.0 LOADED ===');
 
 // FAQ Toggle Function
@@ -129,12 +129,17 @@ const translations = {
             history: "📚 History",
             geography: "🌍 Geography",
             sports: "⚽ Sports",
+            entertainment: "🎬 Entertainment",
             technology: "💻 Technology",
             food: "🍕 Food & Cooking",
             music: "🎵 Music",
             tv_shows: "📺 TV Shows",
             anime: "🎌 Anime",
-            riddles: "🧩 Riddles"
+            riddles: "🧩 Riddles",
+            current_events: "📰 Current Events",
+            pop_culture: "🎭 Pop Culture",
+            pop_culture_2010s: "📱 2010s Pop Culture",
+            pop_culture_morocco: "🇲🇦 Moroccan Pop Culture"
         }
     },
     fr: {
@@ -223,13 +228,17 @@ const translations = {
             history: "📚 Histoire",
             geography: "🌍 Géographie",
             sports: "⚽ Sports",
+            entertainment: "🎬 Divertissement",
             technology: "💻 Technologie",
             music: "🎵 Musique",
             food: "🍕 Cuisine & Alimentation",
             tv_shows: "📺 Séries TV",
             anime: "🎌 Anime",
-            riddles: "🧩 Devinettes"
-            
+            riddles: "🧩 Devinettes",
+            current_events: "📰 Actualités",
+            pop_culture: "🎭 Culture Pop",
+            pop_culture_2010s: "📱 Culture Pop 2010s",
+            pop_culture_morocco: "🇲🇦 Culture Pop Marocaine"
         }
     }
 };
@@ -239,9 +248,9 @@ const translations = {
 // ============================================
 
 const SUBJECTS = [
-    'science', 'history', 'geography', 'sports', 
-    'technology', 'music', 'food', 'tv_shows', 'anime', 'riddles'
-    
+    'science', 'history', 'geography', 'sports', 'entertainment', 
+    'technology', 'music', 'food', 'tv_shows', 'anime', 'riddles',
+    'current_events', 'pop_culture', 'pop_culture_2010s', 'pop_culture_morocco'
 ];
 
 let ws;
@@ -277,7 +286,7 @@ let sfxEnabled = localStorage.getItem('triviaSfxEnabled') !== 'false';
 const themeMusicUrls = {
     neon: '/static/music/neon.mp3',
     dragon: '/static/music/dragon.mp3',
-    ocean: '/static/music/ocean.mp3',
+    horror: '/static/music/horror.mp3', // Creepy ambient horror music
     sakura: '/static/music/sakura.mp3',
     midnight: '/static/music/midnight.mp3',
     clean: '/static/music/clean.mp3'
