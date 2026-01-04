@@ -60,6 +60,12 @@ const translations = {
         roomCode: "Room Code",
         joinRoomBtn: "Join Room",
         waitingForPlayers: "Waiting for players to join...",
+        playersInLobby: "players in lobby",
+        playerInLobby: "player in lobby",
+        finalResults: "FINAL RESULTS",
+        leaderboard: "LEADERBOARD",
+        getReady: "GET READY",
+        go: "GO!",
         startGame: "Start Game",
         buzz: "BUZZ!",
         gameOver: "Game Over!",
@@ -124,6 +130,8 @@ const translations = {
         aiErrorTimeout: "AI is taking too long to respond. Please try again later or choose a predefined category.",
         aiErrorGeneration: "Error generating questions. Please try again.",
         aiErrorConnection: "Connection error. Please try again.",
+        selectAll: "Select All",
+        deselectAll: "Deselect All",
         subjects: {
             science: "🔬 Science",
             history: "📚 History",
@@ -135,11 +143,12 @@ const translations = {
             music: "🎵 Music",
             tv_shows: "📺 TV Shows",
             anime: "🎌 Anime",
-            riddles: "🧩 Riddles",
+            image_riddles: "🖼️ Image Riddles",
             current_events: "📰 Current Events",
             pop_culture: "🎭 Pop Culture",
             pop_culture_2010s: "📱 2010s Pop Culture",
-            pop_culture_morocco: "🇲🇦 Moroccan Pop Culture"
+            pop_culture_morocco: "🇲🇦 Moroccan Pop Culture",
+            flags: "🏳️ World Flags"
         }
     },
     fr: {
@@ -159,6 +168,12 @@ const translations = {
         roomCode: "Code de la salle",
         joinRoomBtn: "Rejoindre la salle",
         waitingForPlayers: "En attente de joueurs...",
+        playersInLobby: "joueurs dans le salon",
+        playerInLobby: "joueur dans le salon",
+        finalResults: "RÉSULTATS FINAUX",
+        leaderboard: "CLASSEMENT",
+        getReady: "PRÉPAREZ-VOUS",
+        go: "C'EST PARTI!",
         startGame: "Démarrer le jeu",
         buzz: "BUZZ!",
         gameOver: "Jeu terminé!",
@@ -223,6 +238,8 @@ const translations = {
         aiErrorTimeout: "L'IA prend trop de temps à répondre. Veuillez réessayer plus tard ou choisir une catégorie prédéfinie.",
         aiErrorGeneration: "Erreur lors de la génération des questions. Veuillez réessayer.",
         aiErrorConnection: "Erreur de connexion. Veuillez réessayer.",
+        selectAll: "Tout sélectionner",
+        deselectAll: "Tout désélectionner",
         subjects: {
             science: "🔬 Science",
             history: "📚 Histoire",
@@ -234,11 +251,12 @@ const translations = {
             food: "🍕 Cuisine & Alimentation",
             tv_shows: "📺 Séries TV",
             anime: "🎌 Anime",
-            riddles: "🧩 Devinettes",
+            image_riddles: "🖼️ Devinettes en Images",
             current_events: "📰 Actualités",
             pop_culture: "🎭 Culture Pop",
             pop_culture_2010s: "📱 Culture Pop 2010s",
-            pop_culture_morocco: "🇲🇦 Culture Pop Marocaine"
+            pop_culture_morocco: "🇲🇦 Culture Pop Marocaine",
+            flags: "🏳️ Drapeaux du Monde"
         }
     }
 };
@@ -249,8 +267,9 @@ const translations = {
 
 const SUBJECTS = [
     'science', 'history', 'geography', 'sports', 'entertainment', 
-    'technology', 'music', 'food', 'tv_shows', 'anime', 'riddles',
-    'current_events', 'pop_culture', 'pop_culture_2010s', 'pop_culture_morocco'
+    'technology', 'music', 'food', 'tv_shows', 'anime', 'image_riddles',
+    'current_events', 'pop_culture', 'pop_culture_2010s', 'pop_culture_morocco',
+    'flags'
 ];
 
 let ws;
@@ -270,6 +289,7 @@ let selectedJoinTeam = null;
 let roomGameMode = null;
 let isCheckingRoom = false;
 let currentMultiQuestion = null;
+let currentLobbyPlayerCount = 0; // Track player count for lobby display
 
 // Buzzer key settings
 let buzzerKey = localStorage.getItem('triviaBuzzerKey') || 'Space';
@@ -418,6 +438,18 @@ function setupKeyboardBuzzer() {
             e.preventDefault();
             setBuzzerKey(e.code, getKeyDisplayName(e));
             return;
+        }
+        
+        // Ignore if user is typing in an input field or textarea
+        const activeElement = document.activeElement;
+        const isTyping = activeElement && (
+            activeElement.tagName === 'INPUT' || 
+            activeElement.tagName === 'TEXTAREA' ||
+            activeElement.isContentEditable
+        );
+        
+        if (isTyping) {
+            return; // Don't capture buzzer key when typing
         }
         
         // Check if buzzer key was pressed
@@ -734,6 +766,14 @@ function applyTranslations() {
         const text = t(key);
         if (text) element.placeholder = text;
     });
+    
+    // Update lobby player count if in lobby
+    if (currentLobbyPlayerCount > 0) {
+        updateLobbyPlayerCount();
+    }
+    
+    // Re-render subjects if visible
+    renderSubjects();
 }
 
 function selectLanguage(lang) {
@@ -942,6 +982,18 @@ function renderSubjectsToContainer(containerId) {
     const container = document.getElementById(containerId);
     if (!container) return;
     container.innerHTML = '';
+    
+    // Add Select All / Deselect All button
+    const toggleAllBtn = document.createElement('button');
+    toggleAllBtn.className = 'btn-toggle-all';
+    toggleAllBtn.innerHTML = `<span class="toggle-icon">☑️</span> <span data-translate="selectAll">${t('selectAll')}</span>`;
+    toggleAllBtn.onclick = (e) => {
+        e.preventDefault();
+        toggleAllSubjects(containerId);
+    };
+    container.appendChild(toggleAllBtn);
+    
+    // Add subjects
     SUBJECTS.forEach(subject => {
         const div = document.createElement('div');
         div.className = 'subject-item';
@@ -960,6 +1012,29 @@ function renderSubjectsToContainer(containerId) {
         };
         container.appendChild(div);
     });
+}
+
+function toggleAllSubjects(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+    const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+    
+    // Toggle all - if all are checked, uncheck all; otherwise check all
+    checkboxes.forEach(cb => {
+        cb.checked = !allChecked;
+    });
+    
+    // Update button text
+    const toggleBtn = container.querySelector('.btn-toggle-all');
+    if (toggleBtn) {
+        if (allChecked) {
+            toggleBtn.innerHTML = `<span class="toggle-icon">☐</span> <span data-translate="selectAll">${t('selectAll')}</span>`;
+        } else {
+            toggleBtn.innerHTML = `<span class="toggle-icon">☑️</span> <span data-translate="deselectAll">${t('deselectAll')}</span>`;
+        }
+    }
 }
 
 function getSelectedSubjects(containerId) {
@@ -1228,10 +1303,29 @@ function showNextSoloQuestion() {
         }
     }
     
+    // Handle question image (for flag quiz etc.)
+    const questionImageEl = document.getElementById('soloQuestionImage');
+    if (questionImageEl) {
+        if (soloCurrentQuestion.image) {
+            questionImageEl.style.display = 'block';
+            questionImageEl.querySelector('img').src = soloCurrentQuestion.image;
+        } else {
+            questionImageEl.style.display = 'none';
+        }
+    }
+    
     const questionText = document.getElementById('soloQuestionText');
     if (questionText) questionText.textContent = soloCurrentQuestion.q;
     const questionNumber = document.getElementById('soloQuestionNumber');
     if (questionNumber) questionNumber.textContent = `${t('question').toUpperCase()} #${soloQuestionIndex + 1}`;
+
+    // Add question enter animation
+    const questionBox = document.querySelector('#soloGameScreen .question-box');
+    if (questionBox) {
+        questionBox.classList.remove('entering');
+        void questionBox.offsetWidth; // Force reflow
+        questionBox.classList.add('entering');
+    }
 
     let timeLeft = soloCurrentQuestion.time || 10;
     const maxTime = timeLeft;
@@ -1287,11 +1381,15 @@ function handleSoloAnswer(idx) {
             void scoreEl.offsetWidth; // Trigger reflow
             scoreEl.classList.add('updated');
         }
+        // Enhanced feedback
+        showPointsPopup('+100', true);
+        showFeedbackFlash(true);
         createConfetti(30);
     } else { 
         playSfx('wrong');
+        showPointsPopup('✗', false);
+        showFeedbackFlash(false);
         shakeScreen(); 
-        flashWrong(); 
     }
 
     document.querySelectorAll('#soloOptionsBox .option').forEach((opt, i) => {
@@ -1307,7 +1405,9 @@ function handleSoloAnswer(idx) {
 
 function handleSoloTimeout() {
     playSfx('wrong');
-    shakeScreen(); flashWrong();
+    showPointsPopup('⏰', false);
+    showFeedbackFlash(false);
+    shakeScreen();
     document.querySelectorAll('#soloOptionsBox .option').forEach((opt, i) => {
         opt.onclick = null;
         if (i === soloCurrentQuestion.correct) { opt.classList.add('correct'); animateCorrectOption(opt); }
@@ -1319,9 +1419,100 @@ function handleSoloTimeout() {
 
 function showSoloGameOver() {
     clearInterval(timerInterval);
-    showScreen('gameOverScreen');
+    // Show podium celebration for solo mode
+    showPodiumCelebration([{
+        name: document.getElementById('soloName')?.value || 'Player',
+        score: soloScore
+    }], true);
+}
+
+// Enhanced feedback functions
+function showPointsPopup(text, isCorrect) {
+    const popup = document.createElement('div');
+    popup.className = `points-popup ${isCorrect ? 'correct' : 'wrong'}`;
+    popup.textContent = text;
+    document.body.appendChild(popup);
+    setTimeout(() => popup.remove(), 1500);
+}
+
+function showFeedbackFlash(isCorrect) {
+    const overlay = document.createElement('div');
+    overlay.className = `feedback-overlay ${isCorrect ? 'feedback-correct' : 'feedback-wrong'}`;
+    document.body.appendChild(overlay);
+    setTimeout(() => overlay.remove(), 600);
+}
+
+// Podium Celebration
+function showPodiumCelebration(players, isSolo = false) {
+    // Sort by score
+    const sorted = [...players].sort((a, b) => b.score - a.score);
+    
+    // Store mode for the close function
+    window.podiumIsSolo = isSolo;
+    
+    const overlay = document.createElement('div');
+    overlay.className = 'podium-overlay';
+    overlay.innerHTML = `
+        <div class="podium-title">🏆 ${isSolo ? t('gameOver') : t('finalResults')} 🏆</div>
+        <div class="podium-container">
+            ${sorted.length > 1 ? `
+            <div class="podium-place second" style="animation-delay: 0.3s;">
+                <div class="podium-avatar" style="background: linear-gradient(135deg, #C0C0C0, #A9A9A9);">🥈</div>
+                <div class="podium-name">${sorted[1]?.name || '-'}</div>
+                <div class="podium-score">${sorted[1]?.score || 0}</div>
+                <div class="podium-stand">2</div>
+            </div>
+            ` : ''}
+            <div class="podium-place first" style="animation-delay: 0.6s;">
+                <div class="podium-avatar" style="background: linear-gradient(135deg, #FFD700, #FFA500);">🥇</div>
+                <div class="podium-name">${sorted[0]?.name || '-'}</div>
+                <div class="podium-score">${sorted[0]?.score || 0}</div>
+                <div class="podium-stand">1</div>
+            </div>
+            ${sorted.length > 2 ? `
+            <div class="podium-place third" style="animation-delay: 0.9s;">
+                <div class="podium-avatar" style="background: linear-gradient(135deg, #CD7F32, #8B4513);">🥉</div>
+                <div class="podium-name">${sorted[2]?.name || '-'}</div>
+                <div class="podium-score">${sorted[2]?.score || 0}</div>
+                <div class="podium-stand">3</div>
+            </div>
+            ` : ''}
+        </div>
+        <div class="podium-continue">
+            <button class="btn" onclick="closePodium()">${t('playAgain')}</button>
+        </div>
+    `;
+    
+    document.body.appendChild(overlay);
+    
+    // Animate podium places
+    setTimeout(() => {
+        overlay.querySelectorAll('.podium-place').forEach((place, i) => {
+            setTimeout(() => place.classList.add('animate-in'), i * 300);
+        });
+    }, 100);
+    
+    // Confetti celebration
     playSfx('victory');
     celebrateVictory();
+    createConfetti(100);
+}
+
+function closePodium() {
+    const overlay = document.querySelector('.podium-overlay');
+    if (overlay) overlay.remove();
+    
+    if (window.podiumIsSolo) {
+        closePodiumAndShowGameOver();
+    } else {
+        closePodiumAndShowMultiGameOver();
+    }
+}
+
+function closePodiumAndShowGameOver() {
+    showScreen('gameOverScreen');
+    
+    // Update game over screen
     const winnerBox = document.getElementById('winnerBox');
     if (winnerBox) winnerBox.textContent = `🏆 ${t('score')}: ${soloScore}`;
     const finalScores = document.getElementById('finalScores');
@@ -1332,6 +1523,80 @@ function showSoloGameOver() {
         div.innerHTML = `<span>${document.getElementById('soloName')?.value || 'Player'}</span><span>${soloScore}</span>`;
         finalScores.appendChild(div);
     }
+}
+
+// Animated Leaderboard
+function showAnimatedLeaderboard(scores, duration = 3000) {
+    const sorted = Object.entries(scores)
+        .map(([name, score]) => ({ name, score }))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 5);
+    
+    const overlay = document.createElement('div');
+    overlay.className = 'leaderboard-overlay';
+    overlay.innerHTML = `
+        <div class="leaderboard-container">
+            <div class="leaderboard-title">📊 ${t('leaderboard')}</div>
+            <div class="leaderboard-entries">
+                ${sorted.map((player, i) => `
+                    <div class="leaderboard-entry rank-${i + 1}" style="animation-delay: ${i * 0.1}s;">
+                        <div class="leaderboard-rank">${i + 1}</div>
+                        <div class="leaderboard-info">
+                            <div class="leaderboard-name">${player.name}</div>
+                        </div>
+                        <div class="leaderboard-score">${player.score}</div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(overlay);
+    
+    // Animate entries
+    setTimeout(() => {
+        overlay.querySelectorAll('.leaderboard-entry').forEach((entry, i) => {
+            setTimeout(() => entry.classList.add('animate-in'), i * 150);
+        });
+    }, 100);
+    
+    // Auto close
+    setTimeout(() => {
+        overlay.style.opacity = '0';
+        setTimeout(() => overlay.remove(), 300);
+    }, duration);
+}
+
+// Question Transition with "Get Ready"
+function showQuestionTransition(questionNum, callback) {
+    const overlay = document.createElement('div');
+    overlay.className = 'get-ready-overlay';
+    overlay.innerHTML = `
+        <div class="get-ready-text">${t('question').toUpperCase()} ${questionNum}</div>
+        <div class="countdown-number">3</div>
+    `;
+    document.body.appendChild(overlay);
+    
+    const countdownEl = overlay.querySelector('.countdown-number');
+    let count = 3;
+    
+    const countdownInterval = setInterval(() => {
+        count--;
+        if (count > 0) {
+            countdownEl.textContent = count;
+            countdownEl.style.animation = 'none';
+            void countdownEl.offsetWidth;
+            countdownEl.style.animation = 'countdownPulse 1s ease-in-out';
+        } else {
+            clearInterval(countdownInterval);
+            countdownEl.textContent = t('go');
+            countdownEl.style.color = 'var(--success)';
+            setTimeout(() => {
+                overlay.remove();
+                if (callback) callback();
+            }, 500);
+        }
+    }, 1000);
 }
 
 function showSoloMessage(text) {
@@ -1564,6 +1829,7 @@ function handleMessage(msg) {
         case 'teamEliminated': showMessage(`💀 ${msg.data.message}`); updateScores(msg.data.scores); if (msg.data.teamScores) updateTeamScores(msg.data.teamScores); if (msg.data.team === myTeam) { const b = document.getElementById('buzzer'); if (b) { b.disabled = true; b.textContent = 'ELIMINATED'; } } break;
         case 'roundTransition': showMessage(`🔥 ${msg.data.message}`); updateScores(msg.data.scores); if (msg.data.teamScores) updateTeamScores(msg.data.teamScores); break;
         case 'gameOver': showGameOver(msg.data); break;
+        case 'reaction': handleReaction(msg.data); break;
         case 'error': alert(msg.data); break;
         case 'playerLeft': showMessage(msg.data.message || 'Player left'); break;
         case 'newHost': showMessage(msg.data.message || 'New host'); const myN2 = document.getElementById('createName')?.value || document.getElementById('joinName')?.value; if (msg.data.hostName === myN2) isHost = true; break;
@@ -1593,10 +1859,27 @@ function updatePlayers(data) {
             </div>
             ${player.isHost ? `<span class="host-badge">${t('host')}</span>` : ''}
         `;
+        // Add join animation
+        div.classList.add('player-join-animation');
         list.appendChild(div);
     });
+    
+    // Update player count display and store for language changes
+    currentLobbyPlayerCount = data.players.length;
+    updateLobbyPlayerCount();
+    
     const startBtn = document.getElementById('startBtn');
     if (startBtn) startBtn.style.display = (isHost && data.canStart) ? 'block' : 'none';
+}
+
+function updateLobbyPlayerCount() {
+    const waitingMsg = document.querySelector('.waiting-message');
+    if (waitingMsg && currentLobbyPlayerCount > 0) {
+        const countText = currentLobbyPlayerCount === 1 ? t('playerInLobby') : t('playersInLobby');
+        waitingMsg.innerHTML = `<span class="lobby-player-count">${currentLobbyPlayerCount}</span> ${countText}<span class="lobby-waiting-dots">...</span>`;
+    } else if (waitingMsg) {
+        waitingMsg.textContent = t('waitingForPlayers');
+    }
 }
 
 function startGame() {
@@ -1608,6 +1891,25 @@ let currentMaxTime = 10; // Store max time for circular timer
 function showQuestion(data) {
     hasBuzzed = false; canAnswer = false;
     document.getElementById('questionText').textContent = data.q;
+    
+    // Handle question image (for flag quiz etc.)
+    const questionImageEl = document.getElementById('questionImage');
+    if (questionImageEl) {
+        if (data.image) {
+            questionImageEl.style.display = 'block';
+            questionImageEl.querySelector('img').src = data.image;
+        } else {
+            questionImageEl.style.display = 'none';
+        }
+    }
+    
+    // Add question enter animation
+    const questionBox = document.querySelector('#gameScreen .question-box');
+    if (questionBox) {
+        questionBox.classList.remove('entering');
+        void questionBox.offsetWidth; // Force reflow
+        questionBox.classList.add('entering');
+    }
     
     // Update round badge
     const roundInfo = document.getElementById('roundInfo');
@@ -1711,16 +2013,24 @@ function showResult(data) {
     if (data.answeredBy === myName) { 
         if (data.correct) { 
             playSfx('correct');
+            showPointsPopup('+100', true);
+            showFeedbackFlash(true);
             createConfetti(30); 
         } else { 
             playSfx('wrong');
+            showPointsPopup('✗', false);
+            showFeedbackFlash(false);
             shakeScreen(); 
-            flashWrong(); 
         } 
     }
     updateScores(data.scores);
     if (data.teamScores) updateTeamScores(data.teamScores);
     showMessage(data.message || (data.correct ? '✅ Correct!' : `❌ Wrong! Answer: ${data.answer}`));
+    
+    // Show animated leaderboard after a delay
+    setTimeout(() => {
+        showAnimatedLeaderboard(data.scores, 2500);
+    }, 1000);
 }
 
 function updateScores(scores) {
@@ -1764,8 +2074,31 @@ function updateTeamScores(teamScores) {
 }
 
 function showGameOver(data) {
-    clearInterval(timerInterval); showScreen('gameOverScreen'); celebrateVictory();
-    playSfx('victory');
+    clearInterval(timerInterval);
+    
+    // Convert finalScores to array for podium
+    const players = Object.entries(data.finalScores)
+        .map(([name, score]) => ({ name, score }))
+        .sort((a, b) => b.score - a.score);
+    
+    // Show podium celebration first
+    showPodiumCelebration(players, false);
+    
+    // Store data for later use in closePodiumAndShowMultiGameOver
+    window.multiGameOverData = data;
+}
+
+function closePodiumAndShowMultiGameOver() {
+    const overlay = document.querySelector('.podium-overlay');
+    if (overlay) overlay.remove();
+    
+    const data = window.multiGameOverData;
+    if (!data) {
+        showScreen('homeScreen');
+        return;
+    }
+    
+    showScreen('gameOverScreen');
     const winnerBox = document.getElementById('winnerBox');
     if (winnerBox) winnerBox.textContent = data.winner ? `🏆 Winner: ${data.winner}` : (data.reason || 'Game Over!');
     const finalScores = document.getElementById('finalScores');
@@ -1891,6 +2224,44 @@ function updateCircularTimer(containerId, time, maxTime) {
     if (container) {
         container.innerHTML = createCircularTimer(time, maxTime);
     }
+}
+
+// ============================================
+// PLAYER REACTIONS
+// ============================================
+
+function sendReaction(emoji) {
+    // Show local reaction immediately
+    showFloatingReaction(emoji);
+    
+    // Send to other players via WebSocket
+    if (ws?.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({ 
+            action: 'reaction', 
+            userId, 
+            matchToken,
+            emoji 
+        }));
+    }
+}
+
+function showFloatingReaction(emoji, fromPlayer = null) {
+    const reaction = document.createElement('div');
+    reaction.className = 'floating-reaction';
+    reaction.textContent = emoji;
+    
+    // Random horizontal position
+    const randomX = 20 + Math.random() * 60; // 20% to 80% of screen width
+    reaction.style.left = randomX + '%';
+    reaction.style.bottom = '100px';
+    
+    document.body.appendChild(reaction);
+    setTimeout(() => reaction.remove(), 2000);
+}
+
+// Handle incoming reactions from other players
+function handleReaction(data) {
+    showFloatingReaction(data.emoji, data.player);
 }
 
 // ============================================
