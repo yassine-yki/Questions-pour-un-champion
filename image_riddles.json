@@ -1,0 +1,465 @@
+{
+  "en": {
+    "image_riddles": [
+      {
+        "q": "What surface is this extreme close-up of?",
+        "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400",
+        "options": ["Human eyes", "Strawberry skin", "Cat's eyes", "Coral reef"],
+        "correct": 2,
+        "time": 20
+      },
+      {
+        "q": "What object creates this pattern?",
+        "image": "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=400",
+        "options": ["Soap bubble", "Oil slick", "Peacock feather", "Butterfly wing"],
+        "correct": 2,
+        "time": 20
+      },
+      {
+        "q": "In which city is this street located?",
+        "image": "https://quiz.com/image-cache/uploads/69a957aa-62d3-4c78-a238-f26b72d4b9e5/3d1d77a5fca2b97f3476dfff48e92b0e0f03e420.jpg.jpg?width=1600&height=1200",
+        "options": ["Amsterdam", "Copenhagen", "Stockholm", "Rotterdam"],
+        "correct": 0,
+        "time": 20
+      },
+      {
+        "q": "In which city is this street located?",
+        "image": "https://quiz.com/image-cache/uploads/69a957aa-62d3-4c78-a238-f26b72d4b9e5/fa1a3feca7afd71bcf6f0108232fc04a8422ebe3.jpg.jpg?width=1600&height=1200",
+        "options": ["Slovakia ", "Hungary", "France", "Italy"],
+        "correct": 1,
+        "time": 12
+      },
+      {
+        "q": "What material is this close-up of?",
+        "image": "https://images.unsplash.com/photo-1558171813-4c088753af8f?w=400",
+        "options": ["Corduroy", "Denim", "Canvas", "Tweed"],
+        "correct": 1,
+        "time": 20
+      },
+      {
+        "q": "What is this spiral pattern from?",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Nautilus_belauensis_from_Palau.jpg/960px-Nautilus_belauensis_from_Palau.jpg",
+        "options": ["Snail shell", "Nautilus shell", "Ammonite fossil", "Seashell"],
+        "correct": 1,
+        "time": 20
+      },
+      {
+        "q": "This texture belongs to which fruit?",
+        "image": "https://www.realsimple.com/thmb/QvVFG2-h2R4RTXYDFGqx9RF5jrQ=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/what-is-jackfruit-2000-bb057b681e3943d68a1f6e38e81125db.jpg",
+        "options": ["Cantaloupe", "Honeydew", "Jackfruit", "Durian"],
+        "correct": 0,
+        "time": 18
+      },
+      {
+        "q": "Guess the footballer in the picture ",
+        "image": "https://information.tv5monde.com/sites/tv5-info/files/styles/seo_1200/public/2024-08/AP24215575504010.jpg",
+        "options": ["Achraf Hakimi", "Youssef En-Nesyri", "Diego Maradona", "Yamiq"],
+        "correct": 0,
+        "time": 7
+      },
+      {
+        "q": "This scale pattern belongs to which animal?",
+        "image": "https://images.unsplash.com/photo-1504450874802-0ba2bcd9b5ae?w=400",
+        "options": ["Alligator", "Crocodile", "Komodo dragon", "Monitor lizard"],
+        "correct": 1,
+        "time": 20
+      },
+      {
+        "q": "Guess the footballer in the picture ",
+        "image": "https://images2.minutemediacdn.com/image/upload/c_crop,w_5850,h_3290,x_0,y_343/images/voltaxMediaLibrary/mmsport/si/01kc93qxa3rcqwppzssw.jpg",
+        "options": ["Martin Odegaard", "Declan Rice", "Enzo Fernandez", "Cole Palmer"],
+        "correct": 3,
+        "time": 7
+      },
+      {
+        "q": "Guess the Car in the picture  ",
+        "image": "https://cdn.quiz.com/uploads/69a957aa-62d3-4c78-a238-f26b72d4b9e5/1b4d107c9491261f6de0f7ddfe1c904014b75179.avif",
+        "options": ["Chevrolet Camaro", "Dodge Challengert", "Ford Mustang", "Dodge Charger"],
+        "correct": 3,
+        "time": 15
+      },
+      {
+        "q": "What produces this iridescent pattern?",
+        "image": "https://www.ambiance-sticker.com/images/Image/sticker-rayures-de-zebre-5-ambiance-sticker-KC3826.jpg",
+        "options": ["CD surface", "Soap film", "Zebra stripes", "Oil on water"],
+        "correct": 2,
+        "time": 18
+      },
+      {
+        "q": "This fur pattern belongs to which big cat?",
+        "image": "https://images.unsplash.com/photo-1456926631375-92c8ce872def?w=400",
+        "options": ["Leopard", "Jaguar", "Cheetah", "Ocelot"],
+        "correct": 2,
+        "time": 20
+      },
+      {
+        "q": "What kitchen tool is this part of?",
+        "image": "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400",
+        "options": ["Egg beater", "Whisk", "Spiral mixer", "Milk frother"],
+        "correct": 1,
+        "time": 18
+      },
+      {
+        "q": "What type of glass is this?",
+        "image": "https://images.unsplash.com/photo-1519741347686-c1e0aadf4611?w=400",
+        "options": ["Frosted glass", "Crystal", "Quartz", "Diamond"],
+        "correct": 2,
+        "time": 20
+      },
+      {
+        "q": "This ridged surface belongs to what?",
+        "image": "https://images.unsplash.com/photo-1551462147-ff29053bfc14?w=400",
+        "options": ["Radiator", "Accordion", "Farfalle pasta", "Pleated fabric"],
+        "correct": 2,
+        "time": 18
+      },
+      {
+        "q": "What marine creature is this?",
+        "image": "https://images.unsplash.com/photo-1545671913-b89ac1b4ac10?w=400",
+        "options": ["Portuguese man o' war", "Moon jellyfish", "Box jellyfish", "Lion's mane jellyfish"],
+        "correct": 1,
+        "time": 20
+      },
+      {
+        "q": "This bark pattern is from which tree?",
+        "image": "https://images.unsplash.com/photo-1510797215324-95aa89f43c33?w=400",
+        "options": ["Birch", "Eucalyptus", "Palm", "Cork oak"],
+        "correct": 2,
+        "time": 20
+      },
+      {
+        "q": "What do we call this light phenomenon?",
+        "image": "https://i.guim.co.uk/img/media/524890224ffc97650d93592d657525b601e384fd/0_1_4252_2551/master/4252.jpg?width=1200&height=900&quality=85&auto=format&fit=crop&s=f89a25b89271f590df1a61643577fc39",
+        "options": ["Northern Lights", "Light painting", "Neon lights", "Bioluminescence"],
+        "correct": 3,
+        "time": 18
+      },
+      {
+        "q": "This is a close-up of which spice?",
+        "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400",
+        "options": ["Cinnamon bark", "Dried ginger", "Nutmeg", "Mountain landscape"],
+        "correct": 3,
+        "time": 20
+      },
+      {
+        "q": "What instrument string is this?",
+        "image": "https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?w=400",
+        "options": ["Guitar", "Violin", "Piano wire", "Harp"],
+        "correct": 2,
+        "time": 20
+      },
+      {
+        "q": "This purple crystal is what gemstone?",
+        "image": "https://images.unsplash.com/photo-1551122089-4e3e72477432?w=400",
+        "options": ["Tanzanite", "Iolite", "Amethyst", "Purple sapphire"],
+        "correct": 2,
+        "time": 20
+      },
+      {
+        "q": "What sport equipment shows this stitching?",
+        "image": "https://images.unsplash.com/photo-1531415074968-036ba1b575da?w=400",
+        "options": ["Baseball", "Cricket ball", "Tennis ball", "Golf ball"],
+        "correct": 1,
+        "time": 18
+      },
+      {
+        "q": "This golden surface is from what food?",
+        "image": "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400",
+        "options": ["Crumpet", "Pancake", "Waffle", "English muffin"],
+        "correct": 1,
+        "time": 18
+      },
+      {
+        "q": "This ring system belongs to which planet?",
+        "image": "https://images.unsplash.com/photo-1614732414444-096e5f1122d5?w=400",
+        "options": ["Jupiter", "Uranus", "Saturn", "Neptune"],
+        "correct": 2,
+        "time": 15
+      },
+      {
+        "q": "What bird's feather pattern is this?",
+        "image": "https://images.unsplash.com/photo-1444464666168-49d633b86797?w=400",
+        "options": ["Hawk", "Golden eagle", "Bald eagle", "Falcon"],
+        "correct": 2,
+        "time": 20
+      },
+      {
+        "q": "This glazed surface is from what pastry?",
+        "image": "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=400",
+        "options": ["Croissant", "Donut", "Danish", "Cinnamon roll"],
+        "correct": 1,
+        "time": 18
+      },
+      {
+        "q": "This metallic badge is from which car brand?",
+        "image": "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=400",
+        "options": ["Aston Martin", "Bentley", "Porsche", "Maserati"],
+        "correct": 2,
+        "time": 20
+      },
+      {
+        "q": "What is this silhouette of?",
+        "image": "https://images.unsplash.com/photo-1474511320723-9a56873571b7?w=400",
+        "options": ["Moose", "Elk", "Giraffe", "Camel"],
+        "correct": 2,
+        "time": 18
+      },
+      {
+        "q": "This architectural detail is from what landmark?",
+        "image": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=400",
+        "options": ["Arc de Triomphe", "Eiffel Tower", "Notre-Dame", "Louvre Pyramid"],
+        "correct": 1,
+        "time": 20
+      },
+      {
+        "q": "What flower's center is this?",
+        "image": "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=400",
+        "options": ["Daisy", "Black-eyed Susan", "Sunflower", "Marigold"],
+        "correct": 2,
+        "time": 18
+      },
+      {
+        "q": "This curved peel belongs to which fruit?",
+        "image": "https://images.unsplash.com/photo-1528825871115-3581a5387919?w=400",
+        "options": ["Plantain", "Yellow squash", "Banana", "Papaya"],
+        "correct": 2,
+        "time": 15
+      },
+      {
+        "q": "What type of leaf venation is this?",
+        "image": "https://images.unsplash.com/photo-1518882605630-8dc52a4c4c2a?w=400",
+        "options": ["Maple leaf", "Oak leaf", "Monstera leaf", "Fern frond"],
+        "correct": 2,
+        "time": 20
+      },
+      {
+        "q": "This bubble pattern is from what substance?",
+        "image": "https://images.unsplash.com/photo-1527066236128-2ff79f7b9705?w=400",
+        "options": ["Champagne", "Beer foam", "Soap suds", "Carbonated water"],
+        "correct": 2,
+        "time": 18
+      },
+      {
+        "q": "What creates these parallel lines?",
+        "image": "https://images.unsplash.com/photo-1505765050516-f72dcac9c60e?w=400",
+        "options": ["Vinyl record grooves", "Tree rings", "Ripples in sand", "Fingerprint"],
+        "correct": 2,
+        "time": 20
+      }
+    ]
+  },
+  "fr": {
+    "image_riddles": [
+      {
+        "q": "De quelle surface est ce gros plan extrême ?",
+        "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400",
+        "options": ["Langue humaine", "Peau de fraise", "Langue de chat", "Récif corallien"],
+        "correct": 2,
+        "time": 20
+      },
+      {
+        "q": "Quel objet crée ce motif ?",
+        "image": "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=400",
+        "options": ["Bulle de savon", "Nappe de pétrole", "Plume de paon", "Aile de papillon"],
+        "correct": 2,
+        "time": 20
+      },
+      {
+        "q": "Dans quelle ville se trouve cette rue ?",
+        "image": "https://quiz.com/image-cache/uploads/69a957aa-62d3-4c78-a238-f26b72d4b9e5/fa1a3feca7afd71bcf6f0108232fc04a8422ebe3.jpg.jpg?width=1600&height=1200",
+        "options": ["Hungary", "Slovakia", "France", "Italy"],
+        "correct": 0,
+        "time": 12
+      },
+      {
+        "q": "Dans quelle ville se trouve cette rue ?",
+        "image": "https://quiz.com/image-cache/uploads/69a957aa-62d3-4c78-a238-f26b72d4b9e5/3d1d77a5fca2b97f3476dfff48e92b0e0f03e420.jpg.jpg?width=1600&height=1200",
+        "options": ["Rotterdam", "Amsterdam", "Copenhagen", "Stockholm"],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "De quel matériau est ce gros plan ?",
+        "image": "https://images.unsplash.com/photo-1558171813-4c088753af8f?w=400",
+        "options": ["Velours côtelé", "Jean", "Toile", "Tweed"],
+        "correct": 1,
+        "time": 20
+      },
+      {
+        "q": "D'où vient ce motif en spirale ?",
+        "image": "https://images.unsplash.com/photo-1471922694854-ff1b63b20054?w=400",
+        "options": ["Coquille d'escargot", "Coquille de nautile", "Fossile d'ammonite", "Coquillage"],
+        "correct": 1,
+        "time": 20
+      },
+      {
+        "q": "Devine le joueur sur l'image",
+        "image": "https://information.tv5monde.com/sites/tv5-info/files/styles/seo_1200/public/2024-08/AP24215575504010.jpg",
+        "options": ["Achraf Hakimi", "Youssef En-Nesyri", "Diego Maradona", "Yamiq"],
+        "correct": 0,
+        "time": 7
+      },
+      {
+        "q": "Ce motif d'écailles appartient à quel animal ?",
+        "image": "https://images.unsplash.com/photo-1504450874802-0ba2bcd9b5ae?w=400",
+        "options": ["Alligator", "Crocodile", "Dragon de Komodo", "Varan"],
+        "correct": 1,
+        "time": 20
+      },
+      {
+        "q": "Devine le joueur sur l'image",
+        "image": "https://images2.minutemediacdn.com/image/upload/c_crop,w_5850,h_3290,x_0,y_343/images/voltaxMediaLibrary/mmsport/si/01kc93qxa3rcqwppzssw.jpg",
+        "options": ["Martin Odegaard", "Enzo Fernandez", "Cole Palmer", "Declan Rice"],
+        "correct": 3,
+        "time": 7
+      },
+      {
+        "q": "Devine la voiture sur l'image",
+        "image": "https://cdn.quiz.com/uploads/69a957aa-62d3-4c78-a238-f26b72d4b9e5/1b4d107c9491261f6de0f7ddfe1c904014b75179.avif",
+        "options": ["Chevrolet Camaro", "Dodge Challenger", "Ford Mustang", "Dodge Charger"],
+        "correct": 3,
+        "time": 18
+      },
+      {
+        "q": "Qu'est-ce qui produit ce motif irisé ?",
+        "image": "https://www.ambiance-sticker.com/images/Image/sticker-rayures-de-zebre-5-ambiance-sticker-KC3826.jpg",
+        "options": ["Surface de CD", "Film de savon", "Rayures de zèbre", "Huile sur l'eau"],
+        "correct": 2,
+        "time": 18
+      },
+      {
+        "q": "Ce motif de fourrure appartient à quel grand félin ?",
+        "image": "https://images.unsplash.com/photo-1456926631375-92c8ce872def?w=400",
+        "options": ["Léopard", "Jaguar", "Guépard", "Ocelot"],
+        "correct": 2,
+        "time": 20
+      },
+      {
+        "q": "De quel ustensile de cuisine fait partie ceci ?",
+        "image": "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400",
+        "options": ["Batteur à œufs", "Fouet", "Mixeur spirale", "Mousseur à lait"],
+        "correct": 1,
+        "time": 18
+      },
+      {
+        "q": "Quel type de verre est-ce ?",
+        "image": "https://images.unsplash.com/photo-1519741347686-c1e0aadf4611?w=400",
+        "options": ["Verre dépoli", "Cristal", "Quartz", "Diamant"],
+        "correct": 2,
+        "time": 20
+      },
+      {
+        "q": "Cette surface striée appartient à quoi ?",
+        "image": "https://images.unsplash.com/photo-1551462147-ff29053bfc14?w=400",
+        "options": ["Radiateur", "Accordéon", "Pâtes farfalle", "Tissu plissé"],
+        "correct": 2,
+        "time": 18
+      },
+      {
+        "q": "Quelle créature marine est-ce ?",
+        "image": "https://images.unsplash.com/photo-1545671913-b89ac1b4ac10?w=400",
+        "options": ["Physalie", "Méduse lune", "Cuboméduse", "Crinière de lion"],
+        "correct": 1,
+        "time": 20
+      },
+      {
+        "q": "Ce motif d'écorce vient de quel arbre ?",
+        "image": "https://images.unsplash.com/photo-1510797215324-95aa89f43c33?w=400",
+        "options": ["Bouleau", "Eucalyptus", "Palmier", "Chêne-liège"],
+        "correct": 2,
+        "time": 20
+      },
+      {
+        "q": "Qu'est-ce qui cause ce phénomène lumineux ?",
+        "image": "https://images.unsplash.com/photo-1527482937786-6f4e4d0e9a53?w=400",
+        "options": ["Aurore boréale", "Light painting", "Néons", "Bioluminescence"],
+        "correct": 0,
+        "time": 18
+      },
+      {
+        "q": "Ceci est un gros plan de quelle épice ?",
+        "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400",
+        "options": ["Écorce de cannelle", "Gingembre séché", "Noix de muscade", "Paysage de montagne"],
+        "correct": 3,
+        "time": 20
+      },
+      {
+        "q": "Quelle corde d'instrument est-ce ?",
+        "image": "https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?w=400",
+        "options": ["Guitare", "Violon", "Corde de piano", "Harpe"],
+        "correct": 2,
+        "time": 20
+      },
+      {
+        "q": "Ce cristal violet est quelle pierre précieuse ?",
+        "image": "https://images.unsplash.com/photo-1551122089-4e3e72477432?w=400",
+        "options": ["Tanzanite", "Iolite", "Améthyste", "Saphir violet"],
+        "correct": 2,
+        "time": 20
+      },
+      {
+        "q": "Quel équipement sportif montre cette couture ?",
+        "image": "https://images.unsplash.com/photo-1531415074968-036ba1b575da?w=400",
+        "options": ["Balle de baseball", "Balle de cricket", "Balle de tennis", "Balle de golf"],
+        "correct": 1,
+        "time": 18
+      },
+      {
+        "q": "Cette surface dorée vient de quel aliment ?",
+        "image": "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400",
+        "options": ["Crumpet", "Pancake", "Gaufre", "Muffin anglais"],
+        "correct": 1,
+        "time": 18
+      },
+      {
+        "q": "Ce système d'anneaux appartient à quelle planète ?",
+        "image": "https://images.unsplash.com/photo-1614732414444-096e5f1122d5?w=400",
+        "options": ["Jupiter", "Uranus", "Saturne", "Neptune"],
+        "correct": 2,
+        "time": 15
+      },
+      {
+        "q": "Quel motif de plume d'oiseau est-ce ?",
+        "image": "https://images.unsplash.com/photo-1444464666168-49d633b86797?w=400",
+        "options": ["Buse", "Aigle royal", "Pygargue à tête blanche", "Faucon"],
+        "correct": 2,
+        "time": 20
+      },
+      {
+        "q": "Cette surface glacée vient de quelle pâtisserie ?",
+        "image": "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=400",
+        "options": ["Croissant", "Donut", "Danoise", "Roulé à la cannelle"],
+        "correct": 1,
+        "time": 18
+      },
+      {
+        "q": "Cet insigne métallique est de quelle marque de voiture ?",
+        "image": "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=400",
+        "options": ["Aston Martin", "Bentley", "Porsche", "Maserati"],
+        "correct": 2,
+        "time": 20
+      },
+      {
+        "q": "Quelle est cette silhouette ?",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Cervus_canadensis2006.jpg/960px-Cervus_canadensis2006.jpg",
+        "options": ["Élan", "Wapiti", "Girafe", "Cerf"],
+        "correct": 1,
+        "time": 14
+      },
+      {
+        "q": "Ce détail architectural vient de quel monument ?",
+        "image": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=400",
+        "options": ["Arc de Triomphe", "Tour Eiffel", "Notre-Dame", "Pyramide du Louvre"],
+        "correct": 1,
+        "time": 20
+      },
+      {
+        "q": "Quel est le centre de cette fleur ?",
+        "image": "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=400",
+        "options": ["Marguerite", "Rudbeckie", "Tournesol", "Souci"],
+        "correct": 2,
+        "time": 18
+      }
+    ]
+  }
+}

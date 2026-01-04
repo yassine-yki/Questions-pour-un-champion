@@ -1,0 +1,535 @@
+{
+  "en": {
+    "flags": [
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/fr.png",
+        "options": ["France", "Netherlands", "Belgium", "Luxembourg"],
+        "correct": 0,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/jp.png",
+        "options": ["China", "Japan", "South Korea", "Vietnam"],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/br.png",
+        "options": ["Portugal", "Argentina", "Brazil", "Colombia"],
+        "correct": 2,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/ca.png",
+        "options": ["Canada", "United States", "Mexico", "Denmark"],
+        "correct": 0,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/de.png",
+        "options": ["Austria", "Belgium", "Germany", "Switzerland"],
+        "correct": 2,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/it.png",
+        "options": ["Ireland", "Italy", "Mexico", "Hungary"],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/es.png",
+        "options": ["Portugal", "Andorra", "Spain", "Monaco"],
+        "correct": 2,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/gb.png",
+        "options": ["Australia", "New Zealand", "United Kingdom", "Iceland"],
+        "correct": 2,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/cn.png",
+        "options": ["Vietnam", "China", "North Korea", "Mongolia"],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/in.png",
+        "options": ["India", "Niger", "Ireland", "Ivory Coast"],
+        "correct": 0,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/au.png",
+        "options": ["New Zealand", "United Kingdom", "Australia", "Fiji"],
+        "correct": 2,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/ru.png",
+        "options": ["Serbia", "Slovenia", "Slovakia", "Russia"],
+        "correct": 3,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/mx.png",
+        "options": ["Italy", "Mexico", "Ireland", "Hungary"],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/kr.png",
+        "options": ["Japan", "North Korea", "South Korea", "Taiwan"],
+        "correct": 2,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/za.png",
+        "options": ["Kenya", "South Africa", "Ghana", "Nigeria"],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/eg.png",
+        "options": ["Iraq", "Syria", "Yemen", "Egypt"],
+        "correct": 3,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/ar.png",
+        "options": ["Argentina", "Uruguay", "Honduras", "El Salvador"],
+        "correct": 0,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/se.png",
+        "options": ["Finland", "Norway", "Sweden", "Denmark"],
+        "correct": 2,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/no.png",
+        "options": ["Iceland", "Norway", "Finland", "Denmark"],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/ch.png",
+        "options": ["Austria", "Denmark", "Switzerland", "Georgia"],
+        "correct": 2,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/nl.png",
+        "options": ["Luxembourg", "Netherlands", "Russia", "France"],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/be.png",
+        "options": ["Germany", "Belgium", "Chad", "Mali"],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/pt.png",
+        "options": ["Brazil", "Portugal", "Angola", "Mozambique"],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/gr.png",
+        "options": ["Uruguay", "Greece", "Israel", "Finland"],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/pl.png",
+        "options": ["Indonesia", "Monaco", "Poland", "Singapore"],
+        "correct": 2,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/tr.png",
+        "options": ["Tunisia", "Turkey", "Pakistan", "Algeria"],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/th.png",
+        "options": ["Costa Rica", "Thailand", "North Korea", "Cambodia"],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/id.png",
+        "options": ["Poland", "Monaco", "Indonesia", "Singapore"],
+        "correct": 2,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/ph.png",
+        "options": ["Czech Republic", "Philippines", "Cuba", "Puerto Rico"],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/vn.png",
+        "options": ["China", "Morocco", "Vietnam", "Turkey"],
+        "correct": 2,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/my.png",
+        "options": ["Liberia", "Malaysia", "United States", "Puerto Rico"],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/sg.png",
+        "options": ["Indonesia", "Poland", "Singapore", "Monaco"],
+        "correct": 2,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/nz.png",
+        "options": ["Australia", "Fiji", "New Zealand", "United Kingdom"],
+        "correct": 2,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/ie.png",
+        "options": ["Italy", "Ivory Coast", "Ireland", "India"],
+        "correct": 2,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/at.png",
+        "options": ["Latvia", "Austria", "Peru", "Canada"],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/dk.png",
+        "options": ["Switzerland", "England", "Denmark", "Georgia"],
+        "correct": 2,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/fi.png",
+        "options": ["Sweden", "Finland", "Greece", "Scotland"],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/cz.png",
+        "options": ["Poland", "Czech Republic", "Philippines", "Slovakia"],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/hu.png",
+        "options": ["Italy", "Bulgaria", "Hungary", "Tajikistan"],
+        "correct": 2,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/ro.png",
+        "options": ["Chad", "Moldova", "Romania", "Andorra"],
+        "correct": 2,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/ua.png",
+        "options": ["Sweden", "Ukraine", "Rwanda", "Palau"],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/ma.png",
+        "options": ["Vietnam", "China", "Morocco", "Turkey"],
+        "correct": 2,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/ng.png",
+        "options": ["India", "Ireland", "Nigeria", "Italy"],
+        "correct": 2,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/ke.png",
+        "options": ["Kenya", "South Sudan", "Malawi", "Gambia"],
+        "correct": 0,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/pe.png",
+        "options": ["Canada", "Austria", "Peru", "Latvia"],
+        "correct": 2,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/co.png",
+        "options": ["Ecuador", "Colombia", "Venezuela", "Romania"],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/cl.png",
+        "options": ["Texas", "Chile", "Liberia", "Puerto Rico"],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/ve.png",
+        "options": ["Colombia", "Ecuador", "Venezuela", "Bolivia"],
+        "correct": 2,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/sa.png",
+        "options": ["Pakistan", "Saudi Arabia", "Libya", "Mauritania"],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/ae.png",
+        "options": ["Kuwait", "Jordan", "United Arab Emirates", "Palestine"],
+        "correct": 2,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/il.png",
+        "options": ["Greece", "Israel", "Argentina", "Honduras"],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/pk.png",
+        "options": ["Saudi Arabia", "Algeria", "Pakistan", "Mauritania"],
+        "correct": 2,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/bd.png",
+        "options": ["Japan", "Palau", "Bangladesh", "Laos"],
+        "correct": 2,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/cu.png",
+        "options": ["Puerto Rico", "Cuba", "Czech Republic", "Chile"],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "What country does this flag belong to?",
+        "image": "https://flagcdn.com/w320/jm.png",
+        "options": ["South Africa", "Jamaica", "Guyana", "Tanzania"],
+        "correct": 1,
+        "time": 15
+      }
+    ]
+  },
+  "fr": {
+    "flags": [
+      {
+        "q": "À quel pays appartient ce drapeau ?",
+        "image": "https://flagcdn.com/w320/fr.png",
+        "options": ["France", "Pays-Bas", "Belgique", "Luxembourg"],
+        "correct": 0,
+        "time": 15
+      },
+      {
+        "q": "À quel pays appartient ce drapeau ?",
+        "image": "https://flagcdn.com/w320/jp.png",
+        "options": ["Chine", "Japon", "Corée du Sud", "Vietnam"],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "À quel pays appartient ce drapeau ?",
+        "image": "https://flagcdn.com/w320/br.png",
+        "options": ["Portugal", "Argentine", "Brésil", "Colombie"],
+        "correct": 2,
+        "time": 15
+      },
+      {
+        "q": "À quel pays appartient ce drapeau ?",
+        "image": "https://flagcdn.com/w320/ca.png",
+        "options": ["Canada", "États-Unis", "Mexique", "Danemark"],
+        "correct": 0,
+        "time": 15
+      },
+      {
+        "q": "À quel pays appartient ce drapeau ?",
+        "image": "https://flagcdn.com/w320/de.png",
+        "options": ["Autriche", "Belgique", "Allemagne", "Suisse"],
+        "correct": 2,
+        "time": 15
+      },
+      {
+        "q": "À quel pays appartient ce drapeau ?",
+        "image": "https://flagcdn.com/w320/it.png",
+        "options": ["Irlande", "Italie", "Mexique", "Hongrie"],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "À quel pays appartient ce drapeau ?",
+        "image": "https://flagcdn.com/w320/es.png",
+        "options": ["Portugal", "Andorre", "Espagne", "Monaco"],
+        "correct": 2,
+        "time": 15
+      },
+      {
+        "q": "À quel pays appartient ce drapeau ?",
+        "image": "https://flagcdn.com/w320/gb.png",
+        "options": ["Australie", "Nouvelle-Zélande", "Royaume-Uni", "Islande"],
+        "correct": 2,
+        "time": 15
+      },
+      {
+        "q": "À quel pays appartient ce drapeau ?",
+        "image": "https://flagcdn.com/w320/cn.png",
+        "options": ["Vietnam", "Chine", "Corée du Nord", "Mongolie"],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "À quel pays appartient ce drapeau ?",
+        "image": "https://flagcdn.com/w320/in.png",
+        "options": ["Inde", "Niger", "Irlande", "Côte d'Ivoire"],
+        "correct": 0,
+        "time": 15
+      },
+      {
+        "q": "À quel pays appartient ce drapeau ?",
+        "image": "https://flagcdn.com/w320/au.png",
+        "options": ["Nouvelle-Zélande", "Royaume-Uni", "Australie", "Fidji"],
+        "correct": 2,
+        "time": 15
+      },
+      {
+        "q": "À quel pays appartient ce drapeau ?",
+        "image": "https://flagcdn.com/w320/ru.png",
+        "options": ["Serbie", "Slovénie", "Slovaquie", "Russie"],
+        "correct": 3,
+        "time": 15
+      },
+      {
+        "q": "À quel pays appartient ce drapeau ?",
+        "image": "https://flagcdn.com/w320/mx.png",
+        "options": ["Italie", "Mexique", "Irlande", "Hongrie"],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "À quel pays appartient ce drapeau ?",
+        "image": "https://flagcdn.com/w320/kr.png",
+        "options": ["Japon", "Corée du Nord", "Corée du Sud", "Taïwan"],
+        "correct": 2,
+        "time": 15
+      },
+      {
+        "q": "À quel pays appartient ce drapeau ?",
+        "image": "https://flagcdn.com/w320/za.png",
+        "options": ["Kenya", "Afrique du Sud", "Ghana", "Nigéria"],
+        "correct": 1,
+        "time": 15
+      },
+      {
+        "q": "À quel pays appartient ce drapeau ?",
+        "image": "https://flagcdn.com/w320/eg.png",
+        "options": ["Irak", "Syrie", "Yémen", "Égypte"],
+        "correct": 3,
+        "time": 15
+      },
+      {
+        "q": "À quel pays appartient ce drapeau ?",
+        "image": "https://flagcdn.com/w320/ar.png",
+        "options": ["Argentine", "Uruguay", "Honduras", "Salvador"],
+        "correct": 0,
+        "time": 15
+      },
+      {
+        "q": "À quel pays appartient ce drapeau ?",
+        "image": "https://flagcdn.com/w320/se.png",
+        "options": ["Finlande", "Norvège", "Suède", "Danemark"],
+        "correct": 2,
+        "time": 15
+      },
+      {
+        "q": "À quel pays appartient ce drapeau ?",
+        "image": "https://flagcdn.com/w320/ma.png",
+        "options": ["Vietnam", "Chine", "Maroc", "Turquie"],
+        "correct": 2,
+        "time": 15
+      },
+      {
+        "q": "À quel pays appartient ce drapeau ?",
+        "image": "https://flagcdn.com/w320/ch.png",
+        "options": ["Autriche", "Danemark", "Suisse", "Géorgie"],
+        "correct": 2,
+        "time": 15
+      }
+    ]
+  }
+}
