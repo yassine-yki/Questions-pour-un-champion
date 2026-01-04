@@ -256,7 +256,7 @@ const translations = {
 // ============================================
 
 const SUBJECTS = [
-    'science', 'history', 'geography', 'sports', 'entertainment', 'music', 'food', 'tv_shows', 'anime', 'image_riddles',
+    'science', 'history', 'geography', 'sports', 'music', 'food', 'tv_shows', 'anime', 'image_riddles',
     'flags'
 ];
 
@@ -2471,3 +2471,4 @@ showHome = function() {
     cleanupVoiceChat();
     originalShowHome();
 };
+
