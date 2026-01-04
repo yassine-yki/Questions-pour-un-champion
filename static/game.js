@@ -3,7 +3,7 @@
 // ============================================
 
 // VERSION CHECK - Remove after debugging
-console.log('=== GAME.JS VERSION 5.0 LOADED ===');
+
 
 // FAQ Toggle Function
 function toggleFaq(element) {
@@ -245,7 +245,7 @@ const translations = {
             food: "🍕 Cuisine & Alimentation",
             tv_shows: "📺 Séries TV",
             anime: "🎌 Anime",
-            image_riddles: "🖼️ Devinettes en Images",,
+            image_riddles: "🖼️ Devinettes en Images",
             flags: "🏳️ Drapeaux du Monde"
         }
     }
@@ -256,8 +256,7 @@ const translations = {
 // ============================================
 
 const SUBJECTS = [
-    'science', 'history', 'geography', 'sports', 
-    'technology', 'music', 'food', 'tv_shows', 'anime', 'image_riddles',
+    'science', 'history', 'geography', 'sports', 'entertainment', 'music', 'food', 'tv_shows', 'anime', 'image_riddles',
     'flags'
 ];
 
@@ -2472,4 +2471,3 @@ showHome = function() {
     cleanupVoiceChat();
     originalShowHome();
 };
-
