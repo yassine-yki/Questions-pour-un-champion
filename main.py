@@ -145,6 +145,40 @@ try:
 except FileNotFoundError:
     raise RuntimeError("questions.json not found")
 
+# Load flag questions and merge with ALL_QUESTIONS
+try:
+    with open("flag_questions.json", "r", encoding="utf-8") as f:
+        FLAG_QUESTIONS = json.load(f)
+    # Merge flag questions into ALL_QUESTIONS
+    for lang in FLAG_QUESTIONS:
+        if lang not in ALL_QUESTIONS:
+            ALL_QUESTIONS[lang] = {}
+        ALL_QUESTIONS[lang]["flags"] = FLAG_QUESTIONS[lang]["flags"]
+    print(f"✅ Loaded {len(FLAG_QUESTIONS.get('en', {}).get('flags', []))} flag questions")
+except FileNotFoundError:
+    print("⚠️ flag_questions.json not found, flag quiz disabled")
+except Exception as e:
+    print(f"⚠️ Error loading flag questions: {e}")
+
+# Load image riddles and replace text riddles
+try:
+    with open("image_riddles.json", "r", encoding="utf-8") as f:
+        IMAGE_RIDDLES = json.load(f)
+    # Replace riddles with image_riddles in ALL_QUESTIONS
+    for lang in IMAGE_RIDDLES:
+        if lang not in ALL_QUESTIONS:
+            ALL_QUESTIONS[lang] = {}
+        # Remove old text riddles if they exist
+        if "riddles" in ALL_QUESTIONS.get(lang, {}):
+            del ALL_QUESTIONS[lang]["riddles"]
+        # Add image riddles as the new riddles category
+        ALL_QUESTIONS[lang]["image_riddles"] = IMAGE_RIDDLES[lang]["image_riddles"]
+    print(f"✅ Loaded {len(IMAGE_RIDDLES.get('en', {}).get('image_riddles', []))} image riddles")
+except FileNotFoundError:
+    print("⚠️ image_riddles.json not found, keeping text riddles")
+except Exception as e:
+    print(f"⚠️ Error loading image riddles: {e}")
+
 # === GLOBAL STATE ===
 rooms: Dict[str, Dict] = {}
 connections: Dict[str, Dict[str, WebSocket]] = {}
@@ -745,6 +779,34 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                         "message": get_text(lang, "buzzed", player=player["name"])
                     })
 
+            elif action == "reaction":
+                # Handle player reactions (emoji reactions during game)
+                room = get_room(code)
+                if not room:
+                    continue
+                
+                msg_user_id = msg.get("userId")
+                token = msg.get("matchToken")
+                emoji = msg.get("emoji", "")
+
+                player = room["players"].get(msg_user_id)
+                if not player or player["match_token"] != token:
+                    continue
+                
+                # Broadcast reaction to all players except sender
+                for uid, p in room["players"].items():
+                    if uid != msg_user_id and uid in connections.get(code, {}):
+                        try:
+                            await connections[code][uid].send_json({
+                                "event": "reaction",
+                                "data": {
+                                    "player": player["name"],
+                                    "emoji": emoji
+                                }
+                            })
+                        except:
+                            pass
+
             elif action == "answer":
                 room = get_room(code)
                 if not room:
@@ -908,7 +970,8 @@ async def start_question(code: str):
     room["state"] = "question"
     room["questions_in_round"] += 1
 
-    await broadcast(code, "question", {
+    # Build question data with optional image
+    question_data = {
         "q": q["q"],
         "options": q["options"],
         "time": room["timer"],
@@ -916,7 +979,13 @@ async def start_question(code: str):
         "round": room["current_round"],
         "questionInRound": room["questions_in_round"],
         "questionsPerRound": room["questions_per_round"]
-    })
+    }
+    
+    # Include image if present (for flag quiz etc.)
+    if "image" in q:
+        question_data["image"] = q["image"]
+    
+    await broadcast(code, "question", question_data)
     
     asyncio.create_task(timer_task(code))
 
