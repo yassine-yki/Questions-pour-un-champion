@@ -137,17 +137,12 @@ const translations = {
             history: "📚 History",
             geography: "🌍 Geography",
             sports: "⚽ Sports",
-            entertainment: "🎬 Entertainment",
             technology: "💻 Technology",
             food: "🍕 Food & Cooking",
             music: "🎵 Music",
             tv_shows: "📺 TV Shows",
             anime: "🎌 Anime",
             image_riddles: "🖼️ Image Riddles",
-            current_events: "📰 Current Events",
-            pop_culture: "🎭 Pop Culture",
-            pop_culture_2010s: "📱 2010s Pop Culture",
-            pop_culture_morocco: "🇲🇦 Moroccan Pop Culture",
             flags: "🏳️ World Flags"
         }
     },
@@ -245,17 +240,12 @@ const translations = {
             history: "📚 Histoire",
             geography: "🌍 Géographie",
             sports: "⚽ Sports",
-            entertainment: "🎬 Divertissement",
             technology: "💻 Technologie",
             music: "🎵 Musique",
             food: "🍕 Cuisine & Alimentation",
             tv_shows: "📺 Séries TV",
             anime: "🎌 Anime",
-            image_riddles: "🖼️ Devinettes en Images",
-            current_events: "📰 Actualités",
-            pop_culture: "🎭 Culture Pop",
-            pop_culture_2010s: "📱 Culture Pop 2010s",
-            pop_culture_morocco: "🇲🇦 Culture Pop Marocaine",
+            image_riddles: "🖼️ Devinettes en Images",,
             flags: "🏳️ Drapeaux du Monde"
         }
     }
@@ -266,9 +256,8 @@ const translations = {
 // ============================================
 
 const SUBJECTS = [
-    'science', 'history', 'geography', 'sports', 'entertainment', 
+    'science', 'history', 'geography', 'sports', 
     'technology', 'music', 'food', 'tv_shows', 'anime', 'image_riddles',
-    'current_events', 'pop_culture', 'pop_culture_2010s', 'pop_culture_morocco',
     'flags'
 ];
 
@@ -2483,3 +2472,4 @@ showHome = function() {
     cleanupVoiceChat();
     originalShowHome();
 };
+
