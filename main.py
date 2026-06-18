@@ -4,7 +4,10 @@
 # Les fichiers JavaScript s'occupent de l'interface; ce fichier garde surtout les regles et la communication serveur.
 
 import uuid, random, json, asyncio, time, os, re
-import httpx
+try:
+    import httpx
+except ImportError:
+    httpx = None
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.templating import Jinja2Templates
@@ -42,9 +45,9 @@ def calculate_time_score(time_left: float, max_time: float) -> int:
 try:
     from dotenv import load_dotenv
     load_dotenv()
-    print("✅ Loaded .env file")
+    print("Loaded .env file")
 except ImportError:
-    print("ℹ️  python-dotenv not installed, using system environment variables")
+    print("python-dotenv not installed, using system environment variables")
 
 app = FastAPI()
 
@@ -66,7 +69,7 @@ HF_MODEL = "meta-llama/Llama-3.1-8B-Instruct"
 
 # Avertissement si le token manque
 if not HF_API_TOKEN:
-    print("⚠️  WARNING: HF_API_TOKEN environment variable is not set!")
+    print("WARNING: HF_API_TOKEN environment variable is not set!")
     print("   AI-generated questions will not work.")
     print("   Set it with: export HF_API_TOKEN='your_token_here'")
 
@@ -84,9 +87,9 @@ def load_cache_from_file():
             with open(CACHE_FILE, "r", encoding="utf-8") as f:
                 ai_questions_cache = json.load(f)
                 total_questions = sum(len(q) for q in ai_questions_cache.values())
-                print(f"✅ Loaded {total_questions} cached questions from {len(ai_questions_cache)} categories")
+                print(f"Loaded {total_questions} cached questions from {len(ai_questions_cache)} categories")
     except Exception as e:
-        print(f"⚠️ Could not load cache: {e}")
+        print(f"Could not load cache: {e}")
         ai_questions_cache = {}
 
 # Sauvegarde le cache dans le fichier
@@ -94,9 +97,9 @@ def save_cache_to_file():
     try:
         with open(CACHE_FILE, "w", encoding="utf-8") as f:
             json.dump(ai_questions_cache, f, ensure_ascii=False, indent=2)
-        print(f"💾 Cache saved: {sum(len(q) for q in ai_questions_cache.values())} questions")
+        print(f"Cache saved: {sum(len(q) for q in ai_questions_cache.values())} questions")
     except Exception as e:
-        print(f"⚠️ Could not save cache: {e}")
+        print(f"Could not save cache: {e}")
 
 # Charge le cache au lancement
 load_cache_from_file()
@@ -194,11 +197,11 @@ try:
         if lang not in ALL_QUESTIONS:
             ALL_QUESTIONS[lang] = {}
         ALL_QUESTIONS[lang]["flags"] = FLAG_QUESTIONS[lang]["flags"]
-    print(f"✅ Loaded {len(FLAG_QUESTIONS.get('en', {}).get('flags', []))} flag questions")
+    print(f"Loaded {len(FLAG_QUESTIONS.get('en', {}).get('flags', []))} flag questions")
 except FileNotFoundError:
-    print("⚠️ flag_questions.json not found, flag quiz disabled")
+    print("flag_questions.json not found, flag quiz disabled")
 except Exception as e:
-    print(f"⚠️ Error loading flag questions: {e}")
+    print(f"Error loading flag questions: {e}")
 
 # Load image riddles and replace text riddles
 try:
@@ -213,11 +216,11 @@ try:
             del ALL_QUESTIONS[lang]["riddles"]
         # Add image riddles as the new riddles category
         ALL_QUESTIONS[lang]["image_riddles"] = IMAGE_RIDDLES[lang]["image_riddles"]
-    print(f"✅ Loaded {len(IMAGE_RIDDLES.get('en', {}).get('image_riddles', []))} image riddles")
+    print(f"Loaded {len(IMAGE_RIDDLES.get('en', {}).get('image_riddles', []))} image riddles")
 except FileNotFoundError:
-    print("⚠️ image_riddles.json not found, keeping text riddles")
+    print("image_riddles.json not found, keeping text riddles")
 except Exception as e:
-    print(f"⚠️ Error loading image riddles: {e}")
+    print(f"Error loading image riddles: {e}")
 
 # Charge les questions Picguess
 try:
@@ -227,11 +230,11 @@ try:
         if lang not in ALL_QUESTIONS:
             ALL_QUESTIONS[lang] = {}
         ALL_QUESTIONS[lang]["picguess"] = PICGUESS_QUESTIONS[lang]["picguess"]
-    print(f"✅ Loaded {len(PICGUESS_QUESTIONS.get('en', {}).get('picguess', []))} picture guess questions")
+    print(f"Loaded {len(PICGUESS_QUESTIONS.get('en', {}).get('picguess', []))} picture guess questions")
 except FileNotFoundError:
-    print("⚠️ picguess_questions.json not found, picture guess disabled")
+    print("picguess_questions.json not found, picture guess disabled")
 except Exception as e:
-    print(f"⚠️ Error loading picture guess questions: {e}")
+    print(f"Error loading picture guess questions: {e}")
 
 # === GLOBAL STATE ===
 rooms: Dict[str, Dict] = {}
@@ -378,7 +381,10 @@ async def timer_task(code: str):
     
     # Temps ecoule : gere le cas avec buzzer et sans buzzer
     if not room["answered"]:
-        async with room_locks[code]:
+        lock = room_locks.get(code)
+        if not lock:
+            return
+        async with lock:
             if not room["answered"]:
                 room["answered"] = True
                 q = room["current_q"]
@@ -643,7 +649,10 @@ async def websocket_endpoint(ws: WebSocket, code: str):
     
     try:
         while True:
-            msg = await ws.receive_json()
+            try:
+                msg = await ws.receive_json()
+            except (WebSocketDisconnect, RuntimeError):
+                break
             action = msg.get("action")
 
             # === ACTIONS DU LOBBY ===
@@ -1478,7 +1487,10 @@ async def wager_collection_timer(code: str):
     room = get_room(code)
     if not room or room.get("state") != "wagering":
         return
-    async with room_locks[code]:
+    lock = room_locks.get(code)
+    if not lock:
+        return
+    async with lock:
         if room.get("state") == "wagering":
             await begin_wager_answers(code)
 
@@ -1519,7 +1531,10 @@ async def wager_answer_timer(code: str):
         if not r or r.get("state") != "wager_answer":
             return
         await asyncio.sleep(0.2)
-    async with room_locks[code]:
+    lock = room_locks.get(code)
+    if not lock:
+        return
+    async with lock:
         r = get_room(code)
         if r and r.get("state") == "wager_answer":
             await resolve_wager(code)
@@ -1574,7 +1589,10 @@ async def speed_answer_timer(code: str):
         if not r or r.get("state") != "speed_answer":
             return
         await asyncio.sleep(0.15)
-    async with room_locks[code]:
+    lock = room_locks.get(code)
+    if not lock:
+        return
+    async with lock:
         r = get_room(code)
         if r and r.get("state") == "speed_answer":
             await resolve_speed(code)
@@ -1848,6 +1866,10 @@ async def generate_ai_questions(category: str, num_questions: int = 10, language
     
     # Il faut plus de questions : on en genere
     print(f"Generating more questions for '{category}' (current cache: {cached_count})")
+
+    if httpx is None:
+        print("httpx is not installed; AI question generation is unavailable.")
+        return None
     
     # Genere plus de questions pour remplir la reserve
     questions_to_generate = 15  # Genere 15 questions a la fois pour remplir le cache plus vite
@@ -2070,6 +2092,12 @@ async def api_generate_questions(request: Request):
 @app.get("/api/check-model")
 async def check_model_status():
     """Check if the HF model is ready"""
+    if httpx is None:
+        return JSONResponse(content={
+            "ready": False,
+            "message": "httpx is not installed, so AI generation is unavailable."
+        })
+
     headers = {"Authorization": f"Bearer {HF_API_TOKEN}"}
     
     try:
