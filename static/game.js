@@ -2119,18 +2119,22 @@ function renderPublicRooms(rooms) {
         return;
     }
     
-    container.innerHTML = rooms.map(room => `
+    container.innerHTML = rooms.map(room => {
+        const playerCount = Number(room.playerCount ?? room.count ?? (Array.isArray(room.players) ? room.players.length : 0));
+        const maxPlayers = Number(room.maxPlayers ?? 4);
+        return `
         <div class="public-room-item" onclick="joinPublicRoom('${room.code}')">
             <div class="public-room-info">
                 <span class="public-room-host">🎮 ${room.hostName}</span>
                 <span class="public-room-details">
                     ${room.gameMode === 'team' ? '👥 Team Mode' : '🎯 Free for All'} • 
-                    ${room.playerCount}/${room.maxPlayers} ${t('players')}
+                    ${playerCount}/${maxPlayers} ${t('players')}
                 </span>
             </div>
             <button class="public-room-join">${t('join')}</button>
         </div>
-    `).join('');
+    `;
+    }).join('');
 }
 
 function joinPublicRoom(code) {
@@ -3626,6 +3630,7 @@ function updatePlayers(data) {
     
     // Update player count display and store for language changes
     currentLobbyPlayerCount = data.players.length;
+    window.currentLobbyPlayerCount = data.players.length;
     updateLobbyPlayerCount();
     
     const startBtn = document.getElementById('startBtn');
