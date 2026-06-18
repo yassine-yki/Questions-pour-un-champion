@@ -84,7 +84,7 @@ function startHorrorEffects() {
                 }
                 
                 .horror-demon::after {
-                    content: 'ðŸ‘ï¸';
+                    content: '👁️';
                     position: absolute;
                     top: 50%;
                     left: 50%;
@@ -428,6 +428,9 @@ function openSettings() {
     document.getElementById('settingsModal').classList.add('active');
     updateLanguageUI();
     updateThemeUI();
+    if (typeof updateMasterMuteUI === 'function') updateMasterMuteUI();
+    if (typeof updateMusicUI === 'function') updateMusicUI();
+    if (typeof updateSfxToggleUI === 'function') updateSfxToggleUI();
 }
 
 function closeSettings() {
