@@ -2120,7 +2120,10 @@ function renderPublicRooms(rooms) {
     }
     
     container.innerHTML = rooms.map(room => {
-        const playerCount = Number(room.playerCount ?? room.count ?? (Array.isArray(room.players) ? room.players.length : 0));
+        const playerCount = Number(room.playerCount ?? room.count ?? (
+            Array.isArray(room.players) ? room.players.length :
+            (room.players && typeof room.players === 'object' ? Object.keys(room.players).length : 0)
+        ));
         const maxPlayers = Number(room.maxPlayers ?? 4);
         return `
         <div class="public-room-item" onclick="joinPublicRoom('${room.code}')">
@@ -3592,6 +3595,16 @@ function handleMessage(msg) {
 function updatePlayers(data) {
     const list = document.getElementById('playersList');
     if (!list) return;
+    const players = Array.isArray(data.players) ? data.players : [];
+    const maxPlayers = Number(data.maxPlayers || 4);
+
+    const countEl = document.getElementById('lobbyPlayerCount');
+    const maxEl = document.getElementById('lobbyPlayerMax');
+    if (countEl) countEl.textContent = players.length;
+    if (maxEl) maxEl.textContent = maxPlayers;
+    currentLobbyPlayerCount = players.length;
+    window.currentLobbyPlayerCount = players.length;
+
     list.innerHTML = `<h3>${t('players')}</h3>`;
     if (data.gameMode === 'team' && data.teamCounts) {
         const td = document.createElement('div'); td.className = 'team-scores';
@@ -3603,17 +3616,21 @@ function updatePlayers(data) {
     const currentPlayerName = document.getElementById('createName')?.value || 
                               document.getElementById('joinName')?.value || '';
     
-    data.players.forEach(player => {
+    players.forEach(player => {
         const div = document.createElement('div'); div.className = 'player-item' + (player.isHost ? ' host' : '');
         let teamBadge = '';
         if (data.gameMode === 'team' && player.team) teamBadge = `<span class="team-badge team-${player.team}">${t('team' + player.team.charAt(0).toUpperCase() + player.team.slice(1))}</span>`;
         
         // Use avatar from server if available, otherwise generate from name
         let avatarUrl;
-        if (player.avatar) {
-            avatarUrl = generateAvatarUrl(player.avatar);
-        } else {
-            avatarUrl = generateAvatarUrlFromName(player.name);
+        try {
+            if (player.avatar) {
+                avatarUrl = generateAvatarUrl(player.avatar);
+            } else {
+                avatarUrl = generateAvatarUrlFromName(player.name);
+            }
+        } catch (e) {
+            avatarUrl = '';
         }
         
         div.innerHTML = `
@@ -3629,8 +3646,6 @@ function updatePlayers(data) {
     });
     
     // Update player count display and store for language changes
-    currentLobbyPlayerCount = data.players.length;
-    window.currentLobbyPlayerCount = data.players.length;
     updateLobbyPlayerCount();
     
     const startBtn = document.getElementById('startBtn');
