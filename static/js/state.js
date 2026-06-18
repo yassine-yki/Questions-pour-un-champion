@@ -45,3 +45,5 @@ let musicPlayer = null;
 let isMusicPlaying = false;
 let musicVolume = parseInt(localStorage.getItem('triviaMusicVolume')) || 30;
 let sfxVolume = parseInt(localStorage.getItem('triviaSfxVolume')) || 70;
+let sfxEnabled = localStorage.getItem('triviaSfxEnabled') !== 'false';
+let masterMuted = localStorage.getItem('triviaMasterMuted') === 'true';
