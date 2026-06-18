@@ -171,8 +171,9 @@ const MESSAGE_HANDLERS = {
         }
     },
     players(data) {
-        updatePlayers(data);
-        window.currentGamePlayers = data.players;
+        window.currentGamePlayers = data.players || [];
+        const renderPlayers = typeof window.updatePlayers === 'function' ? window.updatePlayers : updatePlayers;
+        renderPlayers(data);
     },
     gameStarting(data) {
         showMessage(data.message || 'La partie commence !');
