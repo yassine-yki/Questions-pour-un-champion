@@ -108,7 +108,9 @@ window.renderPublicRooms = function(rooms) {
         }
 
         container.innerHTML = rooms.map(room => {
-            const isFull = room.playerCount >= room.maxPlayers;
+            const playerCount = Number(room.playerCount ?? room.count ?? 0);
+            const maxPlayers = Number(room.maxPlayers ?? 4);
+            const isFull = playerCount >= maxPlayers;
             const isPlaying = room.state === 'playing' || room.inProgress;
             const disabled = isFull || isPlaying;
             const stateLabel = isPlaying
@@ -127,7 +129,7 @@ window.renderPublicRooms = function(rooms) {
                     </div>
                     <div class="pr-room__meta">
                         <span class="pr-room__tag">${modeLabel}</span>
-                        <span class="pr-room__tag">${room.playerCount}/${room.maxPlayers} ${label('players', 'joueurs', 'players').toLowerCase()}</span>
+                        <span class="pr-room__tag">${playerCount}/${maxPlayers} ${label('players', 'joueurs', 'players').toLowerCase()}</span>
                     </div>
                 </button>`;
         }).join('');
