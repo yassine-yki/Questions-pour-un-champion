@@ -173,7 +173,12 @@ const MESSAGE_HANDLERS = {
     players(data) {
         window.currentGamePlayers = data.players || [];
         const renderPlayers = typeof window.updatePlayers === 'function' ? window.updatePlayers : updatePlayers;
-        renderPlayers(data);
+        try {
+            renderPlayers(data);
+        } catch (e) {
+            console.error('Unable to render lobby players, using fallback renderer:', e);
+            if (renderPlayers !== updatePlayers) updatePlayers(data);
+        }
     },
     gameStarting(data) {
         showMessage(data.message || 'La partie commence !');
@@ -268,6 +273,16 @@ function handleMessage(msg) {
 function updatePlayers(data) {
     const list = document.getElementById('playersList');
     if (!list) return;
+    const players = Array.isArray(data.players) ? data.players : [];
+    const maxPlayers = Number(data.maxPlayers || 4);
+
+    const countEl = document.getElementById('lobbyPlayerCount');
+    const maxEl = document.getElementById('lobbyPlayerMax');
+    if (countEl) countEl.textContent = players.length;
+    if (maxEl) maxEl.textContent = maxPlayers;
+    currentLobbyPlayerCount = players.length;
+    window.currentLobbyPlayerCount = players.length;
+
     list.innerHTML = `<h3>${t('players')}</h3>`;
     if (data.gameMode === 'team' && data.teamCounts) {
         const td = document.createElement('div'); td.className = 'team-scores';
@@ -279,17 +294,21 @@ function updatePlayers(data) {
     const currentPlayerName = document.getElementById('createName')?.value || 
                               document.getElementById('joinName')?.value || '';
     
-    data.players.forEach(player => {
+    players.forEach(player => {
         const div = document.createElement('div'); div.className = 'player-item' + (player.isHost ? ' host' : '');
         let teamBadge = '';
         if (data.gameMode === 'team' && player.team) teamBadge = `<span class="team-badge team-${player.team}">${t('team' + player.team.charAt(0).toUpperCase() + player.team.slice(1))}</span>`;
         
         // Utilise l avatar du serveur si disponible, sinon genere depuis le nom
         let avatarUrl;
-        if (player.avatar) {
-            avatarUrl = generateAvatarUrl(player.avatar);
-        } else {
-            avatarUrl = generateAvatarUrlFromName(player.name);
+        try {
+            if (player.avatar) {
+                avatarUrl = generateAvatarUrl(player.avatar);
+            } else {
+                avatarUrl = generateAvatarUrlFromName(player.name);
+            }
+        } catch (e) {
+            avatarUrl = '';
         }
         
         div.innerHTML = `
@@ -305,7 +324,6 @@ function updatePlayers(data) {
     });
     
     // Met a jour le nombre de joueurs et le garde pour les changements de langue
-    currentLobbyPlayerCount = data.players.length;
     updateLobbyPlayerCount();
     
     const startBtn = document.getElementById('startBtn');
@@ -1206,21 +1224,3 @@ function showFloatingReaction(emoji, fromPlayer = null) {
     reaction.className = 'floating-reaction';
     reaction.textContent = emoji;
     
-    // Position horizontale aleatoire
-    const randomX = 20 + Math.random() * 60; // De 20% a 80% de la largeur de l ecran
-    reaction.style.left = randomX + '%';
-    reaction.style.bottom = '100px';
-    
-    document.body.appendChild(reaction);
-    setTimeout(() => reaction.remove(), 2000);
-}
-
-// Gere les reactions recues des autres joueurs
-function handleReaction(data) {
-    showFloatingReaction(data.emoji, data.player);
-}
-
-// ============================================
-// CHAT VOCAL (AGORA)
-// ============================================
-
