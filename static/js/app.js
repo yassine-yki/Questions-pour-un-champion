@@ -1,4 +1,4 @@
-﻿/*
+/*
 Resume du fichier :
 Ce fichier gere une grande partie du rendu de l'interface du jeu.
 Il affiche les cartes de salle, les sujets, les joueurs, les ecrans de fin, le mode Mise, le mode Speed et plusieurs petits elements visuels.
@@ -401,6 +401,7 @@ window.renderPlayerCards = function(players, scores = {}) {
         if (!container) return;
 
         const players = data.players || [];
+        window.currentGamePlayers = players;
         const maxPlayers = data.maxPlayers || 4;
         const hostName = data.host || (players[0] && (players[0].name || players[0]));
         const readyPlayers = new Set(data.readyPlayers || []);
@@ -710,7 +711,9 @@ window.renderPlayerCards = function(players, scores = {}) {
             const team = (typeof player === 'object') ? player.team : null;
             // Couleur : en equipe on prend la couleur d equipe, sinon une couleur tournante
             const tint = team === 'red' ? 'coral' : team === 'blue' ? 'sky' : TINTS[idx % 4];
-            const url = avatarFor(name);
+            const url = player && player.avatar && typeof generateAvatarUrl === 'function'
+                ? generateAvatarUrl(player.avatar)
+                : avatarFor(name);
 
             let seatClass = 'seat';
             if (pIsHost) seatClass += ' is-host';
@@ -770,9 +773,8 @@ window.renderPlayerCards = function(players, scores = {}) {
         if (maxEl) maxEl.textContent = maxPlayers;
 
         // Garde les effets attendus : compteur global et rafraichissement langue
-        if (typeof currentLobbyPlayerCount !== 'undefined') {
-            window.currentLobbyPlayerCount = players.length;
-        }
+        try { currentLobbyPlayerCount = players.length; } catch (e) {}
+        window.currentLobbyPlayerCount = players.length;
         if (typeof updateLobbyPlayerCount === 'function') updateLobbyPlayerCount();
 
         // Le bouton Lancer apparait seulement pour l hote quand la salle peut commencer.
