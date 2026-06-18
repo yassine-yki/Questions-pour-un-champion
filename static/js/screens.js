@@ -6,6 +6,7 @@ rejoindre, accueil, reglages et salles publiques.
 */
 
 let lobbyWs = null;
+let lobbyRefreshTimer = null;
 let selectedRoomVisibility = window.selectedRoomVisibility || 'public';
 window.selectedRoomVisibility = selectedRoomVisibility;
 
@@ -69,6 +70,8 @@ function showJoinMulti() {
     if (joinCodeInput) joinCodeInput.value = '';
 
     connectToLobby();
+    refreshPublicRooms();
+    startPublicRoomsRefresh();
 }
 
 function openSettings() {
@@ -126,11 +129,40 @@ function connectToLobby() {
 }
 
 function disconnectFromLobby() {
+    stopPublicRoomsRefresh();
     if (!lobbyWs) return;
     try {
         lobbyWs.close();
     } catch (e) {}
     lobbyWs = null;
+}
+
+async function refreshPublicRooms() {
+    if (typeof renderPublicRooms !== 'function') return;
+    try {
+        const response = await fetch('/api/public-rooms', { cache: 'no-store' });
+        if (!response.ok) return;
+        const data = await response.json();
+        renderPublicRooms(data.rooms || []);
+    } catch (e) {}
+}
+
+function startPublicRoomsRefresh() {
+    stopPublicRoomsRefresh();
+    lobbyRefreshTimer = setInterval(() => {
+        const joinScreen = document.getElementById('joinMultiScreen');
+        if (!joinScreen || !joinScreen.classList.contains('active')) {
+            stopPublicRoomsRefresh();
+            return;
+        }
+        refreshPublicRooms();
+    }, 2500);
+}
+
+function stopPublicRoomsRefresh() {
+    if (!lobbyRefreshTimer) return;
+    clearInterval(lobbyRefreshTimer);
+    lobbyRefreshTimer = null;
 }
 
 function joinPublicRoom(code) {
