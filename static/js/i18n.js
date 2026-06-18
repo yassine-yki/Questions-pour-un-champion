@@ -128,16 +128,16 @@ const translations = {
         subjects: {
             science: "🔬 Science",
             history: "📚 History",
-            geography: "ðŸŒ Geography",
+            geography: "🌍 Geography",
             sports: "⚽ Sports",
             technology: "💻 Technology",
-            food: "ðŸ• Food & Cooking",
+            food: "🍕 Food & Cooking",
             music: "🎵 Music",
             tv_shows: "📺 TV Shows",
             anime: "🎌 Anime",
-            image_riddles: "ðŸ–¼ï¸ Image Riddles",
-            flags: "ðŸ³ï¸ World Flags",
-            picguess: "ðŸ” Picture Guess"
+            image_riddles: "🖼️ Image Riddles",
+            flags: "🏳️ World Flags",
+            picguess: "🔍 Picture Guess"
         }
     },
     fr: {
@@ -205,7 +205,7 @@ const translations = {
         sfxOff: "SFX: Désactivés",
         score: "Score",
         correct: "✅ Correct !",
-        wrong: "âŒ Faux ! Bonne rÃ©ponse:",
+        wrong: "❌ Faux ! Bonne réponse:",
         timeout: "⏰ Temps écoulé !",
         round: "Manche",
         question: "Question",
@@ -262,16 +262,16 @@ const translations = {
         subjects: {
             science: "🔬 Science",
             history: "📚 Histoire",
-            geography: "ðŸŒ GÃ©ographie",
+            geography: "🌍 Géographie",
             sports: "⚽ Sports",
             technology: "💻 Technologie",
             music: "🎵 Musique",
-            food: "ðŸ• Cuisine & Alimentation",
+            food: "🍕 Cuisine & Alimentation",
             tv_shows: "📺 Séries TV",
             anime: "🎌 Anime",
-            image_riddles: "ðŸ–¼ï¸ Devinettes en Images",
-            flags: "ðŸ³ï¸ Drapeaux du Monde",
-            picguess: "ðŸ” Image MystÃ¨re"
+            image_riddles: "🖼️ Devinettes en Images",
+            flags: "🏳️ Drapeaux du Monde",
+            picguess: "🔍 Image Mystère"
         }
     }
 };
@@ -309,25 +309,25 @@ function applyTranslations() {
     const textBySelector = {
         '#settingsModal .modal-head h2': {
             en: 'Your settings',
-            fr: 'Vos reglages'
+            fr: 'Vos réglages'
         },
-        '#settingsModal .setting-row:nth-of-type(1) .setting-row__name': {
+        '#settingsModal .setting-row:nth-of-type(2) .setting-row__name': {
             en: 'Language',
             fr: 'Langue'
         },
-        '#settingsModal .setting-row:nth-of-type(1) .setting-row__help': {
+        '#settingsModal .setting-row:nth-of-type(2) .setting-row__help': {
             en: 'Interface and questions',
             fr: "L'interface et les questions"
         },
-        '#settingsModal .setting-row:nth-of-type(2) .setting-row__name': {
+        '#settingsModal .setting-row:nth-of-type(3) .setting-row__name': {
             en: 'Master sound',
-            fr: 'Son general'
+            fr: 'Son général'
         },
-        '#settingsModal .setting-row:nth-of-type(2) .setting-row__help': {
+        '#settingsModal .setting-row:nth-of-type(3) .setting-row__help': {
             en: 'Mutes all sounds',
             fr: 'Coupe tous les sons'
         },
-        '#settingsModal .setting-row:nth-of-type(3) .setting-row__name': {
+        '#settingsModal .setting-row:nth-of-type(4) .setting-row__name': {
             en: 'Sound effects',
             fr: 'Effets sonores'
         },
@@ -335,7 +335,7 @@ function applyTranslations() {
             en: 'Buzzer, correct/wrong answers',
             fr: 'Buzzer, bonnes/mauvaises reponses'
         },
-        '#settingsModal .setting-row:nth-of-type(4) .setting-row__name': {
+        '#settingsModal .setting-row:nth-of-type(5) .setting-row__name': {
             en: 'Background music',
             fr: "Musique d'ambiance"
         },
@@ -343,9 +343,25 @@ function applyTranslations() {
             en: 'In lobby and between questions',
             fr: 'En lobby et entre les questions'
         },
-        '#settingsModal .setting-row:nth-of-type(5) .setting-row__name': {
+        '#settingsModal .setting-row:nth-of-type(6) .setting-row__name': {
             en: 'Buzzer key',
             fr: 'Touche buzzer'
+        },
+        '#settingsModal .setting-row:nth-of-type(6) .setting-row__help': {
+            en: 'Click to remap',
+            fr: 'Cliquez pour reprogrammer'
+        },
+        '#settingsModal .account-section-label': {
+            en: 'Account',
+            fr: 'Compte'
+        },
+        '#settingsModal .account-row__logout': {
+            en: 'Log out',
+            fr: 'Déconnexion'
+        },
+        '#accountUsername': {
+            en: currentPlayer ? currentPlayer.username : 'Player',
+            fr: currentPlayer ? currentPlayer.username : 'Joueur'
         },
         '#welcomeName': {
             en: currentPlayer ? currentPlayer.username : 'Sign in',
@@ -539,6 +555,7 @@ function applyTranslations() {
     if (typeof renderCategoryTabs === 'function') renderCategoryTabs();
     if (typeof updateAuthUI === 'function') updateAuthUI();
     if (typeof updateLanguageUI === 'function') updateLanguageUI();
+    if (typeof updateMasterMuteUI === 'function') updateMasterMuteUI();
     if (typeof updateMusicUI === 'function') updateMusicUI();
     if (typeof updateSfxToggleUI === 'function') updateSfxToggleUI();
 }
