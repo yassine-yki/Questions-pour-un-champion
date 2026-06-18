@@ -251,13 +251,16 @@ def get_public_rooms() -> List[Dict]:
     """Get list of public rooms that are waiting for players"""
     public_rooms = []
     for code, room in rooms.items():
-        if room.get("is_public", False) and room.get("state") == "waiting":
+        if room.get("is_public", False) and room.get("state") == "waiting" and room.get("host") in room.get("players", {}):
+            connected_count = sum(1 for p in room["players"].values() if p.get("connected", True))
             public_rooms.append({
                 "code": code,
-                "hostName": room["players"][room["host"]]["name"] if room["host"] and room["host"] in room["players"] else "Unknown",
-                "playerCount": len(room["players"]),
+                "hostName": room["players"][room["host"]]["name"],
+                "playerCount": connected_count,
                 "gameMode": room.get("game_mode", "ffa"),
-                "maxPlayers": 4
+                "state": room.get("state", "waiting"),
+                "maxPlayers": 4,
+                "updatedAt": time.time()
             })
     return public_rooms
 
@@ -722,9 +725,8 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                 
                 await ws.send_json({"event": "roomCreated", "data": {"code": code, "language": language, "gameMode": game_mode, "isPublic": is_public}})
                 
-                # Informe le lobby de la nouvelle salle publique
-                if is_public:
-                    await broadcast_public_rooms()
+                # La salle publique sera publiee apres l'arrivee de l'hote,
+                # pour eviter d'afficher une carte temporaire "0/4".
 
             
             elif action == "getRoomInfo":
