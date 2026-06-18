@@ -21,6 +21,7 @@ function initAudio() {
 
 // Joue un petit son court : bonne reponse, erreur, buzzer, etc.
 function playSfx(soundName) {
+    if (masterMuted) return;
     if (!sfxEnabled) return;
     if (!audioContext) initAudio();
     if (!audioContext) return;
@@ -147,6 +148,29 @@ function updateSfxToggleUI() {
     }
 }
 
+function toggleMasterMute() {
+    masterMuted = !masterMuted;
+    localStorage.setItem('triviaMasterMuted', masterMuted ? 'true' : 'false');
+    if (masterMuted && musicPlayer && isMusicPlaying) {
+        musicPlayer.pause();
+        isMusicPlaying = false;
+    }
+    updateMasterMuteUI();
+    updateMusicUI();
+    updateSfxToggleUI();
+}
+
+function updateMasterMuteUI() {
+    const muteIcon = document.getElementById('muteIcon');
+    const muteBtn = document.getElementById('muteBtn');
+    if (muteIcon) muteIcon.textContent = masterMuted ? '🔇' : '🔊';
+    if (muteBtn) {
+        muteBtn.classList.toggle('is-off', masterMuted);
+        muteBtn.classList.toggle('is-on', !masterMuted);
+        muteBtn.setAttribute('aria-label', masterMuted ? 'Réactiver le son' : 'Couper le son');
+    }
+}
+
 function loadThemeMusic(theme) {
     const musicUrl = themeMusicUrls[theme] || themeMusicUrls.neon;
     
@@ -169,6 +193,11 @@ function loadThemeMusic(theme) {
 
 // Active ou coupe la musique de theme choisie.
 function toggleMusic() {
+    if (masterMuted) {
+        masterMuted = false;
+        localStorage.setItem('triviaMasterMuted', 'false');
+        updateMasterMuteUI();
+    }
     if (!musicPlayer) {
         initMusic();
     }
