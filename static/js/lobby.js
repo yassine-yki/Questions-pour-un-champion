@@ -5,6 +5,12 @@ Il ouvre la connexion WebSocket, envoie les infos de salle au serveur et gere le
 */
 
 // Cree une salle multijoueur avec les options choisies par l hote.
+function getSelectedMultiQuizType() {
+    const validTypes = ['classic', 'speed', 'picguess', 'wager'];
+    const fromWindow = window.selectedMultiQuizType || window.selectedQuizType?.multi;
+    return validTypes.includes(fromWindow) ? fromWindow : 'classic';
+}
+
 async function createRoom() {
     const codeEl = document.getElementById('createCode');
     const nameEl = document.getElementById('createName');
@@ -28,7 +34,7 @@ async function createRoom() {
             currentRoomCode = code;
             gameMode = 'multiplayer';
             const isPublic = selectedRoomVisibility === 'public';
-            connectWebSocket(code, name, true, subjects, selectedGameMode, isPublic, null, null, selectedQuizType.multi);
+            connectWebSocket(code, name, true, subjects, selectedGameMode, isPublic, null, null, getSelectedMultiQuizType());
         }
     } finally {
         if (launchBtn) { launchBtn.disabled = false; launchBtn.textContent = '🚀 Créer & Rejoindre'; }
@@ -88,7 +94,7 @@ async function createRoomWithAI(code, name, category, retryCount = 0) {
             const isPublic = selectedRoomVisibility === 'public';
             // Envoie ai_custom comme sujet pour signaler les questions IA
             // Parametres : code, nom, creation, sujets, mode, public, equipe, questions IA
-            connectWebSocket(code, name, true, ['ai_custom'], selectedGameMode, isPublic, null, window.aiGeneratedQuestions, selectedQuizType.multi);
+            connectWebSocket(code, name, true, ['ai_custom'], selectedGameMode, isPublic, null, window.aiGeneratedQuestions, getSelectedMultiQuizType());
         } else if (data.retry && retryCount < MAX_RETRIES) {
             // Le modele charge encore, nouvelle tentative apres un delai
             console.log(`AI model loading, retry ${retryCount + 1}/${MAX_RETRIES}...`);
