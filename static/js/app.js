@@ -108,7 +108,10 @@ window.renderPublicRooms = function(rooms) {
         }
 
         container.innerHTML = rooms.map(room => {
-            const playerCount = Number(room.playerCount ?? room.count ?? 0);
+            const playerCount = Number(room.playerCount ?? room.count ?? (
+                Array.isArray(room.players) ? room.players.length :
+                (room.players && typeof room.players === 'object' ? Object.keys(room.players).length : 0)
+            ));
             const maxPlayers = Number(room.maxPlayers ?? 4);
             const isFull = playerCount >= maxPlayers;
             const isPlaying = room.state === 'playing' || room.inProgress;
@@ -687,6 +690,21 @@ window.renderPlayerCards = function(players, scores = {}) {
             ? `<img src="${url}" alt="${esc(name||'')}" onerror="this.style.display='none'">`
             : `<span style="font-size:24px;font-weight:800;">${esc((name||'?').charAt(0).toUpperCase())}</span>`;
     }
+    function lang() {
+        try { return selectedLanguage === 'en' ? 'en' : 'fr'; } catch (e) {}
+        try { return localStorage.getItem('triviaLanguage') === 'en' ? 'en' : 'fr'; } catch (e) {}
+        return 'fr';
+    }
+    function copy(fr, en) {
+        return lang() === 'en' ? en : fr;
+    }
+    function label(key, fr, en) {
+        if (typeof t === 'function') {
+            const translated = t(key);
+            if (translated && translated !== key) return translated;
+        }
+        return copy(fr, en);
+    }
     const TINTS = ['coral','sky','mint','amber'];
 
     /* Le chrono renvoie le nombre visible; l anneau autour est anime par le CSS/DOM. */
@@ -699,10 +717,17 @@ window.renderPlayerCards = function(players, scores = {}) {
         const container = document.getElementById('playersList');
         if (!container) return;
 
-        const players = data.players || [];
+        const players = Array.isArray(data.players) ? data.players : [];
         const maxPlayers = data.maxPlayers || (data.gameMode === 'team' ? 4 : 4);
         const myName = document.getElementById('createName')?.value ||
                        document.getElementById('joinName')?.value || '';
+
+        const countEl = document.getElementById('lobbyPlayerCount');
+        const maxEl = document.getElementById('lobbyPlayerMax');
+        if (countEl) countEl.textContent = players.length;
+        if (maxEl) maxEl.textContent = maxPlayers;
+        try { currentLobbyPlayerCount = players.length; } catch (e) {}
+        window.currentLobbyPlayerCount = players.length;
 
         container.innerHTML = '';
 
@@ -713,9 +738,14 @@ window.renderPlayerCards = function(players, scores = {}) {
             const team = (typeof player === 'object') ? player.team : null;
             // Couleur : en equipe on prend la couleur d equipe, sinon une couleur tournante
             const tint = team === 'red' ? 'coral' : team === 'blue' ? 'sky' : TINTS[idx % 4];
-            const url = player && player.avatar && typeof generateAvatarUrl === 'function'
-                ? generateAvatarUrl(player.avatar)
-                : avatarFor(name);
+            let url = null;
+            try {
+                url = player && player.avatar && typeof generateAvatarUrl === 'function'
+                    ? generateAvatarUrl(player.avatar)
+                    : avatarFor(name);
+            } catch (e) {
+                try { url = typeof generateAvatarUrlFromName === 'function' ? generateAvatarUrlFromName(name) : null; } catch (_e) { url = null; }
+            }
 
             let seatClass = 'seat';
             if (pIsHost) seatClass += ' is-host';
@@ -769,14 +799,7 @@ window.renderPlayerCards = function(players, scores = {}) {
             : copy('Chacun pour soi', 'Free for all');
 
         // Nombre de joueurs
-        const countEl = document.getElementById('lobbyPlayerCount');
-        const maxEl = document.getElementById('lobbyPlayerMax');
-        if (countEl) countEl.textContent = players.length;
-        if (maxEl) maxEl.textContent = maxPlayers;
-
         // Garde les effets attendus : compteur global et rafraichissement langue
-        try { currentLobbyPlayerCount = players.length; } catch (e) {}
-        window.currentLobbyPlayerCount = players.length;
         if (typeof updateLobbyPlayerCount === 'function') updateLobbyPlayerCount();
 
         // Le bouton Lancer apparait seulement pour l hote quand la salle peut commencer.
@@ -1688,26 +1711,3 @@ function showWagerResult(d) {
     });
 
     // Enregistre les evenements WebSocket du mode Mise dans le routeur central.
-    if (typeof window.registerMessageHandler === 'function') {
-        const handlerQuestionStandard = typeof window.getMessageHandler === 'function'
-            ? window.getMessageHandler('question')
-            : null;
-
-        window.registerMessageHandler('wagerPhase', showWagerPhase);
-        window.registerMessageHandler('wagerAccepted', onWagerAccepted);
-        window.registerMessageHandler('answerLocked', onAnswerLocked);
-        window.registerMessageHandler('wagerResult', showWagerResult);
-        window.registerMessageHandler('question', (d, msg) => {
-            try {
-                if (d && d.quizType === 'wager') {
-                    showWagerQuestion(d);
-                    return;
-                }
-            } catch (e) {
-                console.error('Erreur du gestionnaire Mise:', e);
-            }
-            if (typeof handlerQuestionStandard === 'function') handlerQuestionStandard(d, msg);
-        });
-    }
-
-})();
