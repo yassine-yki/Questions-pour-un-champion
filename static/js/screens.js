@@ -1,47 +1,160 @@
 /*
 Resume du fichier :
-Ce fichier garde les grandes variables partagees par le jeu.
-Il garde les informations que plusieurs fichiers doivent partager : salle, joueur, langue, audio et interface.
+Ce fichier gere les changements d'ecran et les petites actions de navigation.
+Il expose les fonctions appelees par les boutons HTML : solo, multijoueur, creation,
+rejoindre, accueil, reglages et salles publiques.
 */
 
-// Etat partage de l application et variables utilisees par plusieurs modules.
-window.AppState = window.AppState || {
-    auth: {},
-    room: {},
-    game: {},
-    audio: {},
-    ui: {},
-    language: localStorage.getItem('triviaLanguage') || 'fr'
-};
+let lobbyWs = null;
+let selectedRoomVisibility = window.selectedRoomVisibility || 'public';
+window.selectedRoomVisibility = selectedRoomVisibility;
 
-let ws;
-let userId;
-let matchToken;
-let isHost = false;
-let currentRoomCode;
-let hasBuzzed = false;
-let canAnswer = false;
-let timerInterval;
-let selectedLanguage = localStorage.getItem('triviaLanguage') || 'fr';
-let selectedTheme = 'neon';
-let gameMode = null;
-let selectedGameMode = 'ffa';
-let myTeam = null;
-let selectedJoinTeam = null;
-let roomGameMode = null;
-let isCheckingRoom = false;
-let currentMultiQuestion = null;
-let currentLobbyPlayerCount = 0; // Garde le nombre de joueurs pour l affichage du lobby
+function showScreen(screenId) {
+    const currentScreen = document.querySelector('.screen.active');
+    const newScreen = document.getElementById(screenId);
+    if (!newScreen) return;
 
-// Reglages de la touche buzzer
-let buzzerKey = localStorage.getItem('triviaBuzzerKey') || 'Space';
-let buzzerKeyDisplay = localStorage.getItem('triviaBuzzerKeyDisplay') || 'SPACE';
-let isCapturingKey = false;
+    if (currentScreen && currentScreen.id !== screenId) {
+        newScreen.classList.add('active', 'screen-entering');
+        currentScreen.classList.add('screen-exiting');
 
-// Reglages de musique
-let musicPlayer = null;
-let isMusicPlaying = false;
-let musicVolume = parseInt(localStorage.getItem('triviaMusicVolume')) || 30;
-let sfxVolume = parseInt(localStorage.getItem('triviaSfxVolume')) || 70;
-let sfxEnabled = localStorage.getItem('triviaSfxEnabled') !== 'false';
-let masterMuted = localStorage.getItem('triviaMasterMuted') === 'true';
+        setTimeout(() => {
+            currentScreen.classList.remove('active', 'screen-exiting');
+            newScreen.classList.remove('screen-entering');
+        }, 300);
+    } else {
+        document.querySelectorAll('.screen').forEach(screen => {
+            screen.classList.remove('active', 'screen-exiting', 'screen-entering');
+        });
+        newScreen.classList.add('active');
+    }
+}
+
+function showHome() {
+    disconnectFromLobby();
+    showScreen('homeScreen');
+    if (typeof updateAllAvatarDisplays === 'function') updateAllAvatarDisplays();
+}
+
+function showSoloSetup() {
+    showScreen('soloSetupScreen');
+    setTimeout(() => {
+        if (typeof renderSubjects === 'function') renderSubjects();
+    }, 50);
+}
+
+function showMultiMode() {
+    showScreen('multiModeScreen');
+}
+
+function showCreateMulti() {
+    disconnectFromLobby();
+    showScreen('createMultiScreen');
+    setTimeout(() => {
+        if (typeof renderSubjects === 'function') renderSubjects();
+    }, 50);
+}
+
+function showJoinMulti() {
+    showScreen('joinMultiScreen');
+    selectedJoinTeam = null;
+    roomGameMode = null;
+    isCheckingRoom = false;
+
+    const teamSelectionDiv = document.getElementById('teamSelectionDiv');
+    if (teamSelectionDiv) teamSelectionDiv.style.display = 'none';
+    if (typeof resetTeamButtonStyles === 'function') resetTeamButtonStyles();
+
+    const joinCodeInput = document.getElementById('joinCode');
+    if (joinCodeInput) joinCodeInput.value = '';
+
+    connectToLobby();
+}
+
+function openSettings() {
+    const modal = document.getElementById('settingsModal');
+    if (!modal) return;
+    modal.classList.add('active');
+    if (typeof updateLanguageUI === 'function') updateLanguageUI();
+    if (typeof updateThemeUI === 'function') updateThemeUI();
+    if (typeof updateMasterMuteUI === 'function') updateMasterMuteUI();
+    if (typeof updateMusicUI === 'function') updateMusicUI();
+}
+
+function closeSettings() {
+    const modal = document.getElementById('settingsModal');
+    if (modal) modal.classList.remove('active');
+}
+
+function copyRoomCode() {
+    const codeEl = document.getElementById('roomCode') || document.getElementById('createCode');
+    const code = (codeEl?.value || codeEl?.textContent || '').replace(/[^A-Za-z0-9]/g, '').trim().toUpperCase();
+    if (!code) return;
+
+    const onCopied = () => {
+        codeEl.classList.add('copied');
+        setTimeout(() => codeEl.classList.remove('copied'), 1500);
+        if (typeof showMessage === 'function') showMessage('Code copie !');
+    };
+
+    if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(code).then(onCopied).catch(() => {});
+    }
+}
+
+function connectToLobby() {
+    if (lobbyWs && lobbyWs.readyState === WebSocket.OPEN) return;
+
+    const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+    lobbyWs = new WebSocket(`${protocol}//${location.host}/ws/LOBBY`);
+
+    lobbyWs.onopen = () => {
+        lobbyWs.send(JSON.stringify({ action: 'joinLobby' }));
+    };
+
+    lobbyWs.onmessage = (event) => {
+        const msg = JSON.parse(event.data);
+        if (msg.event === 'publicRooms' && typeof renderPublicRooms === 'function') {
+            renderPublicRooms(msg.data);
+        }
+    };
+
+    lobbyWs.onerror = () => {};
+    lobbyWs.onclose = () => {
+        lobbyWs = null;
+    };
+}
+
+function disconnectFromLobby() {
+    if (!lobbyWs) return;
+    try {
+        lobbyWs.close();
+    } catch (e) {}
+    lobbyWs = null;
+}
+
+function joinPublicRoom(code) {
+    showJoinMulti();
+
+    const joinCodeInput = document.getElementById('joinCode');
+    if (joinCodeInput) {
+        joinCodeInput.value = String(code || '').toUpperCase();
+        joinCodeInput.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+
+    if (typeof checkRoomMode === 'function') {
+        setTimeout(checkRoomMode, 50);
+    }
+}
+
+function selectVisibility(visibility) {
+    selectedRoomVisibility = visibility === 'private' ? 'private' : 'public';
+    window.selectedRoomVisibility = selectedRoomVisibility;
+
+    const pub = document.getElementById('visibilityPublic');
+    const priv = document.getElementById('visibilityPrivate');
+    [pub, priv].forEach(el => el && el.classList.remove('is-on', 'selected'));
+
+    const target = selectedRoomVisibility === 'public' ? pub : priv;
+    if (target) target.classList.add('is-on', 'selected');
+}
