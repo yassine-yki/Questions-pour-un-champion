@@ -1711,3 +1711,49 @@ function showWagerResult(d) {
         const fr = document.getElementById('langFR');
         const en = document.getElementById('langEN');
         [fr, en].forEach(b => b && b.classList.remove('is-on'));
+        const target = lang === 'en' ? en : fr;
+        if (target) target.classList.add('is-on');
+    }
+    const _origSelectLanguage = window.selectLanguage;
+    window.selectLanguage = function(lang) {
+        if (typeof _origSelectLanguage === 'function') {
+            _origSelectLanguage(lang);
+        } else {
+            try { selectedLanguage = lang; } catch (e) {}
+            try { localStorage.setItem('triviaLanguage', lang); } catch (e) {}
+            if (typeof applyTranslations === 'function') applyTranslations();
+        }
+        syncLangToggle(lang);
+    };
+    document.addEventListener('DOMContentLoaded', () => {
+        let lang = 'fr';
+        try { lang = localStorage.getItem('triviaLanguage') || 'fr'; } catch (e) {}
+        try { selectedLanguage = lang; } catch (e) { window.selectedLanguage = lang; }
+        syncLangToggle(lang);
+        if (typeof applyTranslations === 'function') { try { applyTranslations(); } catch (e) {} }
+    });
+
+    // Enregistre les evenements WebSocket du mode Mise dans le routeur central.
+    if (typeof window.registerMessageHandler === 'function') {
+        const handlerQuestionStandard = typeof window.getMessageHandler === 'function'
+            ? window.getMessageHandler('question')
+            : null;
+
+        window.registerMessageHandler('wagerPhase', showWagerPhase);
+        window.registerMessageHandler('wagerAccepted', onWagerAccepted);
+        window.registerMessageHandler('answerLocked', onAnswerLocked);
+        window.registerMessageHandler('wagerResult', showWagerResult);
+        window.registerMessageHandler('question', (d, msg) => {
+            try {
+                if (d && d.quizType === 'wager') {
+                    showWagerQuestion(d);
+                    return;
+                }
+            } catch (e) {
+                console.error('Erreur du gestionnaire Mise:', e);
+            }
+            if (typeof handlerQuestionStandard === 'function') handlerQuestionStandard(d, msg);
+        });
+    }
+
+})();
