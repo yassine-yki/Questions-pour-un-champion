@@ -98,7 +98,9 @@
         }
 
         container.innerHTML = rooms.map(room => {
-            const isFull = room.playerCount >= room.maxPlayers;
+            const playerCount = Number(room.playerCount ?? room.count ?? (Array.isArray(room.players) ? room.players.length : 0));
+            const maxPlayers = Number(room.maxPlayers ?? 4);
+            const isFull = playerCount >= maxPlayers;
             const isPlaying = room.state === 'playing' || room.inProgress;
             const disabled = isFull || isPlaying;
             const stateLabel = isPlaying
@@ -117,7 +119,7 @@
                     </div>
                     <div class="pr-room__meta">
                         <span class="pr-room__tag">${modeLabel}</span>
-                        <span class="pr-room__tag">${room.playerCount}/${room.maxPlayers} ${label('players', 'joueurs', 'players').toLowerCase()}</span>
+                        <span class="pr-room__tag">${playerCount}/${maxPlayers} ${label('players', 'joueurs', 'players').toLowerCase()}</span>
                     </div>
                 </button>`;
         }).join('');
@@ -721,7 +723,9 @@
             const team = (typeof player === 'object') ? player.team : null;
             // Tint: team mode uses team colour, else rotating tint
             const tint = team === 'red' ? 'coral' : team === 'blue' ? 'sky' : TINTS[idx % 4];
-            const url = avatarFor(name);
+            const url = player && player.avatar && typeof generateAvatarUrl === 'function'
+                ? generateAvatarUrl(player.avatar)
+                : avatarFor(name);
 
             let seatClass = 'seat';
             if (pIsHost) seatClass += ' is-host';
@@ -781,9 +785,8 @@
         if (maxEl) maxEl.textContent = maxPlayers;
 
         // Preserve original side-effects: global count + language re-render
-        if (typeof currentLobbyPlayerCount !== 'undefined') {
-            window.currentLobbyPlayerCount = players.length;
-        }
+        try { currentLobbyPlayerCount = players.length; } catch (e) {}
+        window.currentLobbyPlayerCount = players.length;
         if (typeof updateLobbyPlayerCount === 'function') updateLobbyPlayerCount();
 
         // BUG: start button must follow the real (isHost && canStart) gate.
