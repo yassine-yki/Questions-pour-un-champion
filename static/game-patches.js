@@ -98,7 +98,10 @@
         }
 
         container.innerHTML = rooms.map(room => {
-            const playerCount = Number(room.playerCount ?? room.count ?? (Array.isArray(room.players) ? room.players.length : 0));
+            const playerCount = Number(room.playerCount ?? room.count ?? (
+                Array.isArray(room.players) ? room.players.length :
+                (room.players && typeof room.players === 'object' ? Object.keys(room.players).length : 0)
+            ));
             const maxPlayers = Number(room.maxPlayers ?? 4);
             const isFull = playerCount >= maxPlayers;
             const isPlaying = room.state === 'playing' || room.inProgress;
@@ -709,10 +712,17 @@
         const container = document.getElementById('playersList');
         if (!container) return;
 
-        const players = data.players || [];
+        const players = Array.isArray(data.players) ? data.players : [];
         const maxPlayers = data.maxPlayers || (data.gameMode === 'team' ? 4 : 4);
         const myName = document.getElementById('createName')?.value ||
                        document.getElementById('joinName')?.value || '';
+
+        const countEl = document.getElementById('lobbyPlayerCount');
+        const maxEl = document.getElementById('lobbyPlayerMax');
+        if (countEl) countEl.textContent = players.length;
+        if (maxEl) maxEl.textContent = maxPlayers;
+        try { currentLobbyPlayerCount = players.length; } catch (e) {}
+        window.currentLobbyPlayerCount = players.length;
 
         container.innerHTML = '';
 
@@ -723,9 +733,14 @@
             const team = (typeof player === 'object') ? player.team : null;
             // Tint: team mode uses team colour, else rotating tint
             const tint = team === 'red' ? 'coral' : team === 'blue' ? 'sky' : TINTS[idx % 4];
-            const url = player && player.avatar && typeof generateAvatarUrl === 'function'
-                ? generateAvatarUrl(player.avatar)
-                : avatarFor(name);
+            let url = null;
+            try {
+                url = player && player.avatar && typeof generateAvatarUrl === 'function'
+                    ? generateAvatarUrl(player.avatar)
+                    : avatarFor(name);
+            } catch (e) {
+                try { url = typeof generateAvatarUrlFromName === 'function' ? generateAvatarUrlFromName(name) : null; } catch (_e) { url = null; }
+            }
 
             let seatClass = 'seat';
             if (pIsHost) seatClass += ' is-host';
@@ -779,14 +794,7 @@
             : copy('Chacun pour soi', 'Free for all');
 
         // Player count
-        const countEl = document.getElementById('lobbyPlayerCount');
-        const maxEl = document.getElementById('lobbyPlayerMax');
-        if (countEl) countEl.textContent = players.length;
-        if (maxEl) maxEl.textContent = maxPlayers;
-
         // Preserve original side-effects: global count + language re-render
-        try { currentLobbyPlayerCount = players.length; } catch (e) {}
-        window.currentLobbyPlayerCount = players.length;
         if (typeof updateLobbyPlayerCount === 'function') updateLobbyPlayerCount();
 
         // BUG: start button must follow the real (isHost && canStart) gate.
@@ -1702,11 +1710,3 @@
         try {
             if (ev === 'wagerPhase') { showWagerPhase(d); return; }
             if (ev === 'wagerAccepted') { onWagerAccepted(d); return; }
-            if (ev === 'answerLocked') { onAnswerLocked(d); return; }
-            if (ev === 'wagerResult') { showWagerResult(d); return; }
-            if (ev === 'question' && (d.quizType === 'wager' || d.buzzerless)) { showWagerQuestion(d); return; }
-        } catch (e) { console.error('wager handler error:', e); }
-        if (typeof _origHandleMessage === 'function') return _origHandleMessage(msg);
-    };
-
-})();
