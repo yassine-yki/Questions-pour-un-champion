@@ -4,6 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Questions pour un Champion</title>
+    <script>
+        (function guardAgainstFileMode() {
+            if (window.location.protocol !== 'file:') return;
+            document.addEventListener('DOMContentLoaded', function() {
+                document.body.innerHTML = [
+                    '<main style="min-height:100vh;display:grid;place-items:center;padding:24px;background:#121212;color:#f8f4ea;font-family:Arial,sans-serif;">',
+                    '<section style="max-width:640px;text-align:center;border:1px solid rgba(255,255,255,.18);padding:28px;border-radius:12px;background:#1f1f1f;">',
+                    '<h1 style="margin:0 0 12px;font-size:28px;">Lancez le serveur du jeu</h1>',
+                    '<p style="line-height:1.55;color:#d9d0c0;">Cette app ne fonctionne pas en ouvrant <code>templates/index.html</code> directement. Le multijoueur, les scripts <code>/static</code>, l API et les WebSockets doivent passer par FastAPI.</p>',
+                    '<p style="line-height:1.55;color:#d9d0c0;">Demarrez le serveur puis ouvrez :</p>',
+                    '<p><a href="http://127.0.0.1:8000/game" style="color:#ffd166;font-weight:700;">http://127.0.0.1:8000/game</a></p>',
+                    '</section>',
+                    '</main>'
+                ].join('');
+            });
+        })();
+    </script>
 
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏆</text></svg>">
 
@@ -947,7 +964,7 @@
 <script src="/static/js/screens.js?v=20260618-room-count-fix"></script>
 <script src="/static/js/subjects.js"></script>
 <script src="/static/js/solo.js?v=20260618-quiz-type-fix-2"></script>
-<script src="/static/js/lobby.js"></script>
+<script src="/static/js/lobby.js?v=20260618-quiz-type-fix-2"></script>
 <script src="/static/js/multiplayer.js?v=20260618-room-count-fix"></script>
 <script src="/static/js/wager.js"></script>
 <script src="/static/js/voice.js"></script>
