@@ -188,7 +188,10 @@ function doReconnectAttempt() {
             } else {
                 if (Array.isArray(msg.data.players)) initializeGameScreen(msg.data.players, msg.data.scores || {});
                 showScreen('gameScreen');
-                if (msg.data.currentQuestion) {
+                if (msg.data.wagerPhase && typeof window.getMessageHandler === 'function') {
+                    const wagerPhaseHandler = window.getMessageHandler('wagerPhase');
+                    if (typeof wagerPhaseHandler === 'function') wagerPhaseHandler(msg.data.wagerPhase);
+                } else if (msg.data.currentQuestion) {
                     currentMultiQuestion = msg.data.currentQuestion;
                     showQuestion(msg.data.currentQuestion);
                     if (msg.data.buzzedPlayer) handleBuzzed({ player: msg.data.buzzedPlayer });
@@ -863,8 +866,8 @@ function showSpeedResult(data) {
 
     const answer = data.answer || '';
     const msg = selectedLanguage === 'fr'
-        ? `Reponse: ${answer} - prochaine question tout de suite.`
-        : `Answer: ${answer} - next question coming up.`;
+        ? `Reponse: ${answer} - scores mis a jour.`
+        : `Answer: ${answer} - scores updated.`;
     showMessage(msg);
 }
 

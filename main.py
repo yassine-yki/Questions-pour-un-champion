@@ -31,10 +31,11 @@ WAGER_WIN_MULTIPLIER = 2      # Une bonne reponse ajoute aussi ce multiplicateur
 # === CONFIGURATION DU RESSENTI TEMPS REEL ===
 # Ces valeurs gardent le rythme du multijoueur rapide, sans changer la mise en page.
 GAME_START_COUNTDOWN_SECONDS = 1.8
-ANSWER_REVEAL_SECONDS = 1.8
-SPEED_REVEAL_SECONDS = 1.8
-WAGER_REVEAL_SECONDS = 2.0
-ROUND_TRANSITION_SECONDS = 2.0
+ANSWER_REVEAL_SECONDS = 3.2
+SPEED_REVEAL_SECONDS = 3.2
+WAGER_REVEAL_SECONDS = 5.0
+ROUND_COMPLETE_SECONDS = 4.0
+ROUND_TRANSITION_SECONDS = 3.2
 
 # Donne plus de points quand le joueur repond vite.
 def calculate_time_score(time_left: float, max_time: float) -> int:
@@ -1503,6 +1504,9 @@ def current_question_payload(room: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         return None
 
     quiz_type = room.get("quiz_type", "classic")
+    if quiz_type == "wager" and room.get("state") not in ["wager_answer", "wager_done"]:
+        return None
+
     payload = {
         "q": q.get("q", ""),
         "options": q.get("options", []),
@@ -1526,6 +1530,24 @@ def current_question_payload(room: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     started_at = room.get("question_start_time")
     if started_at:
         payload.update(phase_timing(started_at, room.get("timer", 10)))
+    return payload
+
+def wager_phase_payload(room: Dict[str, Any]) -> Dict[str, Any]:
+    started_at = room.get("phase_started_at", time.time())
+    remaining = max(0, int((room.get("phase_ends_at", time.time()) - time.time()) + 0.999))
+    payload = {
+        "round": room.get("current_round", 1),
+        "questionInRound": room.get("questions_in_round", 1),
+        "questionsPerRound": room.get("questions_per_round", 5),
+        "wagerTime": remaining or WAGER_TIME,
+        "difficulty": room.get("wager_difficulty", 1),
+        "winMultiplier": WAGER_WIN_MULTIPLIER,
+        "base": WAGER_BASE,
+        "maxWagers": {p["name"]: max_wager_for(p)
+                      for p in room["players"].values() if p.get("active", True)},
+        "scores": {p["name"]: p["score"] for p in room["players"].values()},
+    }
+    payload.update(phase_timing(started_at, WAGER_TIME))
     return payload
 
 def rejoin_payload(code: str, room: Dict[str, Any], user_id: str, player: Dict[str, Any]) -> Dict[str, Any]:
@@ -1557,6 +1579,8 @@ def rejoin_payload(code: str, room: Dict[str, Any], user_id: str, player: Dict[s
     current_question = current_question_payload(room)
     if current_question:
         payload["currentQuestion"] = current_question
+    if room.get("quiz_type") == "wager" and room.get("state") == "wagering":
+        payload["wagerPhase"] = wager_phase_payload(room)
     if room.get("buzzed") and room["buzzed"] in room["players"]:
         payload["buzzedPlayer"] = room["players"][room["buzzed"]]["name"]
     return payload
@@ -1931,10 +1955,12 @@ async def next_question(code: str):
             "message": get_text(lang, "round_complete", round=room["current_round"]),
             "scores": {p["name"]: p["score"] for p in room["players"].values()},
             "activePlayers": [p["name"] for uid, p in room["players"].items() if p.get("active", True)],
-            "teamScores": room.get("teams") if room["game_mode"] == "team" else None
+            "teamScores": room.get("teams") if room["game_mode"] == "team" else None,
+            **phase_timing(duration=ROUND_COMPLETE_SECONDS,
+                           next_at=time.time() + ROUND_COMPLETE_SECONDS),
         })
-        
-        await asyncio.sleep(3)
+
+        await asyncio.sleep(ROUND_COMPLETE_SECONDS)
         
         # Elimine le joueur/equipe le plus bas si ce n est pas la derniere manche. En Mise,
         # everyone in for all 3 rounds — the winner is simply the highest score.

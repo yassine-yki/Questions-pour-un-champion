@@ -1493,6 +1493,8 @@ function paintColoredOptions(box, items, onClick, letterFor) {
     function removeWagerOverlay() { const o = document.getElementById('wagerOverlay'); if (o) o.remove(); }
 
     let myWager = 0;
+    let wagerSubmitted = false;
+    let wagerAnswerSubmitted = false;
 
     // Premiere etape du mode Mise : chaque joueur choisit combien il risque.
 function showWagerPhase(d) {
@@ -1536,6 +1538,8 @@ function showWagerPhase(d) {
         }[lang];
         const diffLabel = copy.diffs[d.difficulty] || '';
         myWager = 0;
+        wagerSubmitted = false;
+        wagerAnswerSubmitted = false;
 
         const o = document.createElement('div');
         o.id = 'wagerOverlay';
@@ -1566,9 +1570,14 @@ function showWagerPhase(d) {
             const w = b.dataset.w;
             setVal(w === 'max' ? max : w === 'half' ? Math.round(max / 2) : 0);
         }));
-        o.querySelector('#wagerConfirm').addEventListener('click', () => {
+        const submitWager = () => {
+            if (wagerSubmitted) return;
+            wagerSubmitted = true;
+            const confirm = o.querySelector('#wagerConfirm');
+            if (confirm) confirm.disabled = true;
             const c = creds(); send({ action: 'wager', userId: c.uid, matchToken: c.tok, amount: myWager });
-        });
+        };
+        o.querySelector('#wagerConfirm').addEventListener('click', submitWager);
 
         let secs = d.wagerTime || 15;
         const lbl = o.querySelector('#wagerTimerLbl');
@@ -1578,7 +1587,7 @@ function showWagerPhase(d) {
             if (lbl) lbl.textContent = Math.max(0, secs) + 's';
             if (secs <= 0) {
                 clearInterval(window._wagerTimerInt);
-                const c = creds(); send({ action: 'wager', userId: c.uid, matchToken: c.tok, amount: myWager });
+                submitWager();
             }
         }, 1000);
     }
@@ -1614,9 +1623,12 @@ function showWagerPhase(d) {
     }
 
     function sendWagerAnswer(idx, box) {
+        if (wagerAnswerSubmitted) return;
+        wagerAnswerSubmitted = true;
         const c = creds(); send({ action: 'answer', userId: c.uid, matchToken: c.tok, idx });
         if (box) box.querySelectorAll('.option').forEach((o, i) => {
             o.onclick = null;
+            o.disabled = true;
             if (i === idx) o.classList.add('option--picked'); else o.style.opacity = '0.5';
         });
     }
@@ -1625,6 +1637,8 @@ function showWagerPhase(d) {
 function showWagerQuestion(d) {
         removeWagerOverlay();
         ensureGameScreen();
+        wagerAnswerSubmitted = false;
+        try { currentMultiQuestion = d; } catch (e) { window.currentMultiQuestion = d; }
         const wrap = document.querySelector('.buzzer-wrap'); if (wrap) wrap.style.display = 'none';
 
         const qt = document.getElementById('questionText'); if (qt) qt.textContent = d.q;
@@ -1726,7 +1740,8 @@ function showWagerResult(d) {
             </div>`;
         document.body.appendChild(o);
         const ind = document.getElementById('wagerIndicator'); if (ind) ind.remove();
-        setTimeout(() => { const ov = document.getElementById('wagerOverlay'); if (ov) ov.remove(); }, 3800);
+        const holdMs = Math.max(4500, (d.nextEventAt && d.serverNow) ? (d.nextEventAt - d.serverNow) : 5000);
+        setTimeout(() => { const ov = document.getElementById('wagerOverlay'); if (ov) ov.remove(); }, holdMs);
     }
 
     // Synchronisation de la langue de l interface
