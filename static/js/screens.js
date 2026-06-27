@@ -7,6 +7,7 @@ rejoindre, accueil, reglages et salles publiques.
 
 let lobbyWs = null;
 let lobbyRefreshTimer = null;
+let lobbyWsHealthy = false;
 let selectedRoomVisibility = window.selectedRoomVisibility || 'public';
 window.selectedRoomVisibility = selectedRoomVisibility;
 
@@ -112,6 +113,7 @@ function connectToLobby() {
     lobbyWs = new WebSocket(`${protocol}//${location.host}/ws/LOBBY`);
 
     lobbyWs.onopen = () => {
+        lobbyWsHealthy = true;
         lobbyWs.send(JSON.stringify({ action: 'joinLobby' }));
     };
 
@@ -122,8 +124,9 @@ function connectToLobby() {
         }
     };
 
-    lobbyWs.onerror = () => {};
+    lobbyWs.onerror = () => { lobbyWsHealthy = false; };
     lobbyWs.onclose = () => {
+        lobbyWsHealthy = false;
         lobbyWs = null;
     };
 }
@@ -134,11 +137,12 @@ function disconnectFromLobby() {
     try {
         lobbyWs.close();
     } catch (e) {}
+    lobbyWsHealthy = false;
     lobbyWs = null;
 }
-
 async function refreshPublicRooms() {
     if (typeof renderPublicRooms !== 'function') return;
+    if (lobbyWsHealthy && lobbyWs && lobbyWs.readyState === WebSocket.OPEN) return;
     try {
         const response = await fetch('/api/public-rooms', { cache: 'no-store' });
         if (!response.ok) return;

@@ -102,10 +102,10 @@ async function createRoomWithAI(code, name, category, retryCount = 0) {
         } else if (retryCount >= MAX_RETRIES) {
             // Nombre maximum de tentatives atteint
             if (loadingModal) loadingModal.style.display = 'none';
-            alert(t('aiErrorTimeout'));
+            showMessage(t('aiErrorTimeout'), 'error', 3200);
         } else {
             if (loadingModal) loadingModal.style.display = 'none';
-            alert(data.error || t('aiErrorGeneration'));
+            showMessage(data.error || t('aiErrorGeneration'), 'error', 3200);
         }
     } catch (error) {
         console.error('Error generating AI questions:', error);
@@ -114,7 +114,7 @@ async function createRoomWithAI(code, name, category, retryCount = 0) {
             setTimeout(() => createRoomWithAI(code, name, category, retryCount + 1), 3000);
         } else {
             if (loadingModal) loadingModal.style.display = 'none';
-            alert(t('aiErrorConnection'));
+            showMessage(t('aiErrorConnection'), 'error', 3200);
         }
     }
 }
@@ -171,10 +171,10 @@ async function checkRoomMode() {
 async function joinRoom() {
     const code = document.getElementById('joinCode')?.value.trim().toUpperCase();
     const name = document.getElementById('joinName')?.value.trim();
-    if (!code || !name) { alert(t('alertBothFields')); return; }
+    if (!code || !name) { showMessage(t('alertBothFields'), 'error', 2200); return; }
     if (roomGameMode === null && !isCheckingRoom) await checkRoomMode();
     if (isCheckingRoom) await new Promise(r => setTimeout(r, 500));
-    if (roomGameMode === 'team' && !selectedJoinTeam) { alert(t('selectTeam')); return; }
+    if (roomGameMode === 'team' && !selectedJoinTeam) { showMessage(t('selectTeam'), 'error', 2200); return; }
     currentRoomCode = code;
     gameMode = 'multiplayer';
     connectWebSocket(code, name, false, [], 'ffa', false, selectedJoinTeam);
@@ -184,6 +184,7 @@ async function joinRoom() {
 function connectWebSocket(code, playerName, isCreating, subjects, gm = 'ffa', isPublic = false, team = null, aiQuestions = null, quizType = 'classic') {
     // Quitte le lobby general quand on rejoint une salle
     disconnectFromLobby();
+    if (typeof window.setUXState === 'function') window.setUXState('connecting', { roomCode: code, isCreating });
     
     // Logs de debug
     console.log('connectWebSocket called with:');
@@ -211,12 +212,12 @@ function connectWebSocket(code, playerName, isCreating, subjects, gm = 'ffa', is
                 createData.aiQuestions = aiQuestions;
             }
             ws.send(JSON.stringify(createData));
-            setTimeout(() => ws.send(JSON.stringify({ action: 'join', playerName: playerName, avatar: avatarConfig })), 100);
+            ws.send(JSON.stringify({ action: 'join', playerName: playerName, avatar: avatarConfig }));
         } else ws.send(JSON.stringify({ action: 'join', playerName: playerName, team: team, avatar: avatarConfig }));
     };
     ws.onmessage = (event) => handleMessage(JSON.parse(event.data));
     ws.onerror = () => {
-        if (!isAttemptingReconnect) alert(t('connectionError'));
+        if (!isAttemptingReconnect) showMessage(t('connectionError'), 'error', 2600);
     };
     ws.onclose = () => {
         // Reconnexion automatique si la partie etait en cours

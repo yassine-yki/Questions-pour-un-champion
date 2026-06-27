@@ -28,6 +28,14 @@ WAGER_START_POINTS = 100      # Points de depart de chaque joueur
 WAGER_BASE = 50               # Points de base pour chaque bonne reponse
 WAGER_WIN_MULTIPLIER = 2      # Une bonne reponse ajoute aussi ce multiplicateur de la mise
 
+# === CONFIGURATION DU RESSENTI TEMPS REEL ===
+# Ces valeurs gardent le rythme du multijoueur rapide, sans changer la mise en page.
+GAME_START_COUNTDOWN_SECONDS = 1.8
+ANSWER_REVEAL_SECONDS = 1.8
+SPEED_REVEAL_SECONDS = 1.8
+WAGER_REVEAL_SECONDS = 2.0
+ROUND_TRANSITION_SECONDS = 2.0
+
 # Donne plus de points quand le joueur repond vite.
 def calculate_time_score(time_left: float, max_time: float) -> int:
     """Calcule le score selon le temps restant"""
@@ -244,6 +252,29 @@ disconnected_players: Dict[str, Dict[str, Dict]] = {}  # code -> {user_id -> {pl
 
 RECONNECT_WINDOW = 60  # secondes pendant lesquelles un joueur peut se reconnecter
 # === OUTILS INTERNES ===
+def now_ms() -> int:
+    return int(time.time() * 1000)
+
+def phase_timing(started_at: Optional[float] = None, duration: Optional[float] = None,
+                 next_at: Optional[float] = None) -> Dict[str, int]:
+    """Metadata optionnelle pour synchroniser l'UI sans casser les anciens clients."""
+    started_at = started_at if started_at is not None else time.time()
+    timing = {
+        "serverNow": now_ms(),
+        "phaseStartedAt": int(started_at * 1000),
+    }
+    if duration is not None:
+        timing["phaseEndsAt"] = int((started_at + duration) * 1000)
+    if next_at is not None:
+        timing["nextEventAt"] = int(next_at * 1000)
+    return timing
+
+def with_server_now(data: Any) -> Any:
+    if isinstance(data, dict):
+        if "serverNow" not in data:
+            data = {**data, "serverNow": now_ms()}
+    return data
+
 def get_room(code: str) -> Optional[Dict]:
     return rooms.get(code)
 
@@ -275,6 +306,7 @@ async def broadcast_public_rooms():
             print(f"Error broadcasting public rooms to {user_id}: {e}")
 
 async def broadcast(code: str, event: str, data: Any, exclude: Optional[str] = None):
+    data = with_server_now(data)
     for user_id, ws in connections.get(code, {}).items():
         if exclude and user_id == exclude:
             continue
@@ -284,6 +316,7 @@ async def broadcast(code: str, event: str, data: Any, exclude: Optional[str] = N
             print(f"Error broadcasting to {user_id}: {e}")
 
 async def send_to_user(code: str, user_id: str, event: str, data: Any):
+    data = with_server_now(data)
     ws = connections.get(code, {}).get(user_id)
     if ws:
         try:
@@ -409,10 +442,12 @@ async def timer_task(code: str):
                     "timeout": True,
                     "message": get_text(lang, "timeout"),
                     "teamScores": room.get("teams") if room["game_mode"] == "team" else None,
-                    "pointsEarned": -TIMEOUT_PENALTY if room["buzzed"] else 0
+                    "pointsEarned": -TIMEOUT_PENALTY if room["buzzed"] else 0,
+                    **phase_timing(duration=ANSWER_REVEAL_SECONDS,
+                                   next_at=time.time() + ANSWER_REVEAL_SECONDS),
                 })
-                
-                await asyncio.sleep(3)
+
+                await asyncio.sleep(ANSWER_REVEAL_SECONDS)
                 await next_question(code)
 
 async def eliminate_lowest_player(code: str):
@@ -606,10 +641,12 @@ async def start_next_round(code: str):
         "message": round_msg,
         "scores": {p["name"]: p["score"] for p in room["players"].values()},
         "activePlayers": [p["name"] for uid, p in room["players"].items() if p.get("active", True)],
-        "teamScores": room.get("teams") if room["game_mode"] == "team" else None
+        "teamScores": room.get("teams") if room["game_mode"] == "team" else None,
+        **phase_timing(duration=ROUND_TRANSITION_SECONDS,
+                       next_at=time.time() + ROUND_TRANSITION_SECONDS),
     })
-    
-    await asyncio.sleep(3)
+
+    await asyncio.sleep(ROUND_TRANSITION_SECONDS)
     await start_question(code)
 
 # === ROUTES ===
@@ -905,17 +942,21 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                         for tname, team in room["teams"].items():
                             team["score"] = sum(p["score"] for p in room["players"].values() if p.get("team") == tname)
 
-                room["state"] = "question"
-                
+                room["state"] = "starting"
+                phase_started = time.time()
+
                 # Retire la salle des salles publiques quand la partie commence
                 if room.get("is_public"):
                     await broadcast_public_rooms()
-                
+
                 await broadcast(code, "gameStarting", {
                     "startedBy": player["name"],
-                    "message": get_text(lang, "game_starting", player=player["name"])
+                    "message": get_text(lang, "game_starting", player=player["name"]),
+                    "countdownMs": int(GAME_START_COUNTDOWN_SECONDS * 1000),
+                    **phase_timing(phase_started, GAME_START_COUNTDOWN_SECONDS,
+                                   phase_started + GAME_START_COUNTDOWN_SECONDS),
                 })
-                await asyncio.sleep(2)
+                await asyncio.sleep(GAME_START_COUNTDOWN_SECONDS)
                 await start_question(code)
 
             elif action == "buzz":
@@ -941,7 +982,11 @@ async def websocket_endpoint(ws: WebSocket, code: str):
 
                     room["buzzed"] = msg_user_id
                     room["state"] = "buzzed"
-                    
+                    await send_to_user(code, msg_user_id, "buzzAck", {
+                        "player": player["name"],
+                        "phase": "buzzed"
+                    })
+
                     await broadcast(code, "buzzed", {
                         "player": player["name"],
                         "message": get_text(lang, "buzzed", player=player["name"])
@@ -1032,16 +1077,10 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                         if code in disconnected_players:
                             disconnected_players[code].pop(rejoin_user_id, None)
                         
-                        await ws.send_json({"event": "rejoined", "data": {
-                            "userId": rejoin_user_id,
-                            "matchToken": rejoin_token,
-                            "isHost": rejoin_user_id == room["host"],
-                            "team": player.get("team"),
-                            "score": player["score"],
-                            "gameState": room["state"],
-                            "language": lang,
-                            "roomCode": code
-                        }})
+                        await ws.send_json({
+                            "event": "rejoined",
+                            "data": with_server_now(rejoin_payload(code, room, rejoin_user_id, player))
+                        })
                         
                         await broadcast(code, "playerReconnected", {
                             "player": player["name"],
@@ -1070,16 +1109,10 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                 if not disconnected_players[code]:
                     disconnected_players.pop(code, None)
                 
-                await ws.send_json({"event": "rejoined", "data": {
-                    "userId": rejoin_user_id,
-                    "matchToken": rejoin_token,
-                    "isHost": rejoin_user_id == room["host"],
-                    "team": player_data.get("team"),
-                    "score": player_data["score"],
-                    "gameState": room["state"],
-                    "language": lang,
-                    "roomCode": code
-                }})
+                await ws.send_json({
+                    "event": "rejoined",
+                    "data": with_server_now(rejoin_payload(code, room, rejoin_user_id, room["players"][rejoin_user_id]))
+                })
                 
                 await broadcast(code, "playerReconnected", {
                     "player": player_data["name"],
@@ -1257,6 +1290,7 @@ async def websocket_endpoint(ws: WebSocket, code: str):
 
                     correct = idx == q["correct"]
                     points_earned = 0
+                    await send_to_user(code, msg_user_id, "answerLocked", {"idx": idx})
 
                     if correct:
                         # Score base sur le temps, sans multiplicateur adaptatif en multijoueur
@@ -1287,9 +1321,11 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                         "teamScores": room.get("teams") if room["game_mode"] == "team" else None,
                         "selectedIdx": idx,
                         "pointsEarned": points_earned,
+                        **phase_timing(duration=ANSWER_REVEAL_SECONDS,
+                                       next_at=time.time() + ANSWER_REVEAL_SECONDS),
                     })
 
-                    await asyncio.sleep(3)
+                    await asyncio.sleep(ANSWER_REVEAL_SECONDS)
                     await next_question(code)
 
     except WebSocketDisconnect:
@@ -1461,6 +1497,70 @@ def active_connected_ids(room) -> List[str]:
     return [uid for uid, p in room["players"].items()
             if p.get("active", True) and p.get("connected", True)]
 
+def current_question_payload(room: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    q = room.get("current_q")
+    if not q:
+        return None
+
+    quiz_type = room.get("quiz_type", "classic")
+    payload = {
+        "q": q.get("q", ""),
+        "options": q.get("options", []),
+        "time": room.get("timer", 10),
+        "remaining": len(room.get("available", [])),
+        "round": room.get("current_round", 1),
+        "questionInRound": room.get("questions_in_round", 1),
+        "questionsPerRound": room.get("questions_per_round", 5),
+        "quizType": quiz_type,
+    }
+
+    if quiz_type in ["speed", "wager"]:
+        payload["buzzerless"] = True
+    if quiz_type == "speed":
+        payload["speed"] = True
+    if quiz_type == "picguess":
+        payload.update({"picguess": True, "blurStart": 20, "blurEnd": 0})
+    if "image" in q:
+        payload["image"] = q["image"]
+
+    started_at = room.get("question_start_time")
+    if started_at:
+        payload.update(phase_timing(started_at, room.get("timer", 10)))
+    return payload
+
+def rejoin_payload(code: str, room: Dict[str, Any], user_id: str, player: Dict[str, Any]) -> Dict[str, Any]:
+    payload = {
+        "userId": user_id,
+        "matchToken": player["match_token"],
+        "isHost": user_id == room["host"],
+        "team": player.get("team"),
+        "score": player["score"],
+        "gameState": room["state"],
+        "language": room.get("language", "en"),
+        "roomCode": code,
+        "players": [
+            {
+                "name": p["name"],
+                "score": p["score"],
+                "isHost": uid == room["host"],
+                "team": p.get("team"),
+                "avatar": p.get("avatar"),
+                "connected": p.get("connected", True),
+                "active": p.get("active", True),
+            }
+            for uid, p in room["players"].items()
+        ],
+        "scores": {p["name"]: p["score"] for p in room["players"].values()},
+        "teamScores": room.get("teams") if room.get("game_mode") == "team" else None,
+    }
+
+    current_question = current_question_payload(room)
+    if current_question:
+        payload["currentQuestion"] = current_question
+    if room.get("buzzed") and room["buzzed"] in room["players"]:
+        payload["buzzedPlayer"] = room["players"][room["buzzed"]]["name"]
+    return payload
+
 # Mode Mise, etape 1 : chaque joueur choisit combien de points il risque.
 async def start_wager_collection(code: str):
     """Stake phase: buzzer off, players secretly wager before the question is shown."""
@@ -1470,6 +1570,9 @@ async def start_wager_collection(code: str):
     room["state"] = "wagering"
     room["wagers"] = {}
     room["wager_answers"] = {}
+    phase_started = time.time()
+    room["phase_started_at"] = phase_started
+    room["phase_ends_at"] = phase_started + WAGER_TIME
     await broadcast(code, "wagerPhase", {
         "round": room["current_round"],
         "questionInRound": room["questions_in_round"],
@@ -1481,6 +1584,7 @@ async def start_wager_collection(code: str):
         "maxWagers": {p["name"]: max_wager_for(p)
                       for p in room["players"].values() if p.get("active", True)},
         "scores": {p["name"]: p["score"] for p in room["players"].values()},
+        **phase_timing(phase_started, WAGER_TIME),
     })
     asyncio.create_task(wager_collection_timer(code))
 
@@ -1504,6 +1608,8 @@ async def begin_wager_answers(code: str):
     room["state"] = "wager_answer"
     room["answered"] = False
     room["question_start_time"] = time.time()
+    room["phase_started_at"] = room["question_start_time"]
+    room["phase_ends_at"] = room["question_start_time"] + room["timer"]
     q = room["current_q"]
     question_data = {
         "q": q["q"],
@@ -1516,6 +1622,7 @@ async def begin_wager_answers(code: str):
         "quizType": "wager",
         "buzzerless": True,
         "difficulty": room.get("wager_difficulty", 1),
+        **phase_timing(room["question_start_time"], room["timer"]),
     }
     if "image" in q:
         question_data["image"] = q["image"]
@@ -1576,8 +1683,9 @@ async def resolve_wager(code: str):
         "results": results,
         "scores": {p["name"]: p["score"] for p in room["players"].values()},
         "teamScores": room.get("teams") if room["game_mode"] == "team" else None,
+        **phase_timing(duration=WAGER_REVEAL_SECONDS, next_at=time.time() + WAGER_REVEAL_SECONDS),
     })
-    await asyncio.sleep(4)
+    await asyncio.sleep(WAGER_REVEAL_SECONDS)
     await next_question(code)
 
 async def speed_answer_timer(code: str):
@@ -1648,8 +1756,9 @@ async def resolve_speed(code: str):
         "results": results,
         "scores": {p["name"]: p["score"] for p in room["players"].values()},
         "teamScores": room.get("teams") if room["game_mode"] == "team" else None,
+        **phase_timing(duration=SPEED_REVEAL_SECONDS, next_at=time.time() + SPEED_REVEAL_SECONDS),
     })
-    await asyncio.sleep(2)
+    await asyncio.sleep(SPEED_REVEAL_SECONDS)
     await next_question(code)
 
  #KANE
@@ -1736,6 +1845,8 @@ async def start_question(code: str):
     room["timer"] = base_time
     room["max_time"] = room["timer"]
     room["question_start_time"] = time.time()
+    room["phase_started_at"] = room["question_start_time"]
+    room["phase_ends_at"] = room["question_start_time"] + room["timer"]
     room["buzzed"] = None
     room["answered"] = False
     room["state"] = "speed_answer" if quiz_type == "speed" else "question"
@@ -1757,6 +1868,7 @@ async def start_question(code: str):
         "questionInRound": room["questions_in_round"],
         "questionsPerRound": room["questions_per_round"],
         "quizType": quiz_type,
+        **phase_timing(room["question_start_time"], room["timer"]),
     }
     if quiz_type == "speed":
         question_data["buzzerless"] = True

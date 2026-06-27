@@ -7,23 +7,107 @@ Si un evenement vient du serveur pendant une partie multi, il passe presque touj
 let isAttemptingReconnect = false;
 let reconnectAttempts = 0;
 const MAX_RECONNECT_ATTEMPTS = 5;
-const RECONNECT_DELAY = 2000; // ms between attempts
+const RECONNECT_DELAYS = [0, 650, 1200, 2000, 3000];
+const UX_TIMING = Object.freeze({
+    gameStartMs: 1800,
+    toastMs: 2200,
+    reconnectOverlayAfter: 2
+});
+window.UX_TIMING = UX_TIMING;
+window.UXState = window.UXState || { phase: 'idle', updatedAt: Date.now(), meta: {} };
 
+function setUXState(phase, meta = {}) {
+    window.UXState.phase = phase;
+    window.UXState.updatedAt = Date.now();
+    window.UXState.meta = meta;
+    document.body.dataset.uxPhase = phase;
+}
+window.setUXState = setUXState;
+
+function stopQuestionTimer() {
+    clearInterval(timerInterval);
+    clearInterval(window._mpTimerInt);
+    timerInterval = null;
+    window._mpTimerInt = null;
+    if (window._mpTimerRaf) {
+        cancelAnimationFrame(window._mpTimerRaf);
+        window._mpTimerRaf = null;
+    }
+}
+window.stopQuestionTimer = stopQuestionTimer;
+
+function serverMsToPerfMs(serverMs, serverNow) {
+    if (!Number.isFinite(serverMs) || !Number.isFinite(serverNow)) return null;
+    return performance.now() + (serverMs - serverNow);
+}
+
+function startSyncedQuestionTimer(data = {}) {
+    stopQuestionTimer();
+    const durationMs = Math.max(1000, Number(data.time || 10) * 1000);
+    const serverNow = Number(data.serverNow);
+    const phaseEndsAt = Number(data.phaseEndsAt);
+    const phaseStartedAt = Number(data.phaseStartedAt);
+    const syncedEnd = serverMsToPerfMs(phaseEndsAt, serverNow);
+    const endAt = syncedEnd || (performance.now() + durationMs);
+    const totalMs = Number.isFinite(phaseEndsAt - phaseStartedAt) && phaseEndsAt > phaseStartedAt
+        ? (phaseEndsAt - phaseStartedAt)
+        : durationMs;
+
+    const timerEls = [
+        document.getElementById('timer'),
+        document.getElementById('timerValue')
+    ].filter(Boolean);
+    const timerChip = document.querySelector('.ch-timer-chip');
+    const fill = document.getElementById('countdownFill');
+    const totalDash = 314.16;
+    if (fill) {
+        fill.style.transition = 'none';
+        fill.style.strokeDasharray = String(totalDash);
+    }
+
+    function render() {
+        const remainingMs = Math.max(0, endAt - performance.now());
+        const seconds = Math.ceil(remainingMs / 1000);
+        timerEls.forEach(el => { el.textContent = seconds; });
+        if (timerChip) timerChip.classList.toggle('urgent', seconds <= 3 && seconds > 0);
+        if (fill) {
+            const elapsedRatio = Math.max(0, Math.min(1, 1 - (remainingMs / totalMs)));
+            fill.style.strokeDashoffset = String(totalDash * elapsedRatio);
+        }
+        if (remainingMs > 0) {
+            window._mpTimerRaf = requestAnimationFrame(render);
+        } else {
+            window._mpTimerRaf = null;
+        }
+    }
+
+    render();
+}
+window.startSyncedQuestionTimer = startSyncedQuestionTimer;
 function showReconnectOverlay() {
     let overlay = document.getElementById('reconnectOverlay');
     if (!overlay) {
         overlay = document.createElement('div');
         overlay.id = 'reconnectOverlay';
-        overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.85);display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:Poppins,sans-serif;color:white;';
+        overlay.style.cssText = 'position:fixed;right:16px;bottom:16px;z-index:9999;background:rgba(32,26,20,0.92);display:flex;flex-direction:column;align-items:flex-start;gap:6px;font-family:inherit;color:white;border-radius:14px;padding:14px 16px;box-shadow:0 12px 32px rgba(0,0,0,0.28);max-width:min(320px,calc(100vw - 32px));';
         overlay.innerHTML = `
-            <div style="width:48px;height:48px;border:3px solid rgba(255,255,255,0.2);border-top:3px solid #fff;border-radius:50%;animation:spin 1s linear infinite;margin-bottom:20px;"></div>
-            <div style="font-size:18px;font-weight:600;margin-bottom:8px;">Reconnecting...</div>
-            <div id="reconnectStatus" style="font-size:13px;opacity:0.6;">Attempting to rejoin the game</div>
-            <button onclick="cancelReconnect()" style="margin-top:24px;padding:10px 24px;background:transparent;border:1px solid rgba(255,255,255,0.3);color:white;cursor:pointer;font-size:13px;border-radius:4px;">Cancel</button>
+            <div style="display:flex;align-items:center;gap:10px;">
+                <div style="width:18px;height:18px;border:2px solid rgba(255,255,255,0.25);border-top-color:#fff;border-radius:50%;animation:spin 1s linear infinite;"></div>
+                <div style="font-size:14px;font-weight:800;">Reconnecting...</div>
+            </div>
+            <div id="reconnectStatus" style="font-size:12px;opacity:0.75;">Keeping your seat warm</div>
+            <button onclick="cancelReconnect()" style="margin-top:4px;padding:7px 12px;background:transparent;border:1px solid rgba(255,255,255,0.28);color:white;cursor:pointer;font-size:12px;border-radius:999px;">Cancel</button>
         `;
         document.body.appendChild(overlay);
     }
     overlay.style.display = 'flex';
+    overlay.style.inset = reconnectAttempts >= UX_TIMING.reconnectOverlayAfter ? '0' : '';
+    overlay.style.right = reconnectAttempts >= UX_TIMING.reconnectOverlayAfter ? '0' : '16px';
+    overlay.style.bottom = reconnectAttempts >= UX_TIMING.reconnectOverlayAfter ? '0' : '16px';
+    overlay.style.alignItems = reconnectAttempts >= UX_TIMING.reconnectOverlayAfter ? 'center' : 'flex-start';
+    overlay.style.justifyContent = reconnectAttempts >= UX_TIMING.reconnectOverlayAfter ? 'center' : '';
+    overlay.style.borderRadius = reconnectAttempts >= UX_TIMING.reconnectOverlayAfter ? '0' : '14px';
+    overlay.style.background = reconnectAttempts >= UX_TIMING.reconnectOverlayAfter ? 'rgba(0,0,0,0.82)' : 'rgba(32,26,20,0.92)';
 }
 
 function hideReconnectOverlay() {
@@ -43,7 +127,8 @@ function attemptReconnect() {
     if (isAttemptingReconnect) return;
     isAttemptingReconnect = true;
     reconnectAttempts = 0;
-    showReconnectOverlay();
+    setUXState('reconnecting');
+    showMessage('Reconnecting...', 'info', 1200);
     doReconnectAttempt();
 }
 
@@ -57,6 +142,7 @@ function doReconnectAttempt() {
     }
     
     reconnectAttempts++;
+    showReconnectOverlay();
     const statusEl = document.getElementById('reconnectStatus');
     if (statusEl) statusEl.textContent = `Attempt ${reconnectAttempts}/${MAX_RECONNECT_ATTEMPTS}...`;
     
@@ -83,19 +169,30 @@ function doReconnectAttempt() {
             matchToken = msg.data.matchToken;
             isHost = msg.data.isHost;
             myTeam = msg.data.team;
+            if (Array.isArray(msg.data.players)) {
+                window.currentGamePlayers = msg.data.players;
+            }
             if (msg.data.language) {
                 selectedLanguage = msg.data.language;
                 if (window.AppState) window.AppState.language = selectedLanguage;
                 applyTranslations();
             }
-            
-            showMessage('Reconnected!');
+
+            setUXState('waiting', { rejoined: true, gameState: msg.data.gameState });
+            showMessage('Reconnected!', 'success', 1600);
             
             // Va vers le bon ecran selon l etat de la partie
             if (msg.data.gameState === 'waiting' || msg.data.gameState === 'gameOver') {
+                if (Array.isArray(msg.data.players)) updatePlayers(msg.data);
                 showScreen('lobbyScreen');
             } else {
+                if (Array.isArray(msg.data.players)) initializeGameScreen(msg.data.players, msg.data.scores || {});
                 showScreen('gameScreen');
+                if (msg.data.currentQuestion) {
+                    currentMultiQuestion = msg.data.currentQuestion;
+                    showQuestion(msg.data.currentQuestion);
+                    if (msg.data.buzzedPlayer) handleBuzzed({ player: msg.data.buzzedPlayer });
+                }
             }
             
             // Rebranche le gestionnaire de messages pour la partie en cours
@@ -112,18 +209,18 @@ function doReconnectAttempt() {
             console.log('Rejoin failed:', msg.data);
             ws.close();
             // Nouvelle tentative apres un delai
-            setTimeout(doReconnectAttempt, RECONNECT_DELAY);
+            setTimeout(doReconnectAttempt, RECONNECT_DELAYS[reconnectAttempts] || 3000);
         } else {
             // Evenement different : on est peut-etre deja reconnecte, on traite normalement
             handleMessage(msg);
         }
     };
     ws.onerror = () => {
-        setTimeout(doReconnectAttempt, RECONNECT_DELAY);
+        setTimeout(doReconnectAttempt, RECONNECT_DELAYS[reconnectAttempts] || 3000);
     };
     ws.onclose = () => {
         if (isAttemptingReconnect) {
-            setTimeout(doReconnectAttempt, RECONNECT_DELAY);
+            setTimeout(doReconnectAttempt, RECONNECT_DELAYS[reconnectAttempts] || 3000);
         }
     };
 }
@@ -152,6 +249,7 @@ const MESSAGE_HANDLERS = {
         matchToken = data.matchToken;
         isHost = data.isHost;
         myTeam = data.team;
+        setUXState('waiting', { roomCode: currentRoomCode });
         if (data.language) {
             selectedLanguage = data.language;
             if (window.AppState) window.AppState.language = selectedLanguage;
@@ -181,25 +279,32 @@ const MESSAGE_HANDLERS = {
         }
     },
     gameStarting(data) {
-        showMessage(data.message || 'La partie commence !');
+        setUXState('starting', data);
+        showMessage(data.message || 'La partie commence !', 'info', 1400);
         if (window.currentGamePlayers) {
             initializeGameScreen(window.currentGamePlayers, {});
         }
-        setTimeout(() => showScreen('gameScreen'), 2000);
+        showScreen('gameScreen');
+        showGameCountdown(null, data.countdownMs || UX_TIMING.gameStartMs);
     },
     question(data) {
         currentMultiQuestion = data;
-        if (data.questionInRound === 1) {
-            showGameCountdown(() => showQuestion(data));
-        } else {
-            showQuestion(data);
-        }
+        setUXState('question', data);
+        showQuestion(data);
+    },
+    buzzAck(data) {
+        setUXState('buzz-sent', data || {});
     },
     buzzed: handleBuzzed,
+    answerLocked(data) {
+        setUXState('answer-locked', data || {});
+        markPickedOption(data && data.idx);
+        showMessage(selectedLanguage === 'fr' ? 'Reponse verrouillee.' : 'Answer locked.', 'info', 1200);
+    },
     answerResult: showResult,
     speedResult: showSpeedResult,
     roundComplete(data) {
-        clearInterval(timerInterval);
+        stopQuestionTimer();
         showClubhouseScoreboard(data.scores, data.message, data.round, data.maxRounds);
         if (data.teamScores) updateTeamScores(data.teamScores);
     },
@@ -218,6 +323,7 @@ const MESSAGE_HANDLERS = {
         }
     },
     roundTransition(data) {
+        setUXState('waiting', data || {});
         showMessage(`🔥 ${data.message}`);
         updateScores(data.scores);
         if (data.teamScores) updateTeamScores(data.teamScores);
@@ -242,7 +348,8 @@ const MESSAGE_HANDLERS = {
         if (remBtn) remBtn.style.display = 'none';
     },
     error(data) {
-        alert(data);
+        setUXState('error', { message: data });
+        showMessage(data, 'error', 2800);
     },
     playerLeft(data) {
         showMessage(data.message || 'Player left');
@@ -327,7 +434,13 @@ function updatePlayers(data) {
     updateLobbyPlayerCount();
     
     const startBtn = document.getElementById('startBtn');
-    if (startBtn) startBtn.style.display = (isHost && data.canStart) ? 'block' : 'none';
+    if (startBtn) {
+        startBtn.style.display = (isHost && data.canStart) ? 'block' : 'none';
+        if (data.canStart) {
+            startBtn.disabled = false;
+            delete startBtn.dataset.pending;
+        }
+    }
 }
 
 function updateLobbyPlayerCount() {
@@ -373,62 +486,71 @@ function startLobbyFunFacts() {
 function stopLobbyFunFacts() { clearInterval(funFactInterval); }
 
 function startGame() {
-    if (ws?.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ action: 'start', userId, matchToken, language: selectedLanguage }));
+    if (ws?.readyState === WebSocket.OPEN) {
+        setUXState('starting', { requested: true });
+        const startBtn = document.getElementById('startBtn');
+        if (startBtn) {
+            startBtn.disabled = true;
+            startBtn.dataset.pending = 'true';
+        }
+        ws.send(JSON.stringify({ action: 'start', userId, matchToken, language: selectedLanguage }));
+    }
 }
 
 let currentMaxTime = 10;
 
-function showGameCountdown(callback) {
+function showGameCountdown(callback, durationMs = UX_TIMING.gameStartMs) {
+    const existing = document.getElementById('gameStartCountdownOverlay');
+    if (existing) existing.remove();
     const overlay = document.createElement('div');
+    overlay.id = 'gameStartCountdownOverlay';
     overlay.style.cssText = 'position:fixed;inset:0;z-index:3000;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.9);';
     const num = document.createElement('div');
-    num.style.cssText = 'font-size:clamp(100px,25vw,200px);font-weight:900;color:var(--accent-1,#0ff);text-shadow:0 0 80px currentColor;font-family:var(--font-display,inherit);opacity:0;';
+    num.style.cssText = 'font-size:clamp(76px,18vw,150px);font-weight:900;color:var(--accent-1,#0ff);text-shadow:0 0 80px currentColor;font-family:var(--font-display,inherit);opacity:0;transform:scale(1.4);transition:opacity 140ms ease,transform 240ms var(--ease-spring, ease);';
     overlay.appendChild(num);
     document.body.appendChild(overlay);
-    
+
     const counts = ['3', '2', '1', 'GO!'];
     let i = 0;
-    
+    const stepMs = Math.max(260, Math.floor(durationMs / counts.length));
+
     function showNext() {
         if (i >= counts.length) {
-            if (typeof gsap !== 'undefined') {
-                gsap.to(overlay, { opacity: 0, duration: 0.3, onComplete: () => { overlay.remove(); callback(); } });
-            } else {
-                overlay.style.opacity = '0'; overlay.style.transition = 'opacity 0.3s';
-                setTimeout(() => { overlay.remove(); callback(); }, 300);
-            }
+            overlay.style.opacity = '0';
+            overlay.style.transition = 'opacity 180ms ease';
+            setTimeout(() => {
+                overlay.remove();
+                if (typeof callback === 'function') callback();
+            }, 190);
             return;
         }
-        
+
         num.textContent = counts[i];
         if (i === counts.length - 1) num.style.fontSize = 'clamp(80px,18vw,160px)';
-        
+
         playSfx('countdown');
-        
-        if (typeof gsap !== 'undefined') {
-            gsap.fromTo(num, 
-                { scale: 2.5, opacity: 0 },
-                { scale: 1, opacity: 1, duration: 0.4, ease: 'back.out(1.7)',
-                  onComplete: () => {
-                      gsap.to(num, { scale: 0.8, opacity: 0, duration: 0.3, delay: 0.3, 
-                          onComplete: () => { i++; showNext(); }
-                      });
-                  }
-                }
-            );
-        } else {
+        num.style.transition = 'none';
+        num.style.opacity = '0';
+        num.style.transform = 'scale(1.45)';
+        void num.offsetWidth;
+        num.style.transition = 'opacity 140ms ease,transform 240ms var(--ease-spring, ease)';
+        requestAnimationFrame(() => {
             num.style.opacity = '1';
-            num.style.animation = 'chBubbleIn 0.4s var(--ease-spring) both';
-            setTimeout(() => { i++; showNext(); }, 800);
-        }
+            num.style.transform = 'scale(1)';
+        });
+        setTimeout(() => {
+            num.style.opacity = '0';
+            num.style.transform = 'scale(0.84)';
+        }, Math.max(120, stepMs - 140));
+        setTimeout(() => { i++; showNext(); }, stepMs);
     }
-    
+
     showNext();
 }
 
 // Affiche une question multijoueur : texte, image, options, chrono et buzzer si necessaire.
 function showQuestion(data) {
-    console.log('showQuestion called with:', data);
+    setUXState('question', data || {});
     
     // S assure que l ecran de jeu est actif
     const currentScreen = document.querySelector('.screen.active');
@@ -513,21 +635,8 @@ function showQuestion(data) {
         if (questionValue) questionValue.textContent = `${data.questionInRound}/${data.questionsPerRound || 5}`;
     }
 
-    // Chrono
-    let timeLeft = data.time || 10;
     currentMaxTime = data.time || 10;
-    const timerValue = document.getElementById('timerValue');
-    const timerChip = document.querySelector('.ch-timer-chip');
-    if (timerValue) timerValue.textContent = timeLeft;
-    if (timerChip) timerChip.classList.remove('urgent');
-
-    clearInterval(timerInterval);
-    timerInterval = setInterval(() => {
-        timeLeft--;
-        if (timerValue) timerValue.textContent = Math.max(0, timeLeft);
-        if (timerChip && timeLeft <= 3) timerChip.classList.add('urgent');
-        if (timeLeft <= 0) clearInterval(timerInterval);
-    }, 1000);
+    startSyncedQuestionTimer(data);
 
     // Affiche le buzzer et cache les options pour le mode classique.
     const buzzerArea = document.getElementById('buzzerArea');
@@ -594,11 +703,15 @@ function showQuestion(data) {
                 const fill = holder.querySelector('.picguess-reveal-meter__fill');
                 if (fill) fill.style.animationDuration = `${data.time || 15}s`;
             }
-            // Lance le deflou au prochain affichage
-            requestAnimationFrame(() => {
+            const startReveal = () => requestAnimationFrame(() => {
                 qImg.style.filter = 'blur(0px) brightness(1) saturate(1)';
                 qImg.style.transform = 'scale(1)';
             });
+            if (typeof qImg.decode === 'function') {
+                qImg.decode().then(startReveal).catch(startReveal);
+            } else {
+                startReveal();
+            }
         }
     }
     if (isBuzzerless) {
@@ -613,16 +726,23 @@ function showQuestion(data) {
 function buzzerPressed() {
     const buzzer = document.getElementById('buzzer');
     if (!buzzer || buzzer.disabled || hasBuzzed) return;
-    hasBuzzed = true; buzzer.disabled = true; buzzer.classList.add('buzzed');
+    hasBuzzed = true;
+    buzzer.disabled = true;
+    buzzer.classList.add('buzzed');
+    setUXState('buzz-sent', { sentAt: Date.now() });
     const buzzerText = buzzer.querySelector('.buzzer__text');
-    if (buzzerText) buzzerText.textContent = 'BUZZÉ !';
+    if (buzzerText) buzzerText.textContent = selectedLanguage === 'fr' ? 'BUZZ ENVOYE' : 'BUZZ SENT';
     playSfx('buzzer');
     if (navigator.vibrate) navigator.vibrate(80);
-    if (ws?.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ action: 'buzz', userId, matchToken }));
+    if (ws?.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({ action: 'buzz', userId, matchToken }));
+    } else {
+        showMessage(selectedLanguage === 'fr' ? 'Connexion perdue...' : 'Connection lost...', 'error', 1600);
+    }
 }
-
 function handleBuzzed(data) {
     const playerName = data.player || data;
+    setUXState('revealing', data || {});
     showMessage(data.message || `🔔 ${playerName} a buzzé !`);
     playSfx('buzzer');
 
@@ -683,20 +803,37 @@ function highlightBuzzedPlayer(playerName) {
     });
 }
 
+function markPickedOption(idx) {
+    if (idx === undefined || idx === null) return;
+    document.querySelectorAll('#optionsBox .option, #optionsBox .ch-option').forEach((opt, optionIdx) => {
+        opt.classList.toggle('option--picked', optionIdx === idx);
+    });
+}
+
 // Envoie la reponse choisie au serveur. En Speed/Wager, pas besoin de buzzer avant.
 function answerQuestion(idx) {
     const qType = currentMultiQuestion && currentMultiQuestion.quizType;
     const isBuzzerless = currentMultiQuestion && (currentMultiQuestion.buzzerless || qType === 'speed');
     if (!canAnswer && !isBuzzerless) return;
-    if (ws?.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ action: 'answer', userId, matchToken, idx }));
-    document.querySelectorAll('#optionsBox .option, #optionsBox .ch-option').forEach(opt => opt.onclick = null);
+    markPickedOption(idx);
+    setUXState('answer-locked', { idx });
+    document.querySelectorAll('#optionsBox .option, #optionsBox .ch-option').forEach(opt => {
+        opt.onclick = null;
+        opt.disabled = true;
+    });
+    if (ws?.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({ action: 'answer', userId, matchToken, idx }));
+        showMessage(selectedLanguage === 'fr' ? 'Reponse envoyee...' : 'Answer sent...', 'info', 900);
+    } else {
+        showMessage(selectedLanguage === 'fr' ? 'Connexion perdue...' : 'Connection lost...', 'error', 1600);
+    }
     canAnswer = false;
 }
 
 // Affiche le resultat d une question Speed ou tout le monde a repondu en meme temps.
 function showSpeedResult(data) {
-    clearInterval(timerInterval);
-    clearInterval(window._mpTimerInt);
+    stopQuestionTimer();
+    setUXState('revealing', data || {});
 
     const optionsBox = document.getElementById('optionsBox');
     if (optionsBox) {
@@ -733,7 +870,8 @@ function showSpeedResult(data) {
 
 // Affiche le resultat classique apres une reponse au buzzer.
 function showResult(data) {
-    clearInterval(timerInterval);
+    stopQuestionTimer();
+    setUXState('revealing', data || {});
     
     // S assure que les options sont visibles pour montrer le resultat
     const optionsBox = document.getElementById('optionsBox');
@@ -916,7 +1054,8 @@ function renderClubhousePlayers(players, scores = {}) {
 }
 
 function showGameOver(data) {
-    clearInterval(timerInterval);
+    stopQuestionTimer();
+    setUXState('idle', { gameOver: true });
     
     // Transforme finalScores en liste pour le podium
     const players = Object.entries(data.finalScores)
@@ -1062,8 +1201,33 @@ function closePodiumAndShowMultiGameOver() {
     createConfetti(80);
 }
 
-function showMessage(text) { const box = document.getElementById('messageBox'); if (box) { box.textContent = text; box.classList.add('visible'); box.style.display = 'block'; setTimeout(() => { box.classList.remove('visible'); }, 3000); } }
-function hideMessage() { const box = document.getElementById('messageBox'); if (box) { box.classList.remove('visible'); box.style.display = 'none'; } }
+let messageTimer = null;
+let lastMessageText = '';
+function showMessage(text, type = 'info', duration = UX_TIMING.toastMs) {
+    const box = document.getElementById('messageBox');
+    if (!box || !text) return;
+    const normalized = String(text);
+    if (normalized === lastMessageText && box.classList.contains('visible')) return;
+    lastMessageText = normalized;
+    clearTimeout(messageTimer);
+    box.textContent = normalized;
+    box.dataset.type = type;
+    box.classList.add('visible');
+    box.style.display = 'block';
+    messageTimer = setTimeout(() => {
+        box.classList.remove('visible');
+        lastMessageText = '';
+    }, duration);
+}
+function hideMessage() {
+    const box = document.getElementById('messageBox');
+    clearTimeout(messageTimer);
+    lastMessageText = '';
+    if (box) {
+        box.classList.remove('visible');
+        box.style.display = 'none';
+    }
+}
 
 // ============================================
 // EFFETS VISUELS
@@ -1223,4 +1387,15 @@ function showFloatingReaction(emoji, fromPlayer = null) {
     const reaction = document.createElement('div');
     reaction.className = 'floating-reaction';
     reaction.textContent = emoji;
-    
+
+    const randomX = 20 + Math.random() * 60;
+    reaction.style.left = randomX + '%';
+    reaction.style.bottom = '100px';
+
+    document.body.appendChild(reaction);
+    setTimeout(() => reaction.remove(), 2000);
+}
+
+function handleReaction(data) {
+    showFloatingReaction(data.emoji, data.player);
+}

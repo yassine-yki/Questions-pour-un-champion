@@ -768,6 +768,9 @@
 }
 .option:hover { transform: scale(1.02); }
 .option:active { transform: translateY(4px) scale(0.99); }
+.option:disabled {
+    cursor: default;
+}
 
 .option--a { background: var(--primary); color: var(--primary-tint); box-shadow: 0 6px 0 0 var(--primary-deep-low); }
 .option--b { background: var(--secondary); color: #CEFFD2; box-shadow: 0 6px 0 0 var(--secondary-deep); }
@@ -2951,6 +2954,14 @@
     text-align: center;
     animation: toast-in var(--d-med) var(--ease-spring);
 }
+.game-toast[data-type="error"] {
+    background: #6F1D22;
+    color: #FFF4F0;
+}
+.game-toast[data-type="success"] {
+    background: var(--secondary-deep);
+    color: #F2FFF4;
+}
 @keyframes toast-in {
     from { transform: translateX(-50%) translateY(-12px); opacity: 0; }
     to   { transform: translateX(-50%) translateY(0); opacity: 1; }
@@ -3385,6 +3396,7 @@
 
 /* Picked option (before reveal) */
 .option--picked { outline: 4px solid var(--ink, #2B1609); outline-offset: 3px; }
+.ch-option.option--picked { outline: 4px solid var(--ink, #2B1609); outline-offset: 3px; }
 
 /* Picguess reveal */
 .picguess-frame {

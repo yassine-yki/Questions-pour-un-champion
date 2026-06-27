@@ -95,11 +95,23 @@ window.AppState.bootedAt = Date.now();
     // Liste des salles publiques
 
     // Rendu moderne des cartes de salles publiques.
+let lastPublicRoomsSignature = '';
 window.renderPublicRooms = function(rooms) {
         const container = document.getElementById('publicRoomsList');
         if (!container) return;
+        const normalizedRooms = Array.isArray(rooms) ? rooms : [];
+        const signature = JSON.stringify(normalizedRooms.map(room => ({
+            code: room.code,
+            playerCount: room.playerCount ?? room.count,
+            maxPlayers: room.maxPlayers ?? 4,
+            state: room.state,
+            inProgress: room.inProgress,
+            gameMode: room.gameMode
+        })));
+        if (signature === lastPublicRoomsSignature) return;
+        lastPublicRoomsSignature = signature;
 
-        if (!rooms || rooms.length === 0) {
+        if (normalizedRooms.length === 0) {
             container.innerHTML = `
                 <div style="text-align:center;padding:32px 16px;color:var(--ink-faint);font-weight:500;font-size:14px;">
                     ${copy('Aucune partie publique en ce moment.', 'No public games right now.')}
@@ -107,7 +119,7 @@ window.renderPublicRooms = function(rooms) {
             return;
         }
 
-        container.innerHTML = rooms.map(room => {
+        container.innerHTML = normalizedRooms.map(room => {
             const playerCount = Number(room.playerCount ?? room.count ?? (
                 Array.isArray(room.players) ? room.players.length :
                 (room.players && typeof room.players === 'object' ? Object.keys(room.players).length : 0)
@@ -125,7 +137,7 @@ window.renderPublicRooms = function(rooms) {
                 : copy('Chacun pour soi', 'Free for all');
             const onclick = disabled ? '' : `onclick="joinPublicRoom('${escapeHtml(room.code)}')"`;
             return `
-                <button class="pr-room ${disabled ? 'is-disabled' : ''}" ${onclick} ${disabled ? 'disabled' : ''}>
+                <button class="pr-room ${disabled ? 'is-disabled' : ''}" data-room-code="${escapeHtml(room.code)}" ${onclick} ${disabled ? 'disabled' : ''}>
                     <div class="pr-room__head">
                         <span class="pr-room__code">${escapeHtml(room.code)}</span>
                         <span class="pr-room__state ${stateClass}">${stateLabel}</span>
@@ -388,7 +400,7 @@ window.renderPlayerCards = function(players, scores = {}) {
 
         // Anime l anneau du chrono pendant la duree de la question
         const fill = document.getElementById('countdownFill');
-        if (fill && data && data.time) {
+        if (fill && data && data.time && typeof window.startSyncedQuestionTimer !== 'function') {
             const total = 314.16; // 2Ãâ‚¬ * 50
             fill.style.transition = `stroke-dashoffset ${data.time}s linear`;
             fill.style.strokeDashoffset = '0';
@@ -1130,8 +1142,9 @@ window.renderPlayerCards = function(players, scores = {}) {
         const name = nameEl ? nameEl.value.trim() : '';
 
         if (!name) {
-            const err = document.getElementById('authError');
-            alert(typeof t === 'function' ? t('alertBothFields') : 'Entrez votre nom.');
+            if (typeof showMessage === 'function') {
+                showMessage(typeof t === 'function' ? t('alertBothFields') : 'Entrez votre nom.', 'error', 2200);
+            }
             if (nameEl) nameEl.focus();
             return;
         }
@@ -1158,7 +1171,9 @@ window.renderPlayerCards = function(players, scores = {}) {
             if (all.length && typeof connectWebSocket === 'function') {
                 connectWebSocket(code, name, true, all, mode, isPublic, null, null, quizType);
             } else {
-                alert(typeof t === 'function' ? t('alertSubjects') : 'Choisissez au moins un sujet.');
+                if (typeof showMessage === 'function') {
+                    showMessage(typeof t === 'function' ? t('alertSubjects') : 'Choisissez au moins un sujet.', 'error', 2200);
+                }
             }
         }
     };
@@ -1267,15 +1282,19 @@ window.selectMultiQuizType = function(type) {
         }
 
         // Chrono numerique dans #timer; l anneau est anime par #countdownFill.
-        const timerEl = document.getElementById('timer');
-        let secs = data && data.time ? data.time : 10;
-        if (timerEl) timerEl.textContent = secs;
-        clearInterval(window._mpTimerInt);
-        window._mpTimerInt = setInterval(() => {
-            secs--;
-            if (timerEl) timerEl.textContent = Math.max(0, secs);
-            if (secs <= 0) clearInterval(window._mpTimerInt);
-        }, 1000);
+        if (typeof window.startSyncedQuestionTimer === 'function') {
+            window.startSyncedQuestionTimer(data || {});
+        } else {
+            const timerEl = document.getElementById('timer');
+            let secs = data && data.time ? data.time : 10;
+            if (timerEl) timerEl.textContent = secs;
+            clearInterval(window._mpTimerInt);
+            window._mpTimerInt = setInterval(() => {
+                secs--;
+                if (timerEl) timerEl.textContent = Math.max(0, secs);
+                if (secs <= 0) clearInterval(window._mpTimerInt);
+            }, 1000);
+        }
     };
 
     /* Construit des boutons de reponse colores a partir d une liste de textes. */
@@ -1629,46 +1648,53 @@ function showWagerQuestion(d) {
 
         const box = document.getElementById('optionsBox'); if (box) buildWagerOptions(box, d.options);
 
-        const timerEl = document.getElementById('timer'); let secs = d.time || 15;
-        if (timerEl) timerEl.textContent = secs;
-        clearInterval(window._wagerTimerInt);
-        window._wagerTimerInt = setInterval(() => {
-            secs--; if (timerEl) timerEl.textContent = Math.max(0, secs);
-            if (secs <= 0) clearInterval(window._wagerTimerInt);
-        }, 1000);
+        if (typeof window.startSyncedQuestionTimer === 'function') {
+            window.startSyncedQuestionTimer(d || {});
+        } else {
+            const timerEl = document.getElementById('timer'); let secs = d.time || 15;
+            if (timerEl) timerEl.textContent = secs;
+            clearInterval(window._wagerTimerInt);
+            window._wagerTimerInt = setInterval(() => {
+                secs--; if (timerEl) timerEl.textContent = Math.max(0, secs);
+                if (secs <= 0) clearInterval(window._wagerTimerInt);
+            }, 1000);
 
-        const fill = document.getElementById('countdownFill');
-        if (fill && d.time) {
-            const total = 314.16;
-            fill.style.transition = `stroke-dashoffset ${d.time}s linear`;
-            fill.style.strokeDashoffset = '0';
-            void fill.getBoundingClientRect();
-            fill.style.strokeDashoffset = total;
+            const fill = document.getElementById('countdownFill');
+            if (fill && d.time) {
+                const total = 314.16;
+                fill.style.transition = `stroke-dashoffset ${d.time}s linear`;
+                fill.style.strokeDashoffset = '0';
+                void fill.getBoundingClientRect();
+                fill.style.strokeDashoffset = total;
+            }
         }
     }
-
     function onAnswerLocked(d) {
+        if (typeof window.setUXState === 'function') window.setUXState('answer-locked', d || {});
         const box = document.getElementById('optionsBox');
-        if (box) box.querySelectorAll('.option').forEach((o, i) => {
+        const lockedIdx = d && Number.isInteger(d.idx) ? d.idx : null;
+        if (box) box.querySelectorAll('.option, .ch-option').forEach((o, i) => {
+            o.disabled = true;
             o.onclick = null;
-            if (i === d.idx) o.classList.add('option--picked'); else o.style.opacity = '0.5';
+            if (i === lockedIdx) o.classList.add('option--picked'); else o.style.opacity = '0.5';
         });
         let qType = null;
         try { qType = currentMultiQuestion && currentMultiQuestion.quizType; } catch (e) {}
-        if (qType === 'speed') {
-            if (typeof showMessage === 'function') {
-                showMessage(selectedLanguage === 'fr' ? 'Reponse verrouillee.' : 'Answer locked.');
-            }
+        if (typeof showMessage === 'function') {
+            showMessage(selectedLanguage === 'fr' ? 'Reponse verrouillee.' : 'Answer locked.', 'info', 1200);
+        }
+        if (qType !== 'wager') {
             return;
         }
         const ind = document.getElementById('wagerIndicator');
-        const suffix = selectedLanguage === 'fr' ? ' Â· reponse verrouillee' : ' Â· answer locked';
+        const suffix = selectedLanguage === 'fr' ? ' - reponse verrouillee' : ' - answer locked';
         if (ind && !/locked|verrouill/i.test(ind.textContent)) ind.textContent += suffix;
     }
 
     // Derniere etape du mode Mise : montre les gains/pertes de chaque joueur.
 function showWagerResult(d) {
         clearInterval(window._wagerTimerInt);
+        if (typeof window.stopQuestionTimer === 'function') window.stopQuestionTimer();
         removeWagerOverlay();
 
         const box = document.getElementById('optionsBox');
