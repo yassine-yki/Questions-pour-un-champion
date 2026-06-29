@@ -1,0 +1,76 @@
+{
+  "runId": "870c96d7e7",
+  "architecture": "redis-pubsub-render",
+  "target": "wss://questions-pour-un-champion.onrender.com/ws/BENCH",
+  "createdAt": "2026-06-29T11:04:08Z",
+  "results": [
+    {
+      "clients": 10,
+      "messagesPerClient": 30,
+      "attemptedMessages": 300,
+      "successfulMessages": 300,
+      "failedMessages": 0,
+      "failureRate": 0.0,
+      "durationSeconds": 5.728793499991298,
+      "throughputMessagesPerSecond": 52.36704726753647,
+      "avgLatencyMs": 125.54214566666667,
+      "medianLatencyMs": 125.03115,
+      "p95LatencyMs": 130.2151,
+      "maxLatencyMs": 136.5398,
+      "instanceHits": {
+        "3b792f7a": 300
+      }
+    },
+    {
+      "clients": 25,
+      "messagesPerClient": 30,
+      "attemptedMessages": 750,
+      "successfulMessages": 750,
+      "failedMessages": 0,
+      "failureRate": 0.0,
+      "durationSeconds": 6.1413649001624435,
+      "throughputMessagesPerSecond": 122.12268969397373,
+      "avgLatencyMs": 122.610888,
+      "medianLatencyMs": 124.34465,
+      "p95LatencyMs": 130.4642,
+      "maxLatencyMs": 137.7029,
+      "instanceHits": {
+        "3b792f7a": 750
+      }
+    },
+    {
+      "clients": 50,
+      "messagesPerClient": 30,
+      "attemptedMessages": 1500,
+      "successfulMessages": 1500,
+      "failedMessages": 0,
+      "failureRate": 0.0,
+      "durationSeconds": 7.04169370001182,
+      "throughputMessagesPerSecond": 213.01693369557984,
+      "avgLatencyMs": 122.2975426,
+      "medianLatencyMs": 123.25865,
+      "p95LatencyMs": 141.8607,
+      "maxLatencyMs": 198.0029,
+      "instanceHits": {
+        "3b792f7a": 1500
+      }
+    },
+    {
+      "clients": 100,
+      "messagesPerClient": 30,
+      "attemptedMessages": 3000,
+      "successfulMessages": 3000,
+      "failedMessages": 0,
+      "failureRate": 0.0,
+      "durationSeconds": 10.186581200221553,
+      "throughputMessagesPerSecond": 294.5050887077552,
+      "avgLatencyMs": 122.00686663333333,
+      "medianLatencyMs": 122.91784999999999,
+      "p95LatencyMs": 170.9828,
+      "maxLatencyMs": 212.2685,
+      "instanceHits": {
+        "3b792f7a": 3000
+      }
+    }
+  ]
+}

@@ -1,0 +1,128 @@
+{
+  "modes": [
+    {
+      "mode": "memory",
+      "usesRedis": false,
+      "seedRoomsRequested": 10,
+      "seedRoomsCreated": 10,
+      "results": [
+        {
+          "clients": 100,
+          "successfulReads": 0,
+          "successRate": 0.0,
+          "avgLatencyMs": 145.98237600000002,
+          "p95LatencyMs": 147.8503,
+          "requestsPerSecond": 541.431121713734,
+          "durationSeconds": 0.18469569995068014
+        },
+        {
+          "clients": 250,
+          "successfulReads": 0,
+          "successRate": 0.0,
+          "avgLatencyMs": 146.5164196,
+          "p95LatencyMs": 211.8192,
+          "requestsPerSecond": 468.88867383043913,
+          "durationSeconds": 0.5331755999941379
+        },
+        {
+          "clients": 500,
+          "successfulReads": 0,
+          "successRate": 0.0,
+          "avgLatencyMs": 192.0090586,
+          "p95LatencyMs": 246.4958,
+          "requestsPerSecond": 419.7328501462011,
+          "durationSeconds": 1.191233899910003
+        },
+        {
+          "clients": 1000,
+          "successfulReads": 0,
+          "successRate": 0.0,
+          "avgLatencyMs": 202.69004990000002,
+          "p95LatencyMs": 228.4466,
+          "requestsPerSecond": 438.7089777492392,
+          "durationSeconds": 2.279415400000289
+        },
+        {
+          "clients": 2000,
+          "successfulReads": 0,
+          "successRate": 0.0,
+          "avgLatencyMs": 233.62249795,
+          "p95LatencyMs": 311.1641,
+          "requestsPerSecond": 397.544937389646,
+          "durationSeconds": 5.030877799959853
+        },
+        {
+          "clients": 5000,
+          "successfulReads": 0,
+          "successRate": 0.0,
+          "avgLatencyMs": 228.46246218,
+          "p95LatencyMs": 249.663,
+          "requestsPerSecond": 416.8354746083994,
+          "durationSeconds": 11.995140300132334
+        }
+      ]
+    },
+    {
+      "mode": "redis",
+      "usesRedis": true,
+      "seedRoomsRequested": 10,
+      "seedRoomsCreated": 10,
+      "results": [
+        {
+          "clients": 100,
+          "successfulReads": 100,
+          "successRate": 100.0,
+          "avgLatencyMs": 421.69665000000003,
+          "p95LatencyMs": 440.1688,
+          "requestsPerSecond": 208.10008776633524,
+          "durationSeconds": 0.48053800011985004
+        },
+        {
+          "clients": 250,
+          "successfulReads": 250,
+          "successRate": 100.0,
+          "avgLatencyMs": 133.60245999999998,
+          "p95LatencyMs": 174.4677,
+          "requestsPerSecond": 490.6641336143715,
+          "durationSeconds": 0.5095134999137372
+        },
+        {
+          "clients": 500,
+          "successfulReads": 500,
+          "successRate": 100.0,
+          "avgLatencyMs": 184.4027884,
+          "p95LatencyMs": 243.5679,
+          "requestsPerSecond": 429.8597427998885,
+          "durationSeconds": 1.1631700999569148
+        },
+        {
+          "clients": 1000,
+          "successfulReads": 1000,
+          "successRate": 100.0,
+          "avgLatencyMs": 208.0487676,
+          "p95LatencyMs": 242.3369,
+          "requestsPerSecond": 428.8286951556251,
+          "durationSeconds": 2.331933500012383
+        },
+        {
+          "clients": 2000,
+          "successfulReads": 2000,
+          "successRate": 100.0,
+          "avgLatencyMs": 225.3469828,
+          "p95LatencyMs": 301.9163,
+          "requestsPerSecond": 412.1305942023488,
+          "durationSeconds": 4.852830700110644
+        },
+        {
+          "clients": 5000,
+          "successfulReads": 5000,
+          "successRate": 100.0,
+          "avgLatencyMs": 240.04968650000004,
+          "p95LatencyMs": 291.4178,
+          "requestsPerSecond": 389.7897840295123,
+          "durationSeconds": 12.827427000040188
+        }
+      ]
+    }
+  ]
+}

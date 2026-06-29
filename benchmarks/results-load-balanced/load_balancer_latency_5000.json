@@ -1,0 +1,254 @@
+{
+  "runId": "1d99884a5c",
+  "createdAt": "2026-06-29T15:24:10Z",
+  "clients": [
+    100,
+    250,
+    500,
+    1000,
+    2000,
+    5000
+  ],
+  "messagesPerClient": 5,
+  "workMs": 1.5,
+  "architectures": [
+    {
+      "architecture": "single-no-redis",
+      "instances": 1,
+      "redisEnabled": false,
+      "balancing": "none",
+      "results": [
+        {
+          "clients": 100,
+          "messagesPerClient": 5,
+          "attemptedMessages": 500,
+          "successfulMessages": 500,
+          "failedMessages": 0,
+          "failureRate": 0.0,
+          "durationSeconds": 1.0707757000345737,
+          "throughputMessagesPerSecond": 466.9512018099176,
+          "avgLatencyMs": 165.4451834,
+          "medianLatencyMs": 175.54125,
+          "p95LatencyMs": 177.9172,
+          "maxLatencyMs": 178.6764,
+          "instanceHits": {
+            "single-no-redis-1": 500
+          }
+        },
+        {
+          "clients": 250,
+          "messagesPerClient": 5,
+          "attemptedMessages": 1250,
+          "successfulMessages": 1250,
+          "failedMessages": 0,
+          "failureRate": 0.0,
+          "durationSeconds": 2.708351199980825,
+          "throughputMessagesPerSecond": 461.5354168280871,
+          "avgLatencyMs": 426.95504296,
+          "medianLatencyMs": 451.6094,
+          "p95LatencyMs": 460.7667,
+          "maxLatencyMs": 466.7839,
+          "instanceHits": {
+            "single-no-redis-1": 1250
+          }
+        },
+        {
+          "clients": 500,
+          "messagesPerClient": 5,
+          "attemptedMessages": 2500,
+          "successfulMessages": 2500,
+          "failedMessages": 0,
+          "failureRate": 0.0,
+          "durationSeconds": 5.264174699783325,
+          "throughputMessagesPerSecond": 474.9082510698022,
+          "avgLatencyMs": 832.63076148,
+          "medianLatencyMs": 884.5722499999999,
+          "p95LatencyMs": 896.5531,
+          "maxLatencyMs": 904.9987,
+          "instanceHits": {
+            "single-no-redis-1": 2500
+          }
+        },
+        {
+          "clients": 1000,
+          "messagesPerClient": 5,
+          "attemptedMessages": 5000,
+          "successfulMessages": 5000,
+          "failedMessages": 0,
+          "failureRate": 0.0,
+          "durationSeconds": 10.923937699990347,
+          "throughputMessagesPerSecond": 457.7104096817046,
+          "avgLatencyMs": 1685.23243674,
+          "medianLatencyMs": 1778.7881499999999,
+          "p95LatencyMs": 1816.9159,
+          "maxLatencyMs": 1823.4437,
+          "instanceHits": {
+            "single-no-redis-1": 5000
+          }
+        },
+        {
+          "clients": 2000,
+          "messagesPerClient": 5,
+          "attemptedMessages": 10000,
+          "successfulMessages": 10000,
+          "failedMessages": 0,
+          "failureRate": 0.0,
+          "durationSeconds": 21.717307900078595,
+          "throughputMessagesPerSecond": 460.462228836559,
+          "avgLatencyMs": 3375.59018159,
+          "medianLatencyMs": 3577.5283,
+          "p95LatencyMs": 3639.3377,
+          "maxLatencyMs": 3641.6807,
+          "instanceHits": {
+            "single-no-redis-1": 10000
+          }
+        },
+        {
+          "clients": 5000,
+          "messagesPerClient": 5,
+          "attemptedMessages": 25000,
+          "successfulMessages": 25000,
+          "failedMessages": 0,
+          "failureRate": 0.0,
+          "durationSeconds": 56.631548300152645,
+          "throughputMessagesPerSecond": 441.45005302517245,
+          "avgLatencyMs": 8788.606921592,
+          "medianLatencyMs": 9216.269400000001,
+          "p95LatencyMs": 11061.6563,
+          "maxLatencyMs": 14097.1095,
+          "instanceHits": {
+            "single-no-redis-1": 25000
+          }
+        }
+      ]
+    },
+    {
+      "architecture": "redis-load-balanced",
+      "instances": 4,
+      "redisEnabled": true,
+      "balancing": "sticky round-robin",
+      "results": [
+        {
+          "clients": 100,
+          "messagesPerClient": 5,
+          "attemptedMessages": 500,
+          "successfulMessages": 500,
+          "failedMessages": 0,
+          "failureRate": 0.0,
+          "durationSeconds": 0.3755799999926239,
+          "throughputMessagesPerSecond": 1331.2742957820426,
+          "avgLatencyMs": 42.2923798,
+          "medianLatencyMs": 37.7286,
+          "p95LatencyMs": 60.8003,
+          "maxLatencyMs": 83.2371,
+          "instanceHits": {
+            "redis-load-balanced-1": 125,
+            "redis-load-balanced-2": 125,
+            "redis-load-balanced-3": 125,
+            "redis-load-balanced-4": 125
+          }
+        },
+        {
+          "clients": 250,
+          "messagesPerClient": 5,
+          "attemptedMessages": 1250,
+          "successfulMessages": 1250,
+          "failedMessages": 0,
+          "failureRate": 0.0,
+          "durationSeconds": 0.7920172000303864,
+          "throughputMessagesPerSecond": 1578.2485531274353,
+          "avgLatencyMs": 96.59543232,
+          "medianLatencyMs": 108.08865,
+          "p95LatencyMs": 124.3011,
+          "maxLatencyMs": 133.5265,
+          "instanceHits": {
+            "redis-load-balanced-1": 315,
+            "redis-load-balanced-2": 315,
+            "redis-load-balanced-3": 310,
+            "redis-load-balanced-4": 310
+          }
+        },
+        {
+          "clients": 500,
+          "messagesPerClient": 5,
+          "attemptedMessages": 2500,
+          "successfulMessages": 2500,
+          "failedMessages": 0,
+          "failureRate": 0.0,
+          "durationSeconds": 1.7767876000143588,
+          "throughputMessagesPerSecond": 1407.0336825739873,
+          "avgLatencyMs": 201.95633484,
+          "medianLatencyMs": 216.95135,
+          "p95LatencyMs": 280.0199,
+          "maxLatencyMs": 318.0198,
+          "instanceHits": {
+            "redis-load-balanced-1": 625,
+            "redis-load-balanced-2": 625,
+            "redis-load-balanced-3": 625,
+            "redis-load-balanced-4": 625
+          }
+        },
+        {
+          "clients": 1000,
+          "messagesPerClient": 5,
+          "attemptedMessages": 5000,
+          "successfulMessages": 5000,
+          "failedMessages": 0,
+          "failureRate": 0.0,
+          "durationSeconds": 3.496134900022298,
+          "throughputMessagesPerSecond": 1430.1507644822602,
+          "avgLatencyMs": 416.46553788,
+          "medianLatencyMs": 457.9495,
+          "p95LatencyMs": 547.9854,
+          "maxLatencyMs": 621.9584,
+          "instanceHits": {
+            "redis-load-balanced-1": 1250,
+            "redis-load-balanced-2": 1250,
+            "redis-load-balanced-3": 1250,
+            "redis-load-balanced-4": 1250
+          }
+        },
+        {
+          "clients": 2000,
+          "messagesPerClient": 5,
+          "attemptedMessages": 10000,
+          "successfulMessages": 10000,
+          "failedMessages": 0,
+          "failureRate": 0.0,
+          "durationSeconds": 7.157515800092369,
+          "throughputMessagesPerSecond": 1397.1327873102211,
+          "avgLatencyMs": 802.21498327,
+          "medianLatencyMs": 799.64055,
+          "p95LatencyMs": 1236.1448,
+          "maxLatencyMs": 1420.1102,
+          "instanceHits": {
+            "redis-load-balanced-1": 2500,
+            "redis-load-balanced-2": 2500,
+            "redis-load-balanced-3": 2500,
+            "redis-load-balanced-4": 2500
+          }
+        },
+        {
+          "clients": 5000,
+          "messagesPerClient": 5,
+          "attemptedMessages": 25000,
+          "successfulMessages": 25000,
+          "failedMessages": 0,
+          "failureRate": 0.0,
+          "durationSeconds": 17.83785969996825,
+          "throughputMessagesPerSecond": 1401.5134338142877,
+          "avgLatencyMs": 2017.783345388,
+          "medianLatencyMs": 1803.4160000000002,
+          "p95LatencyMs": 2977.6149,
+          "maxLatencyMs": 3376.1334,
+          "instanceHits": {
+            "redis-load-balanced-1": 6250,
+            "redis-load-balanced-2": 6250,
+            "redis-load-balanced-3": 6250,
+            "redis-load-balanced-4": 6250
+          }
+        }
+      ]
+    }
+  ]
+}

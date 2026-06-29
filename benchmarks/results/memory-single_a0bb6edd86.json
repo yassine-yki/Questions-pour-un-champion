@@ -1,0 +1,59 @@
+{
+  "runId": "a0bb6edd86",
+  "architecture": "memory-single",
+  "target": "ws://127.0.0.1:8000/ws/BENCH",
+  "createdAt": "2026-06-29T10:49:03Z",
+  "results": [
+    {
+      "clients": 10,
+      "messagesPerClient": 20,
+      "attemptedMessages": 200,
+      "successfulMessages": 200,
+      "failedMessages": 0,
+      "failureRate": 0.0,
+      "durationSeconds": 0.6969605998601764,
+      "throughputMessagesPerSecond": 286.9602672520137,
+      "avgLatencyMs": 2.5863485,
+      "medianLatencyMs": 2.0056000000000003,
+      "p95LatencyMs": 4.4105,
+      "maxLatencyMs": 18.2411,
+      "instanceHits": {
+        "106e9708": 200
+      }
+    },
+    {
+      "clients": 25,
+      "messagesPerClient": 20,
+      "attemptedMessages": 500,
+      "successfulMessages": 500,
+      "failedMessages": 0,
+      "failureRate": 0.0,
+      "durationSeconds": 0.6716585999820381,
+      "throughputMessagesPerSecond": 744.4258139676485,
+      "avgLatencyMs": 4.8723048,
+      "medianLatencyMs": 4.24,
+      "p95LatencyMs": 7.1682,
+      "maxLatencyMs": 36.3228,
+      "instanceHits": {
+        "106e9708": 500
+      }
+    },
+    {
+      "clients": 50,
+      "messagesPerClient": 20,
+      "attemptedMessages": 1000,
+      "successfulMessages": 1000,
+      "failedMessages": 0,
+      "failureRate": 0.0,
+      "durationSeconds": 0.8039497002027929,
+      "throughputMessagesPerSecond": 1243.8589127500816,
+      "avgLatencyMs": 7.4692607,
+      "medianLatencyMs": 6.1274,
+      "p95LatencyMs": 11.2587,
+      "maxLatencyMs": 60.7574,
+      "instanceHits": {
+        "106e9708": 1000
+      }
+    }
+  ]
+}

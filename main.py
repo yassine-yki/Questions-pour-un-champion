@@ -888,6 +888,11 @@ async def websocket_endpoint(ws: WebSocket, code: str):
             action = msg.get("action")
 
             if action == "benchPing":
+                work_ms = max(0.0, min(float(msg.get("workMs", 0) or 0), 5.0))
+                if work_ms:
+                    deadline = time.perf_counter() + (work_ms / 1000)
+                    while time.perf_counter() < deadline:
+                        pass
                 await ws.send_json({
                     "event": "benchPong",
                     "data": {

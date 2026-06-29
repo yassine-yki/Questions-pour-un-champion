@@ -1,0 +1,76 @@
+{
+  "runId": "3481313185",
+  "architecture": "memory-single",
+  "target": "ws://127.0.0.1:8000/ws/BENCH",
+  "createdAt": "2026-06-29T11:02:49Z",
+  "results": [
+    {
+      "clients": 10,
+      "messagesPerClient": 30,
+      "attemptedMessages": 300,
+      "successfulMessages": 300,
+      "failedMessages": 0,
+      "failureRate": 0.0,
+      "durationSeconds": 0.9914124999195337,
+      "throughputMessagesPerSecond": 302.59856520303,
+      "avgLatencyMs": 2.6208336666666665,
+      "medianLatencyMs": 2.20825,
+      "p95LatencyMs": 5.4403,
+      "maxLatencyMs": 13.5211,
+      "instanceHits": {
+        "106e9708": 300
+      }
+    },
+    {
+      "clients": 25,
+      "messagesPerClient": 30,
+      "attemptedMessages": 750,
+      "successfulMessages": 750,
+      "failedMessages": 0,
+      "failureRate": 0.0,
+      "durationSeconds": 1.069607200101018,
+      "throughputMessagesPerSecond": 701.191988918144,
+      "avgLatencyMs": 5.242114133333334,
+      "medianLatencyMs": 4.1795,
+      "p95LatencyMs": 8.6773,
+      "maxLatencyMs": 51.2707,
+      "instanceHits": {
+        "106e9708": 750
+      }
+    },
+    {
+      "clients": 50,
+      "messagesPerClient": 30,
+      "attemptedMessages": 1500,
+      "successfulMessages": 1500,
+      "failedMessages": 0,
+      "failureRate": 0.0,
+      "durationSeconds": 1.2010868999641389,
+      "throughputMessagesPerSecond": 1248.8688370881289,
+      "avgLatencyMs": 8.169893266666667,
+      "medianLatencyMs": 7.136,
+      "p95LatencyMs": 14.2093,
+      "maxLatencyMs": 68.9798,
+      "instanceHits": {
+        "106e9708": 1500
+      }
+    },
+    {
+      "clients": 100,
+      "messagesPerClient": 30,
+      "attemptedMessages": 3000,
+      "successfulMessages": 3000,
+      "failedMessages": 0,
+      "failureRate": 0.0,
+      "durationSeconds": 1.5396129000000656,
+      "throughputMessagesPerSecond": 1948.5417405893859,
+      "avgLatencyMs": 13.373982533333333,
+      "medianLatencyMs": 11.8862,
+      "p95LatencyMs": 19.5597,
+      "maxLatencyMs": 125.2124,
+      "instanceHits": {
+        "106e9708": 3000
+      }
+    }
+  ]
+}

@@ -1,0 +1,140 @@
+{
+  "results": [
+    {
+      "mode": "memory",
+      "usesRedis": false,
+      "trials": 5,
+      "successRates": {
+        "room_discovery": 0.0,
+        "cross_instance_join": 0.0,
+        "host_event_delivery": 0.0,
+        "public_lobby_visibility": 0.0
+      },
+      "trialResults": [
+        {
+          "room_discovery": false,
+          "cross_instance_join": false,
+          "host_event_delivery": false,
+          "public_lobby_visibility": false
+        },
+        {
+          "room_discovery": false,
+          "cross_instance_join": false,
+          "host_event_delivery": false,
+          "public_lobby_visibility": false
+        },
+        {
+          "room_discovery": false,
+          "cross_instance_join": false,
+          "host_event_delivery": false,
+          "public_lobby_visibility": false
+        },
+        {
+          "room_discovery": false,
+          "cross_instance_join": false,
+          "host_event_delivery": false,
+          "public_lobby_visibility": false
+        },
+        {
+          "room_discovery": false,
+          "cross_instance_join": false,
+          "host_event_delivery": false,
+          "public_lobby_visibility": false
+        }
+      ]
+    },
+    {
+      "mode": "redis",
+      "usesRedis": true,
+      "trials": 5,
+      "successRates": {
+        "room_discovery": 100.0,
+        "cross_instance_join": 100.0,
+        "host_event_delivery": 100.0,
+        "public_lobby_visibility": 100.0
+      },
+      "trialResults": [
+        {
+          "room_discovery": true,
+          "cross_instance_join": true,
+          "host_event_delivery": true,
+          "public_lobby_visibility": true
+        },
+        {
+          "room_discovery": true,
+          "cross_instance_join": true,
+          "host_event_delivery": true,
+          "public_lobby_visibility": true
+        },
+        {
+          "room_discovery": true,
+          "cross_instance_join": true,
+          "host_event_delivery": true,
+          "public_lobby_visibility": true
+        },
+        {
+          "room_discovery": true,
+          "cross_instance_join": true,
+          "host_event_delivery": true,
+          "public_lobby_visibility": true
+        },
+        {
+          "room_discovery": true,
+          "cross_instance_join": true,
+          "host_event_delivery": true,
+          "public_lobby_visibility": true
+        }
+      ]
+    }
+  ],
+  "rows": [
+    {
+      "mode": "memory",
+      "check": "room_discovery",
+      "label": "Room discovery instance 1 -> instance 2",
+      "successRate": 0.0
+    },
+    {
+      "mode": "memory",
+      "check": "cross_instance_join",
+      "label": "Join room from another instance",
+      "successRate": 0.0
+    },
+    {
+      "mode": "memory",
+      "check": "host_event_delivery",
+      "label": "Host receives remote join event",
+      "successRate": 0.0
+    },
+    {
+      "mode": "memory",
+      "check": "public_lobby_visibility",
+      "label": "Public room visible from another instance",
+      "successRate": 0.0
+    },
+    {
+      "mode": "redis",
+      "check": "room_discovery",
+      "label": "Room discovery instance 1 -> instance 2",
+      "successRate": 100.0
+    },
+    {
+      "mode": "redis",
+      "check": "cross_instance_join",
+      "label": "Join room from another instance",
+      "successRate": 100.0
+    },
+    {
+      "mode": "redis",
+      "check": "host_event_delivery",
+      "label": "Host receives remote join event",
+      "successRate": 100.0
+    },
+    {
+      "mode": "redis",
+      "check": "public_lobby_visibility",
+      "label": "Public room visible from another instance",
+      "successRate": 100.0
+    }
+  ]
+}
