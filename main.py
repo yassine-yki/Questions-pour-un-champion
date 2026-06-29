@@ -4,6 +4,7 @@
 # Les fichiers JavaScript s'occupent de l'interface; ce fichier garde surtout les regles et la communication serveur.
 
 import uuid, random, json, asyncio, time, os, re
+from contextlib import asynccontextmanager
 try:
     import httpx
 except ImportError:
@@ -14,6 +15,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import JSONResponse
 from typing import Dict, Any, Optional, List
+from scaling import RedisScalingLayer
 
 # === CONFIGURATION DES SCORES ===
 # Reglages principaux du score. Ces valeurs influencent tous les modes serveur.
@@ -59,6 +61,8 @@ except ImportError:
     print("python-dotenv not installed, using system environment variables")
 
 app = FastAPI()
+APP_STARTED_AT = time.time()
+redis_scaling = RedisScalingLayer()
 
 app.add_middleware(
     CORSMiddleware,
@@ -296,34 +300,184 @@ def get_public_rooms() -> List[Dict]:
             })
     return public_rooms
 
-async def broadcast_public_rooms():
-    """Broadcast updated public rooms list to all clients in the lobby"""
-    public_rooms = get_public_rooms()
-    # Envoie a toutes les connexions qui attendent dans le lobby general (code = "LOBBY")
-    for user_id, ws in connections.get("LOBBY", {}).items():
+async def get_public_rooms_shared() -> List[Dict]:
+    """Return public rooms from Redis when scaling is enabled, else local memory."""
+    if redis_scaling.enabled:
         try:
-            await ws.send_json({"event": "publicRooms", "data": public_rooms})
+            return await redis_scaling.list_public_rooms()
         except Exception as e:
-            print(f"Error broadcasting public rooms to {user_id}: {e}")
+            print(f"Could not read public rooms from Redis: {e}")
+    return get_public_rooms()
 
-async def broadcast(code: str, event: str, data: Any, exclude: Optional[str] = None):
+async def save_room_snapshot(code: str):
+    """Persist the current room snapshot for other instances."""
+    if not redis_scaling.enabled or code == "LOBBY":
+        return
+    room = rooms.get(code)
+    if room:
+        try:
+            await redis_scaling.save_room(code, room, disconnected_players.get(code, {}))
+        except Exception as e:
+            print(f"Could not save room {code} to Redis: {e}")
+
+async def load_room_snapshot(code: str, force: bool = False) -> Optional[Dict]:
+    """Load a room snapshot from Redis and keep existing dict references valid."""
+    if not redis_scaling.enabled or code == "LOBBY":
+        return rooms.get(code)
+    if code in rooms and not force:
+        return rooms.get(code)
+    try:
+        payload = await redis_scaling.load_room(code)
+    except Exception as e:
+        print(f"Could not load room {code} from Redis: {e}")
+        return rooms.get(code)
+    if not payload:
+        return rooms.get(code)
+
+    remote_room = payload.get("room")
+    if not isinstance(remote_room, dict):
+        return rooms.get(code)
+
+    if code in rooms:
+        rooms[code].clear()
+        rooms[code].update(remote_room)
+    else:
+        rooms[code] = remote_room
+
+    connections.setdefault(code, {})
+    room_locks.setdefault(code, asyncio.Lock())
+
+    remote_disconnected = payload.get("disconnected") or {}
+    if remote_disconnected:
+        disconnected_players[code] = remote_disconnected
+    else:
+        disconnected_players.pop(code, None)
+    return rooms[code]
+
+async def _send_local_event(
+    code: str,
+    event: str,
+    data: Any,
+    exclude: Optional[str] = None,
+    target: Optional[str] = None,
+):
+    """Send an event only to WebSockets connected to this Python process."""
     data = with_server_now(data)
-    for user_id, ws in connections.get(code, {}).items():
+    local_connections = connections.get(code, {})
+
+    if target:
+        ws = local_connections.get(target)
+        if not ws:
+            return
+        recipients = [(target, ws)]
+    else:
+        recipients = list(local_connections.items())
+
+    for user_id, ws in recipients:
         if exclude and user_id == exclude:
             continue
         try:
             await ws.send_json({"event": event, "data": data})
         except Exception as e:
-            print(f"Error broadcasting to {user_id}: {e}")
+            print(f"Error sending local event {event} to {user_id}: {e}")
+
+async def broadcast_public_rooms():
+    """Broadcast updated public rooms list to all clients in the lobby"""
+    if redis_scaling.enabled:
+        for room_code in list(rooms.keys()):
+            await save_room_snapshot(room_code)
+    public_rooms = await get_public_rooms_shared()
+    await _send_local_event("LOBBY", "publicRooms", public_rooms)
+    if redis_scaling.enabled:
+        try:
+            await redis_scaling.publish_event("LOBBY", "publicRooms", public_rooms)
+        except Exception as e:
+            print(f"Could not publish public rooms through Redis: {e}")
+
+async def broadcast(code: str, event: str, data: Any, exclude: Optional[str] = None):
+    data = with_server_now(data)
+    await save_room_snapshot(code)
+    await _send_local_event(code, event, data, exclude=exclude)
+    if redis_scaling.enabled:
+        try:
+            await redis_scaling.publish_event(code, event, data, exclude=exclude)
+        except Exception as e:
+            print(f"Could not publish event {event} through Redis: {e}")
 
 async def send_to_user(code: str, user_id: str, event: str, data: Any):
     data = with_server_now(data)
-    ws = connections.get(code, {}).get(user_id)
-    if ws:
+    await save_room_snapshot(code)
+    await _send_local_event(code, event, data, target=user_id)
+    if redis_scaling.enabled:
         try:
-            await ws.send_json({"event": event, "data": data})
+            await redis_scaling.publish_event(code, event, data, target=user_id)
         except Exception as e:
-            print(f"Error sending to {user_id}: {e}")
+            print(f"Could not publish targeted event {event} through Redis: {e}")
+
+@asynccontextmanager
+async def room_runtime_lock(code: str):
+    """Use a Redis lock for multi-instance writes, falling back to a local lock."""
+    if redis_scaling.enabled:
+        lock = redis_scaling.room_lock(code)
+        if lock:
+            async with lock:
+                await load_room_snapshot(code, force=True)
+                yield
+                await save_room_snapshot(code)
+            return
+
+    local_lock = room_locks.setdefault(code, asyncio.Lock())
+    async with local_lock:
+        yield
+
+async def handle_redis_message(payload: Dict[str, Any]):
+    """Receive cross-instance events from Redis and forward them locally."""
+    if payload.get("source") == redis_scaling.instance_id:
+        return
+
+    kind = payload.get("kind")
+    code = (payload.get("code") or "").upper()
+    if not code:
+        return
+
+    if kind == "room_deleted":
+        rooms.pop(code, None)
+        room_locks.pop(code, None)
+        disconnected_players.pop(code, None)
+        return
+
+    if kind != "ws_event":
+        return
+
+    if code != "LOBBY":
+        await load_room_snapshot(code, force=True)
+
+    await _send_local_event(
+        code,
+        payload.get("event"),
+        payload.get("data"),
+        exclude=payload.get("exclude"),
+        target=payload.get("target"),
+    )
+
+@app.on_event("startup")
+async def startup_scaling_layer():
+    await redis_scaling.connect()
+    if redis_scaling.enabled:
+        app.state.redis_subscriber_task = asyncio.create_task(
+            redis_scaling.run_subscriber(handle_redis_message)
+        )
+
+@app.on_event("shutdown")
+async def shutdown_scaling_layer():
+    task = getattr(app.state, "redis_subscriber_task", None)
+    if task:
+        task.cancel()
+        try:
+            await task
+        except asyncio.CancelledError:
+            pass
+    await redis_scaling.close()
 
 def validate_player_name(name: str) -> bool:
     if not name or not isinstance(name, str):
@@ -337,6 +491,12 @@ async def cleanup_room(code: str):
     connections.pop(code, None)
     room_locks.pop(code, None)
     disconnected_players.pop(code, None)
+    if redis_scaling.enabled:
+        try:
+            await redis_scaling.delete_room(code)
+            await redis_scaling.publish_room_deleted(code)
+        except Exception as e:
+            print(f"Could not delete room {code} from Redis: {e}")
     # Previent le lobby si c etait une salle publique
     if was_public:
         await broadcast_public_rooms()
@@ -418,10 +578,7 @@ async def timer_task(code: str):
     
     # Temps ecoule : gere le cas avec buzzer et sans buzzer
     if not room["answered"]:
-        lock = room_locks.get(code)
-        if not lock:
-            return
-        async with lock:
+        async with room_runtime_lock(code):
             if not room["answered"]:
                 room["answered"] = True
                 q = room["current_q"]
@@ -675,10 +832,44 @@ async def get_questions(language: str = "en", subjects: str = ""):
     random.shuffle(questions)
     return {"questions": questions[:20]}
 
+@app.get("/api/health")
+async def health():
+    """Operational health endpoint for Render and benchmark runs."""
+    return {
+        "ok": True,
+        "uptimeSeconds": int(time.time() - APP_STARTED_AT),
+        "instanceId": redis_scaling.instance_id,
+        "redis": await redis_scaling.health(),
+    }
+
+@app.get("/api/stats")
+async def stats():
+    """Small observability endpoint used by the scalability report."""
+    if redis_scaling.enabled:
+        total_rooms = await redis_scaling.count_rooms()
+    else:
+        total_rooms = len(rooms)
+
+    local_connections = {
+        code: len(room_connections)
+        for code, room_connections in connections.items()
+    }
+
+    return {
+        "instanceId": redis_scaling.instance_id,
+        "uptimeSeconds": int(time.time() - APP_STARTED_AT),
+        "roomStore": "redis" if redis_scaling.enabled else "memory",
+        "rooms": total_rooms,
+        "localRooms": len(rooms),
+        "localConnections": local_connections,
+        "localConnectionCount": sum(local_connections.values()),
+        "publicRooms": await get_public_rooms_shared(),
+    }
+
 @app.get("/api/public-rooms")
 async def get_public_rooms_api():
     """API endpoint to get list of public rooms"""
-    return {"rooms": get_public_rooms()}
+    return {"rooms": await get_public_rooms_shared()}
 
 # === WEBSOCKET ===
 # Connexion temps reel d une salle : creation, rejoindre, buzzer, reponses, langue, rematch.
@@ -696,6 +887,21 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                 break
             action = msg.get("action")
 
+            if action == "benchPing":
+                await ws.send_json({
+                    "event": "benchPong",
+                    "data": {
+                        "sentAt": msg.get("sentAt"),
+                        "clientId": msg.get("clientId"),
+                        "instanceId": redis_scaling.instance_id,
+                        "serverNow": now_ms(),
+                    }
+                })
+                continue
+
+            if action not in {"joinLobby", "leaveLobby"}:
+                await load_room_snapshot(code)
+
             # === ACTIONS DU LOBBY ===
             if action == "joinLobby":
                 # Rejoint le lobby pour recevoir les mises a jour des salles publiques
@@ -705,7 +911,7 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                 connections["LOBBY"][user_id] = ws
                 
                 # Envoie les salles publiques actuelles
-                await ws.send_json({"event": "publicRooms", "data": get_public_rooms()})
+                await ws.send_json({"event": "publicRooms", "data": await get_public_rooms_shared()})
 
             elif action == "leaveLobby":
                 # Quitte le lobby
@@ -760,6 +966,7 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                 }
                 connections[code] = {}
                 room_locks[code] = asyncio.Lock()
+                await save_room_snapshot(code)
                 
                 await ws.send_json({"event": "roomCreated", "data": {"code": code, "language": language, "gameMode": game_mode, "isPublic": is_public}})
                 
@@ -977,7 +1184,7 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                     await send_to_user(code, msg_user_id, "error", "You have been eliminated and cannot buzz")
                     continue
 
-                async with room_locks[code]:
+                async with room_runtime_lock(code):
                     if room["state"] != "question" or room["buzzed"] or room["answered"]:
                         continue
 
@@ -1007,19 +1214,12 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                 if not player or player["match_token"] != token:
                     continue
                 
-                # Envoie la reaction a tous sauf a l envoyeur
-                for uid, p in room["players"].items():
-                    if uid != msg_user_id and uid in connections.get(code, {}):
-                        try:
-                            await connections[code][uid].send_json({
-                                "event": "reaction",
-                                "data": {
-                                    "player": player["name"],
-                                    "emoji": emoji
-                                }
-                            })
-                        except:
-                            pass
+                # Envoie la reaction a tous sauf a l envoyeur, meme si la salle est repartie
+                # sur plusieurs instances Render.
+                await broadcast(code, "reaction", {
+                    "player": player["name"],
+                    "emoji": emoji
+                }, exclude=msg_user_id)
 
             elif action == "changeLanguage":
                 room = get_room(code)
@@ -1207,7 +1407,7 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                     continue
                 amount = max(0, min(int(amount), max_wager_for(player)))
 
-                async with room_locks[code]:
+                async with room_runtime_lock(code):
                     if room.get("state") != "wagering":
                         continue
                     room.setdefault("wagers", {})[msg_user_id] = amount
@@ -1241,7 +1441,7 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                 if room.get("quiz_type") == "wager":
                     if room.get("state") != "wager_answer":
                         continue
-                    async with room_locks[code]:
+                    async with room_runtime_lock(code):
                         if room.get("state") != "wager_answer":
                             continue
                         q = room["current_q"]
@@ -1260,7 +1460,7 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                 if room.get("quiz_type") == "speed":
                     if room.get("state") != "speed_answer":
                         continue
-                    async with room_locks[code]:
+                    async with room_runtime_lock(code):
                         if room.get("state") != "speed_answer":
                             continue
                         q = room["current_q"]
@@ -1278,7 +1478,7 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                             await resolve_speed(code)
                     continue
 
-                async with room_locks[code]:
+                async with room_runtime_lock(code):
                     if room["buzzed"] != msg_user_id or room["answered"]:
                         continue
 
@@ -1617,10 +1817,7 @@ async def wager_collection_timer(code: str):
     room = get_room(code)
     if not room or room.get("state") != "wagering":
         return
-    lock = room_locks.get(code)
-    if not lock:
-        return
-    async with lock:
+    async with room_runtime_lock(code):
         if room.get("state") == "wagering":
             await begin_wager_answers(code)
 
@@ -1664,10 +1861,7 @@ async def wager_answer_timer(code: str):
         if not r or r.get("state") != "wager_answer":
             return
         await asyncio.sleep(0.2)
-    lock = room_locks.get(code)
-    if not lock:
-        return
-    async with lock:
+    async with room_runtime_lock(code):
         r = get_room(code)
         if r and r.get("state") == "wager_answer":
             await resolve_wager(code)
@@ -1723,10 +1917,7 @@ async def speed_answer_timer(code: str):
         if not r or r.get("state") != "speed_answer":
             return
         await asyncio.sleep(0.15)
-    lock = room_locks.get(code)
-    if not lock:
-        return
-    async with lock:
+    async with room_runtime_lock(code):
         r = get_room(code)
         if r and r.get("state") == "speed_answer":
             await resolve_speed(code)
