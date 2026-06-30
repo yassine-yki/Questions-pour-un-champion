@@ -359,7 +359,7 @@ const MESSAGE_HANDLERS = {
     },
     newHost(data) {
         showMessage(data.message || 'New host');
-        const myN2 = document.getElementById('createName')?.value || document.getElementById('joinName')?.value;
+        const myN2 = (typeof getPreferredPlayerName === 'function' ? getPreferredPlayerName() : (document.getElementById('createName')?.value || document.getElementById('joinName')?.value));
         if (data.hostName === myN2) isHost = true;
     }
 };
@@ -401,8 +401,7 @@ function updatePlayers(data) {
     }
     
     // Recupere le nom du joueur actuel depuis les champs
-    const currentPlayerName = document.getElementById('createName')?.value || 
-                              document.getElementById('joinName')?.value || '';
+    const currentPlayerName = (typeof getPreferredPlayerName === 'function' ? getPreferredPlayerName() : (document.getElementById('createName')?.value || document.getElementById('joinName')?.value || ''));
     
     players.forEach(player => {
         const div = document.createElement('div'); div.className = 'player-item' + (player.isHost ? ' host' : '');
@@ -461,10 +460,10 @@ const lobbyFunFacts = [
     "💡 Le saviez-vous ? Le quiz le plus ancien date de 1938 en Angleterre.",
     "🎯 Astuce : Répondez vite — les points diminuent avec le temps !",
     "🧠 Les joueurs qui buzzent en premier gagnent 2× plus de points en moyenne.",
-    "ðŸŒ Plus de 1000 questions dans 10+ catÃ©gories vous attendent.",
+    "🌍 Plus de 1000 questions dans 10+ catégories vous attendent.",
     "🤖 Tapez n'importe quel sujet — l'IA génère un quiz en secondes.",
     "⚡ Mode Speed Round : timer divisé par 2, adrénaline multipliée par 10.",
-    "ðŸ† Le record actuel est dÃ©tenu par quelqu'un dans cette salle... peut-Ãªtre.",
+    "🏆 Le record actuel est détenu par quelqu'un dans cette salle... peut-être.",
     "🎮 Essayez le thème Horror pour une expérience terrifiante !",
 ];
 let funFactInterval = null;
@@ -757,7 +756,7 @@ function handleBuzzed(data) {
         if (buzzerText) buzzerText.textContent = `${playerName} a buzzé !`;
     }
     
-    const myName = document.getElementById('createName')?.value || document.getElementById('joinName')?.value;
+    const myName = (typeof getPreferredPlayerName === 'function' ? getPreferredPlayerName() : (document.getElementById('createName')?.value || document.getElementById('joinName')?.value));
     if (playerName === myName) { 
         canAnswer = true;
     }
@@ -850,7 +849,7 @@ function showSpeedResult(data) {
     if (data.scores) updateScores(data.scores);
     if (data.teamScores) updateTeamScores(data.teamScores);
 
-    const mine = document.getElementById('createName')?.value || document.getElementById('joinName')?.value;
+    const mine = (typeof getPreferredPlayerName === 'function' ? getPreferredPlayerName() : (document.getElementById('createName')?.value || document.getElementById('joinName')?.value));
     const myResult = data.results && data.results[mine];
     if (myResult) {
         if (myResult.correct) {
@@ -893,7 +892,7 @@ function showResult(data) {
         }
     });
     
-    const myName = document.getElementById('createName')?.value || document.getElementById('joinName')?.value;
+    const myName = (typeof getPreferredPlayerName === 'function' ? getPreferredPlayerName() : (document.getElementById('createName')?.value || document.getElementById('joinName')?.value));
     if (data.answeredBy === myName || (data.timeout && data.pointsEarned)) { 
         const pointsEarned = data.pointsEarned || 0;
         
@@ -1117,8 +1116,7 @@ function closePodiumAndShowMultiGameOver() {
         .map(([name, score]) => ({ name, score }))
         .sort((a, b) => b.score - a.score);
     
-    const currentPlayerName = document.getElementById('createName')?.value || 
-                              document.getElementById('joinName')?.value || '';
+    const currentPlayerName = (typeof getPreferredPlayerName === 'function' ? getPreferredPlayerName() : (document.getElementById('createName')?.value || document.getElementById('joinName')?.value || ''));
     
     // ========================================
     // SAUVEGARDE LES STATS MULTIJOUEUR DANS SUPABASE

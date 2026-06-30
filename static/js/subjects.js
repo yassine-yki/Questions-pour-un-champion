@@ -19,9 +19,9 @@ function renderSubjectsToContainer(containerId) {
     container.innerHTML = '';
     
     const subjectEmojis = {
-        science: 'ðŸ”¬', history: 'ðŸ›ï¸', geography: 'ðŸŒ', sports: 'âš½',
-        music: 'ðŸŽµ', food: 'ðŸ³', tv_shows: 'ðŸ“º', anime: 'ðŸŽŒ',
-        image_riddles: 'ðŸ–¼ï¸', flags: 'ðŸ³ï¸', picguess: 'ðŸ”'
+        science: '🔬', history: '🏛️', geography: '🌍', sports: '⚽',
+        music: '🎵', food: '🍳', tv_shows: '📺', anime: '🎌',
+        image_riddles: '🖼️', flags: '🏳️', picguess: '🔍'
     };
     
     const subjectDescs = {

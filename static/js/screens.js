@@ -52,13 +52,16 @@ function showMultiMode() {
 function showCreateMulti() {
     disconnectFromLobby();
     showScreen('createMultiScreen');
+    if (typeof syncPlayerNameInputs === 'function') syncPlayerNameInputs();
     setTimeout(() => {
         if (typeof renderSubjects === 'function') renderSubjects();
+        if (typeof syncPlayerNameInputs === 'function') syncPlayerNameInputs();
     }, 50);
 }
 
 function showJoinMulti() {
     showScreen('joinMultiScreen');
+    if (typeof syncPlayerNameInputs === 'function') syncPlayerNameInputs();
     selectedJoinTeam = null;
     roomGameMode = null;
     isCheckingRoom = false;

@@ -18,7 +18,7 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 
 const PLAYER_SESSION_KEY = 'playerSession';
 const AUTH_SESSION_KEY = 'qpucSupabaseAuthSession';
-const AUTH_EMAIL_DOMAIN = 'qpuc.local';
+const AUTH_EMAIL_DOMAIN = 'qpuc-demo.test';
 
 // Joueur actuellement connecte. var garde aussi window.currentPlayer synchronise.
 var currentPlayer = null;
@@ -125,6 +125,40 @@ function setAuthBusy(formId, busy, label) {
     button.disabled = Boolean(busy);
     button.textContent = busy ? label : button.dataset.defaultText;
 }
+
+function getAccountUsername() {
+    const player = currentPlayer || window.currentPlayer;
+    return player && player.username ? String(player.username).trim() : '';
+}
+
+function getPreferredPlayerName(inputId = null) {
+    const accountName = getAccountUsername();
+    if (accountName) return accountName;
+    if (!inputId) return '';
+    return document.getElementById(inputId)?.value.trim() || '';
+}
+
+function syncPlayerNameInputs() {
+    const accountName = getAccountUsername();
+    ['createName', 'joinName'].forEach((id) => {
+        const input = document.getElementById(id);
+        if (!input) return;
+        if (accountName) {
+            input.value = accountName;
+            input.readOnly = true;
+            input.classList.add('field--locked');
+            input.title = authCopy('Nom lie a votre compte connecte.', 'Name comes from your signed-in account.');
+        } else {
+            input.readOnly = false;
+            input.classList.remove('field--locked');
+            input.removeAttribute('title');
+        }
+    });
+}
+
+window.getAccountUsername = getAccountUsername;
+window.getPreferredPlayerName = getPreferredPlayerName;
+window.syncPlayerNameInputs = syncPlayerNameInputs;
 
 function friendlyAuthError(error) {
     const raw = error?.message || String(error || '');
@@ -708,10 +742,7 @@ function updateAuthUI() {
             accountStats.textContent = `${currentPlayer.games_won}/${currentPlayer.games_played} victoires - ${currentPlayer.total_score} pts`;
         }
 
-        const createName = document.getElementById('createName');
-        const joinName = document.getElementById('joinName');
-        if (createName) createName.value = currentPlayer.username;
-        if (joinName) joinName.value = currentPlayer.username;
+        syncPlayerNameInputs();
     } else {
         if (authSection) authSection.style.display = 'flex';
         if (profileSection) profileSection.style.display = 'none';
@@ -724,6 +755,7 @@ function updateAuthUI() {
         if (homeFallback) homeFallback.style.display = 'block';
         if (accountUsername) accountUsername.textContent = window.isGuest ? authCopy('Invite', 'Guest') : authCopy('Joueur', 'Player');
         if (accountStats) accountStats.textContent = window.isGuest ? authCopy('Session invite', 'Guest session') : '-';
+        syncPlayerNameInputs();
     }
 }
 

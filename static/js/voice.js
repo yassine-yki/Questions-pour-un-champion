@@ -96,8 +96,7 @@ async function joinVoiceChat() {
         updateVoiceButtons();
         
         // Ajoute le joueur local aux participants
-        const myName = document.getElementById('createName')?.value || 
-                       document.getElementById('joinName')?.value || 'You';
+        const myName = (typeof getPreferredPlayerName === 'function' ? getPreferredPlayerName() : (document.getElementById('createName')?.value || document.getElementById('joinName')?.value)) || 'You';
         addVoiceParticipant(odUserId, myName + ' (You)');
         
     } catch (error) {

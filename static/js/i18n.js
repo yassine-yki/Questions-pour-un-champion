@@ -71,7 +71,7 @@ const translations = {
         sfxOff: "SFX: Off",
         score: "Score",
         correct: "✅ Correct!",
-        wrong: "âŒ Wrong! Correct answer:",
+        wrong: "❌ Wrong! Correct answer:",
         timeout: "⏰ Time's up!",
         round: "Round",
         question: "Question",

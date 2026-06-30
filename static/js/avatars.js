@@ -20,7 +20,7 @@ const categoryConfig = {
     skinColor: { icon: '🎨', label: { en: 'Skin', fr: 'Peau' }, type: 'color' },
     hair: { icon: '💇', label: { en: 'Hair', fr: 'Cheveux' }, type: 'option' },
     hairColor: { icon: '🎨', label: { en: 'Hair Color', fr: 'Couleur' }, type: 'color' },
-    eyes: { icon: 'ðŸ‘ï¸', label: { en: 'Eyes', fr: 'Yeux' }, type: 'option' },
+    eyes: { icon: '👁️', label: { en: 'Eyes', fr: 'Yeux' }, type: 'option' },
     eyebrows: { icon: '🤨', label: { en: 'Brows', fr: 'Sourcils' }, type: 'option' },
     mouth: { icon: '👄', label: { en: 'Mouth', fr: 'Bouche' }, type: 'option' },
     glasses: { icon: '👓', label: { en: 'Glasses', fr: 'Lunettes' }, type: 'option' },
@@ -107,7 +107,7 @@ function randomizeAvatar() {
 }
 
 function showAvatarReaction() {
-    const reactions = ['ðŸ˜', 'ðŸ¤©', 'âœ¨', 'ðŸŽ‰', 'ðŸ’«', 'ðŸŒŸ', 'ðŸ˜Ž', 'ðŸ”¥'];
+    const reactions = ['😍', '🤩', '✨', '🎉', '💫', '🌟', '😎', '🔥'];
     const reaction = reactions[Math.floor(Math.random() * reactions.length)];
     const el = document.getElementById('avatarReaction');
     if (el) {
@@ -200,7 +200,7 @@ function renderAvatarOptions() {
             
             html += `<button class="avatar-option-btn ${selected ? 'selected' : ''}" 
                 onclick="selectAvatarOption('${currentCategory}', '${opt}')">
-                ${isEmpty ? '<span style="font-size:20px">âŒ</span>' : `<img src="${previewUrl}" alt="${opt || 'None'}" loading="lazy">`}
+                ${isEmpty ? '<span style="font-size:20px">❌</span>' : `<img src="${previewUrl}" alt="${opt || 'None'}" loading="lazy">`}
             </button>`;
         });
         html += `</div>`;

@@ -15,14 +15,16 @@ async function createRoom() {
     const codeEl = document.getElementById('createCode');
     const nameEl = document.getElementById('createName');
     const code = codeEl?.value.trim().toUpperCase();
-    const name = nameEl?.value.trim();
+    const name = (typeof getPreferredPlayerName === 'function')
+        ? getPreferredPlayerName('createName')
+        : nameEl?.value.trim();
     const subjects = getSelectedSubjects('createSubjects');
     const customCategory = document.getElementById('customCategoryInputMulti')?.value.trim();
     
     // Validation
-    if (!name) { nameEl?.focus(); nameEl?.classList.add('input-error'); setTimeout(() => nameEl?.classList.remove('input-error'), 1500); showMessage('âš ï¸ ' + t('alertName')); return; }
-    if (!code) { codeEl?.focus(); codeEl?.classList.add('input-error'); setTimeout(() => codeEl?.classList.remove('input-error'), 1500); showMessage('âš ï¸ Entrez un code de salle'); return; }
-    if (!customCategory && subjects.length === 0) { showMessage('âš ï¸ ' + t('alertSubjects')); return; }
+    if (!name) { nameEl?.focus(); nameEl?.classList.add('input-error'); setTimeout(() => nameEl?.classList.remove('input-error'), 1500); showMessage('⚠️ ' + t('alertName')); return; }
+    if (!code) { codeEl?.focus(); codeEl?.classList.add('input-error'); setTimeout(() => codeEl?.classList.remove('input-error'), 1500); showMessage('⚠️ Entrez un code de salle'); return; }
+    if (!customCategory && subjects.length === 0) { showMessage('⚠️ ' + t('alertSubjects')); return; }
     
     const launchBtn = document.querySelector('#createMultiScreen .setup-launch-btn');
     if (launchBtn) { launchBtn.disabled = true; launchBtn.textContent = '⏳ Création...'; }
@@ -170,7 +172,9 @@ async function checkRoomMode() {
 // Rejoint une salle existante avec le nom du joueur et son equipe si besoin.
 async function joinRoom() {
     const code = document.getElementById('joinCode')?.value.trim().toUpperCase();
-    const name = document.getElementById('joinName')?.value.trim();
+    const name = (typeof getPreferredPlayerName === 'function')
+        ? getPreferredPlayerName('joinName')
+        : document.getElementById('joinName')?.value.trim();
     if (!code || !name) { showMessage(t('alertBothFields'), 'error', 2200); return; }
     if (roomGameMode === null && !isCheckingRoom) await checkRoomMode();
     if (isCheckingRoom) await new Promise(r => setTimeout(r, 500));

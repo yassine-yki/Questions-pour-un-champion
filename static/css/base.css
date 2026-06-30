@@ -330,6 +330,11 @@ input { outline: none; }
     outline: none;
     box-shadow: 0 0 0 3px rgba(125, 118, 102, 0.22);
 }
+.field--locked {
+    color: var(--ink-soft);
+    background: var(--surface-low);
+    cursor: default;
+}
 .field--sm {
     font-size: 15px;
     padding: 14px 18px;

@@ -61,8 +61,7 @@ window.AppState.bootedAt = Date.now();
 
     function getPlayerAvatarFor(name) {
         const gamePlayers = window.currentGamePlayers || [];
-        const myName = document.getElementById('createName')?.value ||
-                       document.getElementById('joinName')?.value || '';
+        const myName = currentUiPlayerName();
         const server = gamePlayers.find(p => p.name === name);
         if (server && server.avatar && typeof generateAvatarUrl === 'function') {
             return generateAvatarUrl(server.avatar);
@@ -89,6 +88,17 @@ window.AppState.bootedAt = Date.now();
             if (translated && translated !== key) return translated;
         }
         return copy(fr, en);
+    }
+
+    function currentUiPlayerName(inputId = null) {
+        if (typeof getPreferredPlayerName === 'function') {
+            return getPreferredPlayerName(inputId);
+        }
+        const player = window.currentPlayer;
+        if (player && player.username) return String(player.username).trim();
+        if (inputId) return document.getElementById(inputId)?.value.trim() || '';
+        return document.getElementById('createName')?.value ||
+               document.getElementById('joinName')?.value || '';
     }
 
 
@@ -401,7 +411,7 @@ window.renderPlayerCards = function(players, scores = {}) {
         // Anime l anneau du chrono pendant la duree de la question
         const fill = document.getElementById('countdownFill');
         if (fill && data && data.time && typeof window.startSyncedQuestionTimer !== 'function') {
-            const total = 314.16; // 2Ãâ‚¬ * 50
+            const total = 314.16; // 2Ï€ * 50
             fill.style.transition = `stroke-dashoffset ${data.time}s linear`;
             fill.style.strokeDashoffset = '0';
             // Force le recalcul visuel puis lance l animation.
@@ -423,8 +433,7 @@ window.renderPlayerCards = function(players, scores = {}) {
         const hostName = data.host || (players[0] && (players[0].name || players[0]));
         const readyPlayers = new Set(data.readyPlayers || []);
         const micStates = data.micStates || {}; // { name: 'on'|'off'|'speaking' }
-        const myName = document.getElementById('createName')?.value ||
-                       document.getElementById('joinName')?.value || '';
+        const myName = currentUiPlayerName();
 
         container.innerHTML = '';
 
@@ -453,9 +462,9 @@ window.renderPlayerCards = function(players, scores = {}) {
                 statusDotIcon = `<svg viewBox="0 0 256 256" fill="currentColor"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg>`;
             }
 
-            const meta = isHost ? (isMe ? 'Vous Â· HÃ´te' : 'HÃ´te')
-                       : isReady ? 'PrÃªt(e)'
-                       : (isMe ? 'Vous' : 'ConnectÃ©');
+            const meta = isHost ? (isMe ? 'Vous · Hôte' : 'Hôte')
+                       : isReady ? 'Prêt(e)'
+                       : (isMe ? 'Vous' : 'Connecté');
 
             const seat = document.createElement('div');
             seat.className = seatClass;
@@ -564,7 +573,7 @@ window.renderPlayerCards = function(players, scores = {}) {
         // Fonction d attente : avant, les sujets etaient choisis ailleurs.
         // Pour l instant, on va vers la zone des sujets si elle existe,
         // or open a future picker modal.
-        alert('La sÃ©lection des sujets sera bientÃ´t disponible. Tous les sujets sont activÃ©s par dÃ©faut.');
+        alert('La sélection des sujets sera bientôt disponible. Tous les sujets sont activés par défaut.');
     };
 
     window.shareRoomLink = window.shareRoomLink || function() {
@@ -599,9 +608,9 @@ window.renderPlayerCards = function(players, scores = {}) {
             inner = `
                 <div class="history-list">
                     <div class="history-row">
-                        <span class="history-row__result win">â˜…</span>
+                        <span class="history-row__result win">★</span>
                         <div class="history-row__meta">
-                            <div class="history-row__title">Parties gagnÃ©es</div>
+                            <div class="history-row__title">Parties gagnées</div>
                             <div class="history-row__date">${winRate}% de victoires</div>
                         </div>
                         <span class="history-row__score">${won}</span>
@@ -609,21 +618,21 @@ window.renderPlayerCards = function(players, scores = {}) {
                     <div class="history-row">
                         <span class="history-row__result loss">#</span>
                         <div class="history-row__meta">
-                            <div class="history-row__title">Parties jouÃ©es</div>
+                            <div class="history-row__title">Parties jouées</div>
                             <div class="history-row__date">Au total</div>
                         </div>
                         <span class="history-row__score">${played}</span>
                     </div>
                     <div class="history-row">
-                        <span class="history-row__result win">ÃŽÂ£</span>
+                        <span class="history-row__result win">&Sigma;</span>
                         <div class="history-row__meta">
-                            <div class="history-row__title">Score cumulÃ©</div>
+                            <div class="history-row__title">Score cumulé</div>
                             <div class="history-row__date">Toutes parties confondues</div>
                         </div>
                         <span class="history-row__score">${score}</span>
                     </div>
                 </div>
-                <p class="no-data" style="padding:12px 16px;">L'historique partie par partie arrive bientÃ´t.</p>`;
+                <p class="no-data" style="padding:12px 16px;">L'historique partie par partie arrive bientôt.</p>`;
         }
 
         const html = `
@@ -638,7 +647,7 @@ window.renderPlayerCards = function(players, scores = {}) {
     };
 
     window.showHelp = window.showHelp || function() {
-        alert('Aide â€” bientÃ´t disponible.');
+        alert('Aide — bientôt disponible.');
     };
 
     // Le lancement depend du nombre de joueurs et de l etat de la salle
@@ -731,8 +740,7 @@ window.renderPlayerCards = function(players, scores = {}) {
 
         const players = Array.isArray(data.players) ? data.players : [];
         const maxPlayers = data.maxPlayers || (data.gameMode === 'team' ? 4 : 4);
-        const myName = document.getElementById('createName')?.value ||
-                       document.getElementById('joinName')?.value || '';
+        const myName = currentUiPlayerName();
 
         const countEl = document.getElementById('lobbyPlayerCount');
         const maxEl = document.getElementById('lobbyPlayerMax');
@@ -922,18 +930,17 @@ window.renderPlayerCards = function(players, scores = {}) {
             .sort((a, b) => b.score - a.score);
 
         const codeEl = document.getElementById('gameOverRoomCode');
-        if (codeEl) codeEl.textContent = data.roomCode || window.currentRoomCode || 'â€”â€”';
+        if (codeEl) codeEl.textContent = data.roomCode || window.currentRoomCode || '——';
 
         const winnerBox = document.getElementById('winnerBox');
         if (winnerBox) {
             winnerBox.innerHTML = data.winner
                 ? `<em>${esc(data.winner)}</em> remporte la partie`
-                : esc(data.reason || 'Partie terminÃ©e');
+                : esc(data.reason || 'Partie terminée');
         }
 
         // Statistiques conservees
-        const myName = document.getElementById('createName')?.value ||
-                       document.getElementById('joinName')?.value || '';
+        const myName = currentUiPlayerName();
         if (window.currentPlayer && myName && typeof updatePlayerStats === 'function') {
             const i = sorted.findIndex(p => p.name === myName);
             if (i !== -1) updatePlayerStats(sorted[i].score, i === 0, sorted.length, i + 1);
@@ -956,7 +963,7 @@ window.renderPlayerCards = function(players, scores = {}) {
         if (codeEl) codeEl.textContent = 'SOLO';
 
         const winnerBox = document.getElementById('winnerBox');
-        if (winnerBox) winnerBox.innerHTML = `<em>${esc(name)}</em> Â· ${score} points`;
+        if (winnerBox) winnerBox.innerHTML = `<em>${esc(name)}</em> · ${score} points`;
 
         renderPodium([{ name, score }]);
         renderScoreboard([{ name, score }], name);
@@ -1007,8 +1014,8 @@ window.renderPlayerCards = function(players, scores = {}) {
                             <div class="sb-row__meta">${meta}</div>
                         </div>
                     </div>
-                    <span class="sb-row__stat"><b>â€”</b></span>
-                    <span class="sb-row__stat"><b>â€”</b></span>
+                    <span class="sb-row__stat"><b>—</b></span>
+                    <span class="sb-row__stat"><b>—</b></span>
                     <span class="sb-row__final">${p.score}</span>
                 </div>`;
         }).join('');
@@ -1062,13 +1069,13 @@ window.renderPlayerCards = function(players, scores = {}) {
         if (e.key === 'Escape') window.closeAuthCard();
     });
 
-    // "Jouer en invitÃ©" was wired to an undefined function. Playing is allowed
+    // "Jouer en invité" was wired to an undefined function. Playing is allowed
     // Le mode invite permet de jouer sans compte avec le nom saisi dans la configuration
     // La carte se ferme et le profil indique Invite
     window.playAsGuest = function() {
         window.isGuest = true;
         const welcome = document.getElementById('welcomeName');
-        if (welcome) welcome.textContent = 'InvitÃ©';
+        if (welcome) welcome.textContent = 'Invité';
         window.closeAuthCard();
     };
 
@@ -1180,6 +1187,7 @@ window.renderPlayerCards = function(players, scores = {}) {
             const currentType = readSelectedMultiQuizType();
             window.selectMultiQuizType(currentType);
         }
+        if (typeof syncPlayerNameInputs === 'function') syncPlayerNameInputs();
         setTimeout(ensureRoomCode, 50);
     };
 
@@ -1188,7 +1196,7 @@ window.renderPlayerCards = function(players, scores = {}) {
     window.createRoom = function() {
         const code = ensureRoomCode();
         const nameEl = document.getElementById('createName');
-        const name = nameEl ? nameEl.value.trim() : '';
+        const name = currentUiPlayerName('createName');
 
         if (!name) {
             if (typeof showMessage === 'function') {
@@ -1433,15 +1441,15 @@ function paintColoredOptions(box, items, onClick, letterFor) {
             const items = existing.map(el => {
                 const t = el.querySelector('.option__text');
                 return (t ? t.textContent : el.textContent || '')
-                    .replace(/^[Ã¢Å“â€¦Ã¢ÂÅ’]\s*/, '').trim();
+                    .replace(/^[\u2705\u274c]\s*/, '').trim();
             }).filter(s => s.length);
             if (items.length) {
                 // En Vrai/Faux, la lettre du bouton sert de repere visuel
                 const isTF = items.length === 2 &&
-                    items.every(s => /vrai|faux|Ã¢Å“â€¦|Ã¢ÂÅ’/i.test(s));
+                    items.every(s => /vrai|faux|\u2705|\u274c/i.test(s));
                 paintColoredOptions(box, items,
                     (idx) => { if (typeof handleSoloAnswer === 'function') handleSoloAnswer(idx); },
-                    isTF ? (idx) => (idx === 0 ? 'Ã¢Å“â€¦' : 'Ã¢ÂÅ’') : null);
+                    isTF ? (idx) => (idx === 0 ? '\u2705' : '\u274c') : null);
             }
         }
 
@@ -1519,8 +1527,7 @@ function paintColoredOptions(box, items, onClick, letterFor) {
         }[c]));
     }
     function myName() {
-        return document.getElementById('createName')?.value ||
-               document.getElementById('joinName')?.value || '';
+        return currentUiPlayerName();
     }
     function creds() {
         let uid = null, tok = null;
@@ -1565,7 +1572,7 @@ function showWagerPhase(d) {
                 em: 'mise',
                 sub: `Banque: <b>${bank}</b> | Correct: <b>+${base} + ${mult}x mise</b> | Faux: <b>-mise</b>`,
                 safe: 'Sure',
-                half: 'MoitiÃ©',
+                half: 'Moitié',
                 all: `Tout (${max})`,
                 confirm: 'Verrouiller la mise',
                 hint: 'La question arrive quand tout le monde a mise.',

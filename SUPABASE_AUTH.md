@@ -6,7 +6,7 @@ The game now treats authentication and game data as two separate layers:
 - `public.players` stores usernames, avatars, and game statistics.
 - `public.game_history` stores match results.
 
-For the current username-only UI, the browser maps `yassine` to an internal email like `yassine@qpuc.local`. In Supabase Auth settings, disable email confirmation for the demo, otherwise Supabase creates the user but will not return a login session immediately.
+For the current username-only UI, the browser maps `yassine` to an internal email like `yassine@qpuc-demo.test`. In Supabase Auth settings, disable email confirmation for the demo, otherwise Supabase creates the user but will not return a login session immediately.
 
 ## Recommended `players` Table Upgrade
 

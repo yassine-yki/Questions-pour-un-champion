@@ -129,11 +129,11 @@ async function startSoloGame() {
         nameEl?.focus();
         nameEl?.classList.add('input-error');
         setTimeout(() => nameEl?.classList.remove('input-error'), 1500);
-        showMessage('âš ï¸ ' + t('alertName')); return;
+        showMessage('⚠️ ' + t('alertName')); return;
     }
     
     if (!customCategory && subjects.length === 0) {
-        showMessage('âš ï¸ ' + t('alertSubjects')); return;
+        showMessage('⚠️ ' + t('alertSubjects')); return;
     }
     
     // Etat de chargement sur le bouton de lancement
@@ -167,12 +167,12 @@ async function startSoloGameWithPredefined(name, subjects) {
         const response = await fetch(`/api/questions?language=${selectedLanguage}&subjects=${subjects.join(',')}`);
         const data = await response.json();
         soloQuestions = data.questions;
-        if (soloQuestions.length === 0) { showMessage('âš ï¸ No questions available'); return; }
+        if (soloQuestions.length === 0) { showMessage('⚠️ No questions available'); return; }
         showScreen('soloGameScreen');
         showNextSoloQuestion();
     } catch (error) {
         console.error('Error:', error);
-        showMessage('âš ï¸ ' + t('connectionError'));
+        showMessage('⚠️ ' + t('connectionError'));
     }
 }
 
@@ -439,7 +439,7 @@ function showNextSoloQuestion() {
                 btn.className = `option ${tfVariants[idx % 2]}`;
                 const letter = document.createElement('span');
                 letter.className = 'option__letter';
-                letter.textContent = option === 'Vrai' ? 'âœ…' : 'âŒ';
+                letter.textContent = option === 'Vrai' ? '✅' : '❌';
                 const text = document.createElement('span');
                 text.className = 'option__text';
                 text.textContent = option;
@@ -630,8 +630,9 @@ function showPodiumCelebration(players, isSolo = false) {
     
     // Recupere les avatars des joueurs
     const gamePlayers = window.currentGamePlayers || [];
-    const currentPlayerName = document.getElementById('createName')?.value || 
-                              document.getElementById('joinName')?.value || '';
+    const currentPlayerName = (typeof getPreferredPlayerName === 'function')
+        ? getPreferredPlayerName()
+        : (document.getElementById('createName')?.value || document.getElementById('joinName')?.value || '');
     
     function getPlayerAvatar(name) {
         const serverPlayer = gamePlayers.find(p => p.name === name);
@@ -647,7 +648,7 @@ function showPodiumCelebration(players, isSolo = false) {
     const overlay = document.createElement('div');
     overlay.className = 'podium-overlay';
     overlay.innerHTML = `
-        <div class="podium-title">ðŸ† ${isSolo ? t('gameOver') : t('finalResults')} ðŸ†</div>
+        <div class="podium-title">🏆 ${isSolo ? t('gameOver') : t('finalResults')} 🏆</div>
         <div class="podium-container">
             ${sorted.length > 1 ? `
             <div class="podium-place second" style="animation-delay: 0.3s;">
@@ -731,7 +732,7 @@ function showClubhouseScoreboard(scores, message, round, maxRounds, duration = 3
         .map(([name, score]) => ({ name, score }))
         .sort((a, b) => b.score - a.score);
     
-    const myName = document.getElementById('createName')?.value || document.getElementById('joinName')?.value || '';
+    const myName = (typeof getPreferredPlayerName === 'function' ? getPreferredPlayerName() : (document.getElementById('createName')?.value || document.getElementById('joinName')?.value || ''));
     const gamePlayers = window.currentGamePlayers || [];
     
     const getAvatar = (name) => {
@@ -817,7 +818,7 @@ function showClubhouseScoreboard(scores, message, round, maxRounds, duration = 3
 function showEliminationOverlay(data) {
     updateScores(data.scores);
     
-    const myName = document.getElementById('createName')?.value || document.getElementById('joinName')?.value || '';
+    const myName = (typeof getPreferredPlayerName === 'function' ? getPreferredPlayerName() : (document.getElementById('createName')?.value || document.getElementById('joinName')?.value || ''));
     const isMe = data.player === myName;
     const gamePlayers = window.currentGamePlayers || [];
     
