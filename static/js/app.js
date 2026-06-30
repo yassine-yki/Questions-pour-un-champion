@@ -748,6 +748,8 @@ window.renderPlayerCards = function(players, scores = {}) {
             const pIsHost = (typeof player === 'object') && player.isHost;
             const isMe = name === myName;
             const team = (typeof player === 'object') ? player.team : null;
+            const isConnected = !(typeof player === 'object' && player.connected === false);
+            const isActive = !(typeof player === 'object' && player.active === false);
             // Couleur : en equipe on prend la couleur d equipe, sinon une couleur tournante
             const tint = team === 'red' ? 'coral' : team === 'blue' ? 'sky' : TINTS[idx % 4];
             let url = null;
@@ -761,16 +763,28 @@ window.renderPlayerCards = function(players, scores = {}) {
 
             let seatClass = 'seat';
             if (pIsHost) seatClass += ' is-host';
+            if (!isConnected) seatClass += ' is-disconnected';
+            if (!isActive) seatClass += ' is-eliminated';
 
-            const statusIcon = pIsHost
-                ? `<svg viewBox="0 0 256 256" fill="currentColor"><path d="M243.81,90.36a16,16,0,0,0-14.79-9.85H184.69L154.13,21.46a16,16,0,0,0-28.26,0L95.31,80.51H50.94A16,16,0,0,0,36.16,90.36a16.16,16.16,0,0,0,3.06,17.46l31.17,32.61L57.13,191.27a16.16,16.16,0,0,0,21,18.65L128,189.62l49.9,20.3a16,16,0,0,0,21.05-18.65L185.61,140.43l31.17-32.61A16.16,16.16,0,0,0,243.81,90.36Z"/></svg>`
-                : '';
+            let statusIcon = '';
+            if (!isConnected) {
+                statusIcon = `<svg viewBox="0 0 256 256" fill="currentColor"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm37.66,130.34a8,8,0,0,1-11.32,11.32L128,139.31l-26.34,26.35a8,8,0,0,1-11.32-11.32L116.69,128,90.34,101.66a8,8,0,0,1,11.32-11.32L128,116.69l26.34-26.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg>`;
+            } else if (!isActive) {
+                statusIcon = `<svg viewBox="0 0 256 256" fill="currentColor"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40ZM173.66,149.66a8,8,0,0,1-11.32,0L128,115.31,93.66,149.66a8,8,0,0,1-11.32-11.32L116.69,104,82.34,69.66A8,8,0,0,1,93.66,58.34L128,92.69l34.34-34.35a8,8,0,0,1,11.32,11.32L139.31,104l34.35,34.34A8,8,0,0,1,173.66,149.66Z"/></svg>`;
+            } else if (pIsHost) {
+                statusIcon = `<svg viewBox="0 0 256 256" fill="currentColor"><path d="M243.81,90.36a16,16,0,0,0-14.79-9.85H184.69L154.13,21.46a16,16,0,0,0-28.26,0L95.31,80.51H50.94A16,16,0,0,0,36.16,90.36a16.16,16.16,0,0,0,3.06,17.46l31.17,32.61L57.13,191.27a16.16,16.16,0,0,0,21,18.65L128,189.62l49.9,20.3a16,16,0,0,0,21.05-18.65L185.61,140.43l31.17-32.61A16.16,16.16,0,0,0,243.81,90.36Z"/></svg>`;
+            }
 
             const teamLabel = team ? (team === 'red' ? copy(' - Rouge', ' - Red') : copy(' - Bleu', ' - Blue')) : '';
             const hostLabel = label('host', 'Hote', 'Host');
             const youLabel = copy('Vous', 'You');
             const connectedLabel = copy('Connecte', 'Connected');
-            const meta = pIsHost ? (isMe ? `${youLabel} - ${hostLabel}` : hostLabel) : (isMe ? youLabel + teamLabel : connectedLabel + teamLabel);
+            const disconnectedLabel = copy('Deconnecte', 'Disconnected');
+            const eliminatedLabel = copy('Elimine', 'Eliminated');
+            const meta = !isConnected ? disconnectedLabel
+                : !isActive ? eliminatedLabel
+                : pIsHost ? (isMe ? `${youLabel} - ${hostLabel}` : hostLabel)
+                : (isMe ? youLabel + teamLabel : connectedLabel + teamLabel);
             const seat = document.createElement('div');
             seat.className = seatClass;
             seat.dataset.playerName = name;
@@ -810,6 +824,29 @@ window.renderPlayerCards = function(players, scores = {}) {
             ? copy('En equipe', 'Team mode')
             : copy('Chacun pour soi', 'Free for all');
 
+        const visEl = document.getElementById('lobbyVisibility');
+        if (visEl) {
+            visEl.textContent = data.visibility === 'public'
+                ? copy('Publique', 'Public')
+                : copy('Privee', 'Private');
+        }
+
+        const quizTypeNames = {
+            classic: copy('Classique', 'Classic'),
+            speed: copy('Vitesse', 'Speed'),
+            picguess: copy('Image', 'Picture'),
+            wager: copy('Mise', 'Wager')
+        };
+        const subjectCount = Number(data.subjectCount || 0);
+        const subEl = document.getElementById('lobbySubjectCount');
+        if (subEl) {
+            const quizLabel = quizTypeNames[data.quizType] || quizTypeNames.classic;
+            const subjectLabel = subjectCount > 0
+                ? `${subjectCount} ${copy('sujet', 'subject')}${subjectCount > 1 ? 's' : ''}`
+                : copy('Personnalise', 'Custom');
+            subEl.textContent = `${quizLabel} - ${subjectLabel}`;
+        }
+
         // Nombre de joueurs
         // Garde les effets attendus : compteur global et rafraichissement langue
         if (typeof updateLobbyPlayerCount === 'function') updateLobbyPlayerCount();
@@ -848,6 +885,18 @@ window.renderPlayerCards = function(players, scores = {}) {
                 else waitEl.textContent = copy('Salon plein - pret a lancer', 'Room full - ready to start');
             }
         }
+
+        const requiredPlayers = data.gameMode === 'team' ? 4 : 2;
+        const readyRatio = data.canStart ? 1 : Math.min(1, players.length / requiredPlayers);
+        const readyEl = document.getElementById('lobbyReadyState');
+        const readyFill = document.getElementById('lobbyReadyFill');
+        if (readyEl) {
+            readyEl.classList.toggle('is-ready', !!data.canStart);
+            readyEl.textContent = data.canStart
+                ? copy('Pret', 'Ready')
+                : `${players.length}/${requiredPlayers}`;
+        }
+        if (readyFill) readyFill.style.width = `${Math.round(readyRatio * 100)}%`;
     };
 
     /* Ferme le podium puis affiche l ecran de fin adapte au mode joue. */

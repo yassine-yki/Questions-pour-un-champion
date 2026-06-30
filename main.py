@@ -254,11 +254,30 @@ rooms: Dict[str, Dict] = {}
 connections: Dict[str, Dict[str, WebSocket]] = {}
 room_locks: Dict[str, asyncio.Lock] = {}
 disconnected_players: Dict[str, Dict[str, Dict]] = {}  # code -> {user_id -> {player_data, disconnected_at, match_token}}
+runtime_metrics: Dict[str, Any] = {
+    "httpRequests": 0,
+    "websocketConnections": 0,
+    "websocketMessages": 0,
+    "roomsCreated": 0,
+    "roomsDeleted": 0,
+    "playersJoined": 0,
+    "playersDisconnected": 0,
+    "reconnects": 0,
+    "broadcasts": 0,
+    "events": {},
+}
 
 RECONNECT_WINDOW = 60  # secondes pendant lesquelles un joueur peut se reconnecter
 # === OUTILS INTERNES ===
 def now_ms() -> int:
     return int(time.time() * 1000)
+
+def record_metric(name: str, amount: int = 1) -> None:
+    runtime_metrics[name] = int(runtime_metrics.get(name, 0)) + amount
+
+def record_event(event: str) -> None:
+    events = runtime_metrics.setdefault("events", {})
+    events[event] = int(events.get(event, 0)) + 1
 
 def phase_timing(started_at: Optional[float] = None, duration: Optional[float] = None,
                  next_at: Optional[float] = None) -> Dict[str, int]:
@@ -282,6 +301,81 @@ def with_server_now(data: Any) -> Any:
 
 def get_room(code: str) -> Optional[Dict]:
     return rooms.get(code)
+
+def room_team_counts(room: Dict[str, Any]) -> Optional[Dict[str, int]]:
+    if room.get("game_mode") != "team":
+        return None
+
+    return {
+        "red": sum(1 for p in room.get("players", {}).values() if p.get("team") == "red"),
+        "blue": sum(1 for p in room.get("players", {}).values() if p.get("team") == "blue"),
+    }
+
+def room_can_start(room: Dict[str, Any]) -> bool:
+    players = room.get("players", {})
+    if room.get("game_mode") == "team":
+        team_counts = room_team_counts(room) or {"red": 0, "blue": 0}
+        return len(players) == 4 and team_counts["red"] == 2 and team_counts["blue"] == 2
+    return 2 <= len(players) <= 4
+
+def lobby_payload(room: Dict[str, Any]) -> Dict[str, Any]:
+    players = room.get("players", {})
+    return {
+        "players": [
+            {
+                "name": p["name"],
+                "score": p["score"],
+                "isHost": uid == room.get("host"),
+                "team": p.get("team"),
+                "avatar": p.get("avatar"),
+                "connected": p.get("connected", True),
+                "active": p.get("active", True),
+            }
+            for uid, p in players.items()
+        ],
+        "count": len(players),
+        "maxPlayers": 4,
+        "canStart": room_can_start(room),
+        "gameMode": room.get("game_mode", "ffa"),
+        "visibility": "public" if room.get("is_public") else "private",
+        "subjectCount": len(room.get("subjects") or []),
+        "subjects": room.get("subjects") or [],
+        "quizType": room.get("quiz_type", "classic"),
+        "state": room.get("state", "waiting"),
+        "hostName": players.get(room.get("host"), {}).get("name"),
+        "teamCounts": room_team_counts(room),
+    }
+
+def summarize_local_rooms() -> Dict[str, Any]:
+    by_state: Dict[str, int] = {}
+    by_mode: Dict[str, int] = {}
+    by_quiz_type: Dict[str, int] = {}
+    public_count = 0
+    player_count = 0
+    connected_player_count = 0
+
+    for room in rooms.values():
+        state = room.get("state", "unknown")
+        mode = room.get("game_mode", "ffa")
+        quiz_type = room.get("quiz_type", "classic")
+        by_state[state] = by_state.get(state, 0) + 1
+        by_mode[mode] = by_mode.get(mode, 0) + 1
+        by_quiz_type[quiz_type] = by_quiz_type.get(quiz_type, 0) + 1
+        if room.get("is_public"):
+            public_count += 1
+        players = room.get("players", {})
+        player_count += len(players)
+        connected_player_count += sum(1 for p in players.values() if p.get("connected", True))
+
+    return {
+        "byState": by_state,
+        "byMode": by_mode,
+        "byQuizType": by_quiz_type,
+        "publicRooms": public_count,
+        "players": player_count,
+        "connectedPlayers": connected_player_count,
+        "disconnectedPlayers": sum(len(items) for items in disconnected_players.values()),
+    }
 
 def get_public_rooms() -> List[Dict]:
     """Get list of public rooms that are waiting for players"""
@@ -395,6 +489,8 @@ async def broadcast_public_rooms():
             print(f"Could not publish public rooms through Redis: {e}")
 
 async def broadcast(code: str, event: str, data: Any, exclude: Optional[str] = None):
+    record_metric("broadcasts")
+    record_event(event)
     data = with_server_now(data)
     await save_room_snapshot(code)
     await _send_local_event(code, event, data, exclude=exclude)
@@ -405,6 +501,8 @@ async def broadcast(code: str, event: str, data: Any, exclude: Optional[str] = N
             print(f"Could not publish event {event} through Redis: {e}")
 
 async def send_to_user(code: str, user_id: str, event: str, data: Any):
+    record_metric("broadcasts")
+    record_event(event)
     data = with_server_now(data)
     await save_room_snapshot(code)
     await _send_local_event(code, event, data, target=user_id)
@@ -491,6 +589,7 @@ async def cleanup_room(code: str):
     connections.pop(code, None)
     room_locks.pop(code, None)
     disconnected_players.pop(code, None)
+    record_metric("roomsDeleted")
     if redis_scaling.enabled:
         try:
             await redis_scaling.delete_room(code)
@@ -817,8 +916,13 @@ async def landing(request: Request):
 async def game(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
+@app.get("/observability")
+async def observability(request: Request):
+    return templates.TemplateResponse("observability.html", {"request": request})
+
 @app.get("/api/questions")
 async def get_questions(language: str = "en", subjects: str = ""):
+    record_metric("httpRequests")
     subject_list = [s.strip() for s in subjects.split(",") if s.strip()]
     
     if not subject_list:
@@ -835,6 +939,7 @@ async def get_questions(language: str = "en", subjects: str = ""):
 @app.get("/api/health")
 async def health():
     """Operational health endpoint for Render and benchmark runs."""
+    record_metric("httpRequests")
     return {
         "ok": True,
         "uptimeSeconds": int(time.time() - APP_STARTED_AT),
@@ -842,9 +947,7 @@ async def health():
         "redis": await redis_scaling.health(),
     }
 
-@app.get("/api/stats")
-async def stats():
-    """Small observability endpoint used by the scalability report."""
+async def collect_metrics() -> Dict[str, Any]:
     if redis_scaling.enabled:
         total_rooms = await redis_scaling.count_rooms()
     else:
@@ -854,21 +957,65 @@ async def stats():
         code: len(room_connections)
         for code, room_connections in connections.items()
     }
+    room_summary = summarize_local_rooms()
+    redis_health = await redis_scaling.health()
+    uptime_seconds = int(time.time() - APP_STARTED_AT)
+    public_rooms = await get_public_rooms_shared()
 
     return {
+        "ok": True,
         "instanceId": redis_scaling.instance_id,
-        "uptimeSeconds": int(time.time() - APP_STARTED_AT),
+        "uptimeSeconds": uptime_seconds,
         "roomStore": "redis" if redis_scaling.enabled else "memory",
+        "redis": redis_health,
         "rooms": total_rooms,
         "localRooms": len(rooms),
+        "roomSummary": room_summary,
         "localConnections": local_connections,
         "localConnectionCount": sum(local_connections.values()),
-        "publicRooms": await get_public_rooms_shared(),
+        "totals": {
+            "rooms": total_rooms,
+            "localRooms": len(rooms),
+            "players": room_summary["players"],
+            "connectedPlayers": room_summary["connectedPlayers"],
+            "localConnections": sum(local_connections.values()),
+            "publicRooms": len(public_rooms),
+        },
+        "counters": {
+            "httpRequests": runtime_metrics.get("httpRequests", 0),
+            "websocketConnections": runtime_metrics.get("websocketConnections", 0),
+            "websocketMessages": runtime_metrics.get("websocketMessages", 0),
+            "roomsCreated": runtime_metrics.get("roomsCreated", 0),
+            "roomsDeleted": runtime_metrics.get("roomsDeleted", 0),
+            "playersJoined": runtime_metrics.get("playersJoined", 0),
+            "playersDisconnected": runtime_metrics.get("playersDisconnected", 0),
+            "reconnects": runtime_metrics.get("reconnects", 0),
+            "broadcasts": runtime_metrics.get("broadcasts", 0),
+        },
+        "events": dict(sorted(
+            runtime_metrics.get("events", {}).items(),
+            key=lambda item: item[1],
+            reverse=True,
+        )[:10]),
+        "publicRooms": public_rooms,
     }
+
+@app.get("/api/stats")
+async def stats():
+    """Small observability endpoint used by the scalability report."""
+    record_metric("httpRequests")
+    return await collect_metrics()
+
+@app.get("/api/metrics")
+async def metrics():
+    """Live operational metrics for the observability dashboard."""
+    record_metric("httpRequests")
+    return await collect_metrics()
 
 @app.get("/api/public-rooms")
 async def get_public_rooms_api():
     """API endpoint to get list of public rooms"""
+    record_metric("httpRequests")
     return {"rooms": await get_public_rooms_shared()}
 
 # === WEBSOCKET ===
@@ -876,6 +1023,7 @@ async def get_public_rooms_api():
 @app.websocket("/ws/{code}")
 async def websocket_endpoint(ws: WebSocket, code: str):
     await ws.accept()
+    record_metric("websocketConnections")
     code = code.upper()[:6]
     user_id = None
     
@@ -886,6 +1034,7 @@ async def websocket_endpoint(ws: WebSocket, code: str):
             except (WebSocketDisconnect, RuntimeError):
                 break
             action = msg.get("action")
+            record_metric("websocketMessages")
 
             if action == "benchPing":
                 work_ms = max(0.0, min(float(msg.get("workMs", 0) or 0), 5.0))
@@ -971,6 +1120,7 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                 }
                 connections[code] = {}
                 room_locks[code] = asyncio.Lock()
+                record_metric("roomsCreated")
                 await save_room_snapshot(code)
                 
                 await ws.send_json({"event": "roomCreated", "data": {"code": code, "language": language, "gameMode": game_mode, "isPublic": is_public}})
@@ -1064,11 +1214,12 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                     "team": team,
                     "avatar": avatar_config,
                 }
-                
+
                 if room["host"] is None:
                     room["host"] = user_id
-                
+
                 connections[code][user_id] = ws
+                record_metric("playersJoined")
 
                 await ws.send_json({
                     "event": "joined",
@@ -1081,35 +1232,7 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                     }
                 })
 
-                # Verifie si la partie peut demarrer : 2-4 en FFA, exactement 4 en equipe
-                can_start = False
-                if room["game_mode"] == "team":
-                    red_count = sum(1 for p in room["players"].values() if p.get("team") == "red")
-                    blue_count = sum(1 for p in room["players"].values() if p.get("team") == "blue")
-                    can_start = len(room["players"]) == 4 and red_count == 2 and blue_count == 2
-                else:
-                    can_start = len(room["players"]) >= 2 and len(room["players"]) <= MAX_PLAYERS
-
-                await broadcast(code, "players", {
-                    "players": [
-                        {
-                            "name": p["name"], 
-                            "score": p["score"],
-                            "isHost": uid == room["host"],
-                            "team": p.get("team"),
-                            "avatar": p.get("avatar")  # Inclut l avatar dans l envoi aux joueurs
-                        }
-                        for uid, p in room["players"].items()
-                    ],
-                    "count": len(room["players"]),
-                    "maxPlayers": MAX_PLAYERS,
-                    "canStart": can_start,
-                    "gameMode": room["game_mode"],
-                    "teamCounts": {
-                        "red": sum(1 for p in room["players"].values() if p.get("team") == "red"),
-                        "blue": sum(1 for p in room["players"].values() if p.get("team") == "blue")
-                }   if room["game_mode"] == "team" else None
-                     })
+                await broadcast(code, "players", lobby_payload(room))
                 
                 # Informe le lobby du nouveau nombre de joueurs
                 if room.get("is_public"):
@@ -1287,6 +1410,7 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                             "event": "rejoined",
                             "data": with_server_now(rejoin_payload(code, room, rejoin_user_id, player))
                         })
+                        record_metric("reconnects")
                         
                         await broadcast(code, "playerReconnected", {
                             "player": player["name"],
@@ -1319,6 +1443,7 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                     "event": "rejoined",
                     "data": with_server_now(rejoin_payload(code, room, rejoin_user_id, room["players"][rejoin_user_id]))
                 })
+                record_metric("reconnects")
                 
                 await broadcast(code, "playerReconnected", {
                     "player": player_data["name"],
@@ -1354,38 +1479,11 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                     await ws.send_json({"event": "error", "data": "Could not reset room"})
                     continue
                 
-                # Determine can_start
-                MAX_PLAYERS = 4
-                can_start = False
-                if room["game_mode"] == "team":
-                    red_count = sum(1 for p in room["players"].values() if p.get("team") == "red")
-                    blue_count = sum(1 for p in room["players"].values() if p.get("team") == "blue")
-                    can_start = len(room["players"]) == 4 and red_count == 2 and blue_count == 2
-                else:
-                    can_start = len(room["players"]) >= 2 and len(room["players"]) <= MAX_PLAYERS
-                
                 # Annonce la revanche a tous les joueurs
                 await broadcast(code, "rematchStarted", {
+                    **lobby_payload(room),
                     "message": get_text(lang, "rematch_starting"),
                     "roomCode": code,
-                    "players": [
-                        {
-                            "name": p["name"],
-                            "score": p["score"],
-                            "isHost": uid == room["host"],
-                            "team": p.get("team"),
-                            "avatar": p.get("avatar")
-                        }
-                        for uid, p in room["players"].items()
-                    ],
-                    "count": len(room["players"]),
-                    "maxPlayers": MAX_PLAYERS,
-                    "canStart": can_start,
-                    "gameMode": room["game_mode"],
-                    "teamCounts": {
-                        "red": sum(1 for p in room["players"].values() if p.get("team") == "red"),
-                        "blue": sum(1 for p in room["players"].values() if p.get("team") == "blue")
-                    } if room["game_mode"] == "team" else None
                 })
                 
                 # Republie la salle dans le lobby si elle est publique
@@ -1561,6 +1659,7 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                     "disconnected_at": time.time(),
                     "match_token": player_data["match_token"]
                 }
+                record_metric("playersDisconnected")
                 # Marque comme deconnecte sans retirer tout de suite
                 room["players"][user_id]["connected"] = False
                 
@@ -1575,6 +1674,7 @@ async def websocket_endpoint(ws: WebSocket, code: str):
             else:
                 # Not in game — remove immediately (lobby/waiting/gameOver)
                 room["players"].pop(user_id)
+                record_metric("playersDisconnected")
                 
                 if was_host and room["players"]:
                     new_host = next(iter(room["players"].keys()))
@@ -1584,42 +1684,14 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                         "message": get_text(lang, "new_host", host=room["players"][new_host]["name"])
                     })
                 
-                MAX_PLAYERS = 4
-                can_start = False
-                if room["game_mode"] == "team":
-                    red_count = sum(1 for p in room["players"].values() if p.get("team") == "red")
-                    blue_count = sum(1 for p in room["players"].values() if p.get("team") == "blue")
-                    can_start = len(room["players"]) == 4 and red_count == 2 and blue_count == 2
-                else:
-                    can_start = len(room["players"]) >= 2 and len(room["players"]) <= MAX_PLAYERS
-                
                 await broadcast(code, "playerLeft", {
                     "player": player_name,
                     "remaining": len(room["players"]),
                     "message": get_text(lang, "player_left", player=player_name)
                 })
-                
-                await broadcast(code, "players", {
-                    "players": [
-                        {
-                            "name": p["name"], 
-                            "score": p["score"],
-                            "isHost": uid == room["host"],
-                            "team": p.get("team"),
-                            "avatar": p.get("avatar")
-                        }
-                        for uid, p in room["players"].items()
-                    ],
-                    "count": len(room["players"]),
-                    "maxPlayers": MAX_PLAYERS,
-                    "canStart": can_start,
-                    "gameMode": room["game_mode"],
-                    "teamCounts": {
-                        "red": sum(1 for p in room["players"].values() if p.get("team") == "red"),
-                        "blue": sum(1 for p in room["players"].values() if p.get("team") == "blue")
-                    } if room["game_mode"] == "team" else None
-                })
-                
+
+                await broadcast(code, "players", lobby_payload(room))
+
                 if room.get("is_public"):
                     await broadcast_public_rooms()
                 
@@ -1679,6 +1751,8 @@ async def _delayed_disconnect_cleanup(code: str, user_id: str, player_name: str,
             await cleanup_room(code)
     elif len(room["players"]) == 0:
         await cleanup_room(code)
+    else:
+        await broadcast(code, "players", lobby_payload(room))
 
 # === LOGIQUE DE PARTIE ===
 

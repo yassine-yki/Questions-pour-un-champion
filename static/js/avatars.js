@@ -40,7 +40,7 @@ const hairColorHex = {
     '562b00': '#562b00', '796a45': '#796a45', '9a8b6f': '#9a8b6f'
 };
 
-let currentAvatar = loadAvatarFromStorage() || generateRandomAvatar();
+var currentAvatar = loadAvatarFromStorage() || generateRandomAvatar();
 let currentCategory = 'hair';
 
 function loadAvatarFromStorage() {

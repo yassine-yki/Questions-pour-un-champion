@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Observability - Questions pour un Champion</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #f5f2eb;
+            --ink: #1f2933;
+            --muted: #657080;
+            --line: #ddd6ca;
+            --panel: #fffaf1;
+            --panel-2: #ffffff;
+            --red: #d95f6a;
+            --green: #2f9e63;
+            --blue: #2f6fbb;
+            --amber: #d8942d;
+            --shadow: 0 18px 50px rgba(31, 41, 51, 0.12);
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: var(--bg);
+            color: var(--ink);
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+        .page {
+            width: min(1180px, calc(100vw - 32px));
+            margin: 0 auto;
+            padding: 28px 0 40px;
+        }
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            margin-bottom: 28px;
+        }
+        .brand {
+            font-size: 15px;
+            font-weight: 850;
+            letter-spacing: .01em;
+        }
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 38px;
+            padding: 0 14px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: var(--panel-2);
+            color: var(--ink);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 750;
+            cursor: pointer;
+        }
+        .hero {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 22px;
+            margin-bottom: 22px;
+        }
+        h1 {
+            margin: 0;
+            font-size: clamp(34px, 5vw, 62px);
+            line-height: .95;
+            letter-spacing: 0;
+        }
+        .subtitle {
+            margin: 12px 0 0;
+            max-width: 620px;
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.55;
+        }
+        .status-card {
+            min-width: 280px;
+            border-radius: 8px;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow);
+            padding: 16px;
+        }
+        .status-line {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-top: 10px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+        .status-line b { color: var(--ink); }
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            min-height: 30px;
+            padding: 0 10px;
+            border-radius: 999px;
+            background: rgba(47, 158, 99, .12);
+            color: var(--green);
+            font-size: 12px;
+            font-weight: 850;
+        }
+        .badge::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+        .badge.is-warn {
+            color: var(--amber);
+            background: rgba(216, 148, 45, .14);
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+        .metric, .panel {
+            border-radius: 8px;
+            background: var(--panel-2);
+            border: 1px solid var(--line);
+            padding: 18px;
+            box-shadow: 0 8px 24px rgba(31, 41, 51, .06);
+        }
+        .metric__label {
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 750;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+        }
+        .metric__value {
+            margin-top: 12px;
+            font-size: 34px;
+            font-weight: 900;
+            line-height: 1;
+            font-variant-numeric: tabular-nums;
+        }
+        .metric__hint {
+            margin-top: 10px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+        .wide {
+            display: grid;
+            grid-template-columns: 1.2fr .8fr;
+            gap: 14px;
+        }
+        .panel h2 {
+            margin: 0 0 16px;
+            font-size: 18px;
+            letter-spacing: 0;
+        }
+        .rows {
+            display: grid;
+            gap: 10px;
+        }
+        .row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+            gap: 12px;
+            min-height: 34px;
+            border-bottom: 1px solid rgba(221, 214, 202, .7);
+            padding-bottom: 10px;
+            font-size: 14px;
+        }
+        .row:last-child {
+            border-bottom: 0;
+            padding-bottom: 0;
+        }
+        .row span { color: var(--muted); }
+        .row b { font-variant-numeric: tabular-nums; }
+        .bars {
+            display: grid;
+            gap: 12px;
+        }
+        .bar__top {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            font-size: 13px;
+            font-weight: 750;
+        }
+        .bar__track {
+            height: 9px;
+            border-radius: 999px;
+            overflow: hidden;
+            background: #ece6dc;
+            margin-top: 6px;
+        }
+        .bar__fill {
+            height: 100%;
+            width: 0%;
+            border-radius: inherit;
+            background: var(--blue);
+            transition: width .25s ease;
+        }
+        .empty {
+            min-height: 90px;
+            display: grid;
+            place-items: center;
+            color: var(--muted);
+            border: 1px dashed var(--line);
+            border-radius: 8px;
+            font-size: 13px;
+        }
+        @media (max-width: 900px) {
+            .hero, .topbar, .wide { grid-template-columns: 1fr; flex-direction: column; align-items: stretch; }
+            .grid { grid-template-columns: repeat(2, 1fr); }
+            .status-card { min-width: 0; }
+        }
+        @media (max-width: 560px) {
+            .grid { grid-template-columns: 1fr; }
+            .actions { flex-wrap: wrap; }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <nav class="topbar">
+            <div class="brand">Questions pour un Champion</div>
+            <div class="actions">
+                <a class="btn" href="/game">Game</a>
+                <a class="btn" href="/api/metrics">JSON</a>
+                <button class="btn" id="refreshBtn">Refresh</button>
+            </div>
+        </nav>
+
+        <section class="hero">
+            <div>
+                <h1>Observability</h1>
+                <p class="subtitle">Live operational view of rooms, players, Redis state, WebSocket traffic, and server events.</p>
+            </div>
+            <aside class="status-card">
+                <span class="badge" id="healthBadge">Checking</span>
+                <div class="status-line"><span>Instance</span><b id="instanceId">-</b></div>
+                <div class="status-line"><span>Store</span><b id="roomStore">-</b></div>
+                <div class="status-line"><span>Uptime</span><b id="uptime">-</b></div>
+                <div class="status-line"><span>Updated</span><b id="updatedAt">-</b></div>
+            </aside>
+        </section>
+
+        <section class="grid">
+            <article class="metric">
+                <div class="metric__label">Rooms</div>
+                <div class="metric__value" id="roomsValue">0</div>
+                <div class="metric__hint" id="roomsHint">0 local</div>
+            </article>
+            <article class="metric">
+                <div class="metric__label">Players</div>
+                <div class="metric__value" id="playersValue">0</div>
+                <div class="metric__hint" id="playersHint">0 connected</div>
+            </article>
+            <article class="metric">
+                <div class="metric__label">Connections</div>
+                <div class="metric__value" id="connectionsValue">0</div>
+                <div class="metric__hint">local WebSockets</div>
+            </article>
+            <article class="metric">
+                <div class="metric__label">Messages</div>
+                <div class="metric__value" id="messagesValue">0</div>
+                <div class="metric__hint">received by this instance</div>
+            </article>
+        </section>
+
+        <section class="wide">
+            <article class="panel">
+                <h2>Room State</h2>
+                <div class="bars" id="roomStateBars"></div>
+            </article>
+            <article class="panel">
+                <h2>Redis</h2>
+                <div class="rows" id="redisRows"></div>
+            </article>
+        </section>
+
+        <section class="wide" style="margin-top:14px;">
+            <article class="panel">
+                <h2>Top Events</h2>
+                <div class="bars" id="eventBars"></div>
+            </article>
+            <article class="panel">
+                <h2>Counters</h2>
+                <div class="rows" id="counterRows"></div>
+            </article>
+        </section>
+    </main>
+
+    <script>
+        const fmt = new Intl.NumberFormat();
+
+        function text(id, value) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = value;
+        }
+
+        function secondsLabel(value) {
+            const seconds = Number(value || 0);
+            if (seconds < 60) return `${seconds}s`;
+            const minutes = Math.floor(seconds / 60);
+            if (minutes < 60) return `${minutes}m ${seconds % 60}s`;
+            const hours = Math.floor(minutes / 60);
+            return `${hours}h ${minutes % 60}m`;
+        }
+
+        function renderRows(id, rows) {
+            const root = document.getElementById(id);
+            if (!root) return;
+            if (!rows.length) {
+                root.innerHTML = '<div class="empty">No data</div>';
+                return;
+            }
+            root.innerHTML = rows.map(([label, value]) => `
+                <div class="row"><span>${label}</span><b>${value}</b></div>
+            `).join('');
+        }
+
+        function renderBars(id, values) {
+            const root = document.getElementById(id);
+            if (!root) return;
+            const entries = Object.entries(values || {}).filter(([, value]) => Number(value) > 0);
+            if (!entries.length) {
+                root.innerHTML = '<div class="empty">No activity yet</div>';
+                return;
+            }
+            const max = Math.max(...entries.map(([, value]) => Number(value)));
+            root.innerHTML = entries.map(([label, value]) => {
+                const width = max ? Math.max(4, (Number(value) / max) * 100) : 0;
+                return `
+                    <div class="bar">
+                        <div class="bar__top"><span>${label}</span><b>${fmt.format(value)}</b></div>
+                        <div class="bar__track"><div class="bar__fill" style="width:${width}%"></div></div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function refreshMetrics() {
+            try {
+                const response = await fetch('/api/metrics', { cache: 'no-store' });
+                const data = await response.json();
+                const totals = data.totals || {};
+                const summary = data.roomSummary || {};
+                const counters = data.counters || {};
+                const redis = data.redis || {};
+
+                const redisOk = redis.enabled && redis.ping === 'ok';
+                const badge = document.getElementById('healthBadge');
+                badge.textContent = redis.configured ? (redisOk ? 'Healthy' : 'Redis issue') : 'Memory mode';
+                badge.classList.toggle('is-warn', redis.configured && !redisOk);
+
+                text('instanceId', data.instanceId || '-');
+                text('roomStore', data.roomStore || '-');
+                text('uptime', secondsLabel(data.uptimeSeconds));
+                text('updatedAt', new Date().toLocaleTimeString());
+                text('roomsValue', fmt.format(totals.rooms || 0));
+                text('roomsHint', `${fmt.format(totals.localRooms || 0)} local, ${fmt.format(totals.publicRooms || 0)} public`);
+                text('playersValue', fmt.format(totals.players || 0));
+                text('playersHint', `${fmt.format(totals.connectedPlayers || 0)} connected`);
+                text('connectionsValue', fmt.format(totals.localConnections || 0));
+                text('messagesValue', fmt.format(counters.websocketMessages || 0));
+
+                renderBars('roomStateBars', summary.byState || {});
+                renderBars('eventBars', data.events || {});
+                renderRows('redisRows', [
+                    ['Configured', redis.configured ? 'yes' : 'no'],
+                    ['Enabled', redis.enabled ? 'yes' : 'no'],
+                    ['Ping', redis.ping || '-'],
+                    ['Channel', redis.channel || '-'],
+                    ['Last error', redis.lastError || '-'],
+                ]);
+                renderRows('counterRows', Object.entries(counters).map(([key, value]) => [key, fmt.format(value)]));
+            } catch (error) {
+                const badge = document.getElementById('healthBadge');
+                badge.textContent = 'Offline';
+                badge.classList.add('is-warn');
+            }
+        }
+
+        document.getElementById('refreshBtn').addEventListener('click', refreshMetrics);
+        refreshMetrics();
+        setInterval(refreshMetrics, 3000);
+    </script>
+</body>
+</html>
