@@ -261,12 +261,15 @@ try:
     for lang in IMAGE_RIDDLES:
         if lang not in ALL_QUESTIONS:
             ALL_QUESTIONS[lang] = {}
+        image_riddle_questions = IMAGE_RIDDLES[lang].get("image_riddles") or IMAGE_RIDDLES[lang].get("picguess")
+        if not image_riddle_questions:
+            continue
         # Remove old text riddles if they exist
         if "riddles" in ALL_QUESTIONS.get(lang, {}):
             del ALL_QUESTIONS[lang]["riddles"]
         # Add image riddles as the new riddles category
-        ALL_QUESTIONS[lang]["image_riddles"] = IMAGE_RIDDLES[lang]["image_riddles"]
-    print(f"Loaded {len(IMAGE_RIDDLES.get('en', {}).get('image_riddles', []))} image riddles")
+        ALL_QUESTIONS[lang]["image_riddles"] = image_riddle_questions
+    print(f"Loaded {len(ALL_QUESTIONS.get('en', {}).get('image_riddles', []))} image riddles")
 except FileNotFoundError:
     print("image_riddles.json not found, keeping text riddles")
 except Exception as e:
