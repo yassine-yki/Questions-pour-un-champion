@@ -134,13 +134,23 @@ function getAccountUsername() {
 function getPreferredPlayerName(inputId = null) {
     const accountName = getAccountUsername();
     if (accountName) return accountName;
-    if (!inputId) return '';
-    return document.getElementById(inputId)?.value.trim() || '';
+    const readInput = (id) => document.getElementById(id)?.value.trim() || '';
+    if (inputId) {
+        const requested = readInput(inputId);
+        if (requested) return requested;
+    }
+    const fallbackIds = ['createName', 'joinName', 'soloName'];
+    for (const id of fallbackIds) {
+        if (id === inputId) continue;
+        const value = readInput(id);
+        if (value) return value;
+    }
+    return '';
 }
 
 function syncPlayerNameInputs() {
     const accountName = getAccountUsername();
-    ['createName', 'joinName'].forEach((id) => {
+    ['soloName', 'createName', 'joinName'].forEach((id) => {
         const input = document.getElementById(id);
         if (!input) return;
         if (accountName) {

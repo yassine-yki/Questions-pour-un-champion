@@ -555,16 +555,27 @@ window.renderPlayerCards = function(players, scores = {}) {
 
     // Categorie IA
 
-    window.toggleAICategory = function() {
+    function setMultiAICategoryEnabled(enabled) {
         const btn = document.getElementById('aiToggleMulti');
         const input = document.getElementById('customCategoryInputMulti');
-        if (!btn) return;
-        btn.classList.toggle('is-off');
-        const enabled = !btn.classList.contains('is-off');
+        if (btn) btn.classList.toggle('is-off', !enabled);
         if (input) {
             input.disabled = !enabled;
             input.style.opacity = enabled ? '1' : '0.5';
+            if (!enabled) input.value = '';
         }
+    }
+
+    window.setMultiAICategoryEnabled = setMultiAICategoryEnabled;
+    window.isMultiAICategoryEnabled = function() {
+        const btn = document.getElementById('aiToggleMulti');
+        return !!btn && !btn.classList.contains('is-off');
+    };
+
+    window.toggleAICategory = function() {
+        const btn = document.getElementById('aiToggleMulti');
+        if (!btn) return;
+        setMultiAICategoryEnabled(btn.classList.contains('is-off'));
     };
 
 
@@ -1188,6 +1199,9 @@ window.renderPlayerCards = function(players, scores = {}) {
             const currentType = readSelectedMultiQuizType();
             window.selectMultiQuizType(currentType);
         }
+        if (typeof window.setMultiAICategoryEnabled === 'function') {
+            window.setMultiAICategoryEnabled(false);
+        }
         if (typeof syncPlayerNameInputs === 'function') syncPlayerNameInputs();
         setTimeout(ensureRoomCode, 50);
     };
@@ -1218,7 +1232,9 @@ window.renderPlayerCards = function(players, scores = {}) {
 
         const subjects = (typeof getSelectedSubjects === 'function')
             ? getSelectedSubjects('createSubjects') : [];
-        const customCategory = document.getElementById('customCategoryInputMulti')?.value.trim();
+        const customCategory = (typeof window.isMultiAICategoryEnabled === 'function' && window.isMultiAICategoryEnabled())
+            ? document.getElementById('customCategoryInputMulti')?.value.trim()
+            : '';
         const isPublic = (window.selectedRoomVisibility || 'public') === 'public';
         const mode = window.selectedGameMode || 'ffa';
         const quizType = readSelectedMultiQuizType();

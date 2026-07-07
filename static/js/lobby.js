@@ -48,7 +48,9 @@ async function createRoom() {
         ? getPreferredPlayerName('createName')
         : nameEl?.value.trim();
     let subjects = getSelectedSubjects('createSubjects');
-    const customCategory = document.getElementById('customCategoryInputMulti')?.value.trim();
+    const customCategory = (typeof window.isMultiAICategoryEnabled === 'function' && window.isMultiAICategoryEnabled())
+        ? document.getElementById('customCategoryInputMulti')?.value.trim()
+        : '';
     const selectedSubjects = subjects.length > 0
         ? subjects
         : (typeof SUBJECTS !== 'undefined' ? SUBJECTS.slice() : []);
