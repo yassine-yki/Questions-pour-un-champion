@@ -100,6 +100,7 @@ window.AppState.bootedAt = Date.now();
         return document.getElementById('createName')?.value ||
                document.getElementById('joinName')?.value || '';
     }
+    window.currentUiPlayerName = currentUiPlayerName;
 
 
     // Liste des salles publiques
@@ -1196,7 +1197,11 @@ window.renderPlayerCards = function(players, scores = {}) {
     window.createRoom = function() {
         const code = ensureRoomCode();
         const nameEl = document.getElementById('createName');
-        const name = currentUiPlayerName('createName');
+        const name = (typeof window.currentUiPlayerName === 'function')
+            ? window.currentUiPlayerName('createName')
+            : (typeof getPreferredPlayerName === 'function'
+                ? getPreferredPlayerName('createName')
+                : nameEl?.value.trim());
 
         if (!name) {
             if (typeof showMessage === 'function') {
