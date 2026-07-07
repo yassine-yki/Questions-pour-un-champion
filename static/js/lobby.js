@@ -11,15 +11,48 @@ function getSelectedMultiQuizType() {
     return validTypes.includes(fromWindow) ? fromWindow : 'classic';
 }
 
+function readCreateRoomCode() {
+    const el = document.getElementById('createCode');
+    if (!el) return '';
+    const raw = (typeof el.value === 'string' && el.value)
+        ? el.value
+        : (el.textContent || '');
+    return raw.replace(/[^A-Za-z0-9]/g, '').trim().toUpperCase();
+}
+
+function writeCreateRoomCode(code) {
+    const el = document.getElementById('createCode');
+    if (!el) return;
+    if ('value' in el && el.tagName === 'INPUT') el.value = code;
+    el.textContent = code;
+}
+
+function ensureCreateRoomCode() {
+    let code = readCreateRoomCode();
+    if (!code || code.length < 4) {
+        code = typeof generateRoomCode === 'function'
+            ? generateRoomCode()
+            : Math.random().toString(36).slice(2, 8).toUpperCase();
+        writeCreateRoomCode(code);
+    }
+    window.currentRoomCode = code;
+    try { currentRoomCode = code; } catch (e) {}
+    return code;
+}
+
 async function createRoom() {
     const codeEl = document.getElementById('createCode');
     const nameEl = document.getElementById('createName');
-    const code = codeEl?.value.trim().toUpperCase();
+    const code = ensureCreateRoomCode();
     const name = (typeof getPreferredPlayerName === 'function')
         ? getPreferredPlayerName('createName')
         : nameEl?.value.trim();
-    const subjects = getSelectedSubjects('createSubjects');
+    let subjects = getSelectedSubjects('createSubjects');
     const customCategory = document.getElementById('customCategoryInputMulti')?.value.trim();
+    const selectedSubjects = subjects.length > 0
+        ? subjects
+        : (typeof SUBJECTS !== 'undefined' ? SUBJECTS.slice() : []);
+    subjects = selectedSubjects;
     
     // Validation
     if (!name) { nameEl?.focus(); nameEl?.classList.add('input-error'); setTimeout(() => nameEl?.classList.remove('input-error'), 1500); showMessage('⚠️ ' + t('alertName')); return; }
@@ -32,11 +65,12 @@ async function createRoom() {
     try {
         if (customCategory) {
             await createRoomWithAI(code, name, customCategory);
-        } else if (subjects.length > 0) {
+        } else if (selectedSubjects.length > 0) {
             currentRoomCode = code;
             gameMode = 'multiplayer';
-            const isPublic = selectedRoomVisibility === 'public';
-            connectWebSocket(code, name, true, subjects, selectedGameMode, isPublic, null, null, getSelectedMultiQuizType());
+            const isPublic = (window.selectedRoomVisibility || selectedRoomVisibility) === 'public';
+            const mode = window.selectedGameMode || selectedGameMode || 'ffa';
+            connectWebSocket(code, name, true, selectedSubjects, mode, isPublic, null, null, getSelectedMultiQuizType());
         }
     } finally {
         if (launchBtn) { launchBtn.disabled = false; launchBtn.textContent = '🚀 Créer & Rejoindre'; }
