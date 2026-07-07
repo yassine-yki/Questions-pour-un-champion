@@ -339,8 +339,8 @@
           "Arena of Nîmes",
           "Amphitheatre of Pula"
         ],
-        "correct": 0,
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Colosseo_2020.jpg/800px-Colosseo_2020.jpg",
+        "correct": 2,
+        "image": "https://upload.wikimedia.org/wikipedia/commons/6/67/Arenes_de_Nimes_panorama.jpg",
         "time": 15,
         "difficulty": 3
       },
@@ -353,7 +353,7 @@
           "Angkor Wat"
         ],
         "correct": 0,
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/The_Great_Wall_of_China_at_Jinshanling-edit.jpg/800px-The_Great_Wall_of_China_at_Jinshanling-edit.jpg",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/2/23/The_Great_Wall_of_China_at_Jinshanling-edit.jpg",
         "time": 15,
         "difficulty": 3
       },
@@ -365,21 +365,21 @@
           "Centre Pompidou",
           "Walt Disney Concert Hall"
         ],
-        "correct": 0,
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Sydney_Australia._%2821339175489%29.jpg/800px-Sydney_Australia._%2821339175489%29.jpg",
+        "correct": 1,
+        "image": "https://upload.wikimedia.org/wikipedia/commons/9/92/Sydney_Opera_House_from_Circular_Quay%2C_2023%2C_10.jpg",
         "time": 15,
         "difficulty": 3
       },
       {
         "q": "What is this Indian monument?",
         "options": [
+          "Fort Rouge",
+          "Palais des Vents",
           "Taj Mahal",
-          "Red Fort",
-          "Palace of the Winds",
-          "Lotus Temple"
+          "Temple du Lotus"
         ],
         "correct": 0,
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Taj_Mahal%2C_Agra%2C_India_edit3.jpg/800px-Taj_Mahal%2C_Agra%2C_India_edit3.jpg",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/b/bd/Taj_Mahal%2C_Agra%2C_India_edit3.jpg",
         "time": 15,
         "difficulty": 2
       },
@@ -405,7 +405,7 @@
           "Sea Anemone"
         ],
         "correct": 0,
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Octopus2.jpg/800px-Octopus2.jpg",
+        "image": "https://animalfactguide.com/wp-content/uploads/2024/01/common-octopus3.jpg",
         "time": 15,
         "difficulty": 2
       },
@@ -418,7 +418,7 @@
           "Crowned Crane"
         ],
         "correct": 0,
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Noel_Bauza_Flamingo.jpg/800px-Noel_Bauza_Flamingo.jpg",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/3/38/Flamingos_Laguna_Colorada.jpg",
         "time": 15,
         "difficulty": 2
       },
@@ -431,7 +431,7 @@
           "Leopard"
         ],
         "correct": 0,
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Irbis4.jpg/800px-Irbis4.jpg",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/7/71/Uncia_uncia_-_A_tail_and_a_cat_cropped.jpg",
         "time": 15,
         "difficulty": 2
       },
@@ -457,7 +457,7 @@
           "Temaki"
         ],
         "correct": 0,
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Sushi_platter.jpg/800px-Sushi_platter.jpg",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/e/eb/Sushi_%281441234074%29.jpg",
         "time": 15,
         "difficulty": 1
       },
@@ -470,7 +470,7 @@
           "Mangosteen"
         ],
         "correct": 0,
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Pitaya_cross_section_ed2.jpg/800px-Pitaya_cross_section_ed2.jpg",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/4/43/Pitaya_cross_section_ed2.jpg",
         "time": 15,
         "difficulty": 2
       },
@@ -483,7 +483,7 @@
           "Solar Halo"
         ],
         "correct": 0,
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Polarlicht_2.jpg/800px-Polarlicht_2.jpg",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/d/d3/Aurora_borealis_over_Eielson_Air_Force_Base%2C_Alaska.jpg",
         "time": 15,
         "difficulty": 3
       },
@@ -496,7 +496,7 @@
           "Uranus"
         ],
         "correct": 0,
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Saturn_during_Equinox.jpg/800px-Saturn_during_Equinox.jpg",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/c/c7/Saturn_during_Equinox.jpg",
         "time": 15,
         "difficulty": 1
       },
@@ -509,7 +509,7 @@
           "Croquet"
         ],
         "correct": 0,
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Curling_Canada_Torino_2006.jpg/800px-Curling_Canada_Torino_2006.jpg",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/e/e6/Jeux_de_P%C3%A9tanque_%C3%A0_Valbonne.jpg",
         "time": 15,
         "difficulty": 1
       },
@@ -522,7 +522,7 @@
           "The Persistence of Memory"
         ],
         "correct": 0,
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/800px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/0/01/Vincent_van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
         "time": 15,
         "difficulty": 3
       },
@@ -535,7 +535,7 @@
           "Washington Monument"
         ],
         "correct": 0,
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Mount_Rushmore_detail_view_%28100MP%29.jpg/800px-Mount_Rushmore_detail_view_%28100MP%29.jpg",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/8/87/Mount_Rushmore_detail_view_%28100MP%29.jpg",
         "time": 15,
         "difficulty": 3
       },
@@ -547,8 +547,8 @@
           "Birch",
           "Cypress"
         ],
-        "correct": 0,
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Adansonia_grandidieri04.jpg/400px-Adansonia_grandidieri04.jpg",
+        "correct": 2,
+        "image": "https://upload.wikimedia.org/wikipedia/commons/5/5e/Betula_Pendula_at_Stockholm_University_2005-07-01.jpg",
         "time": 15,
         "difficulty": 1
       },
@@ -561,7 +561,7 @@
           "Kalahari"
         ],
         "correct": 0,
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Sahara_Desert_near_Merzouga%2C_Morocco.jpg/800px-Sahara_Desert_near_Merzouga%2C_Morocco.jpg",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/a/a1/Morocco_-_Expedition_to_Iriqui_National_Park_%2849546756981%29.jpg",
         "time": 15,
         "difficulty": 1
       },
