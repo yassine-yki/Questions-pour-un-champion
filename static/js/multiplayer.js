@@ -9,8 +9,8 @@ let reconnectAttempts = 0;
 const MAX_RECONNECT_ATTEMPTS = 5;
 const RECONNECT_DELAYS = [0, 650, 1200, 2000, 3000];
 const UX_TIMING = Object.freeze({
-    gameStartMs: 1800,
-    toastMs: 2200,
+    gameStartMs: 2200,
+    toastMs: 2800,
     reconnectOverlayAfter: 2
 });
 window.UX_TIMING = UX_TIMING;
@@ -283,7 +283,7 @@ const MESSAGE_HANDLERS = {
     },
     gameStarting(data) {
         setUXState('starting', data);
-        showMessage(data.message || 'La partie commence !', 'info', 1400);
+        showMessage(data.message || 'La partie commence !', 'info', 1900);
         if (window.currentGamePlayers) {
             initializeGameScreen(window.currentGamePlayers, {});
         }
@@ -302,7 +302,7 @@ const MESSAGE_HANDLERS = {
     answerLocked(data) {
         setUXState('answer-locked', data || {});
         markPickedOption(data && data.idx);
-        showMessage(selectedLanguage === 'fr' ? 'Reponse verrouillee.' : 'Answer locked.', 'info', 1200);
+        showMessage(selectedLanguage === 'fr' ? 'Reponse verrouillee.' : 'Answer locked.', 'info', 1600);
     },
     answerResult: showResult,
     speedResult: showSpeedResult,
@@ -920,8 +920,8 @@ function showResult(data) {
     
     // Affiche le classement anime apres un court delai
     setTimeout(() => {
-        showAnimatedLeaderboard(data.scores, 2500);
-    }, 1000);
+        showAnimatedLeaderboard(data.scores, 3000);
+    }, 1200);
 }
 
 // Rafraichit les scores visibles dans le panneau de jeu.
@@ -999,7 +999,7 @@ function showScorePopup(points) {
     popup.style.top = '45%';
     popup.style.transform = 'translateX(-50%)';
     document.body.appendChild(popup);
-    setTimeout(() => popup.remove(), 1300);
+    setTimeout(() => popup.remove(), 1700);
 }
 
 // Initialise les cartes joueurs au debut de partie

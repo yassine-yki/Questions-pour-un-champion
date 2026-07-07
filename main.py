@@ -32,12 +32,12 @@ WAGER_WIN_MULTIPLIER = 2      # Une bonne reponse ajoute aussi ce multiplicateur
 
 # === CONFIGURATION DU RESSENTI TEMPS REEL ===
 # Ces valeurs gardent le rythme du multijoueur rapide, sans changer la mise en page.
-GAME_START_COUNTDOWN_SECONDS = 1.8
-ANSWER_REVEAL_SECONDS = 3.2
-SPEED_REVEAL_SECONDS = 3.2
-WAGER_REVEAL_SECONDS = 5.0
-ROUND_COMPLETE_SECONDS = 4.0
-ROUND_TRANSITION_SECONDS = 3.2
+GAME_START_COUNTDOWN_SECONDS = 2.2
+ANSWER_REVEAL_SECONDS = 3.8
+SPEED_REVEAL_SECONDS = 3.8
+WAGER_REVEAL_SECONDS = 5.6
+ROUND_COMPLETE_SECONDS = 4.6
+ROUND_TRANSITION_SECONDS = 3.8
 
 # Donne plus de points quand le joueur repond vite.
 def calculate_time_score(time_left: float, max_time: float) -> int:

@@ -1772,7 +1772,7 @@ function showWagerQuestion(d) {
         let qType = null;
         try { qType = currentMultiQuestion && currentMultiQuestion.quizType; } catch (e) {}
         if (typeof showMessage === 'function') {
-            showMessage(selectedLanguage === 'fr' ? 'Reponse verrouillee.' : 'Answer locked.', 'info', 1200);
+            showMessage(selectedLanguage === 'fr' ? 'Reponse verrouillee.' : 'Answer locked.', 'info', 1600);
         }
         if (qType !== 'wager') {
             return;

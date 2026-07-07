@@ -556,7 +556,7 @@ function handleSoloAnswer(idx) {
 
     showSoloMessage(correct ? t('correct') : `${t('wrong')} ${soloCurrentQuestion.options[soloCurrentQuestion.correct]}`);
     soloQuestionIndex++;
-    setTimeout(showNextSoloQuestion, 2500);
+    setTimeout(showNextSoloQuestion, 3000);
 }
 
 function handleSoloTimeout() {
@@ -583,7 +583,7 @@ function handleSoloTimeout() {
     });
     showSoloMessage(`⏰ ${t('wrong')} ${soloCurrentQuestion.options[soloCurrentQuestion.correct]}`);
     soloQuestionIndex++;
-    setTimeout(showNextSoloQuestion, 2500);
+    setTimeout(showNextSoloQuestion, 3000);
 }
 
 function showSoloGameOver() {
@@ -610,14 +610,14 @@ function showPointsPopup(text, isCorrect) {
     popup.className = `points-popup ${isCorrect ? 'correct' : 'wrong'}`;
     popup.textContent = text;
     document.body.appendChild(popup);
-    setTimeout(() => popup.remove(), 1500);
+    setTimeout(() => popup.remove(), 1800);
 }
 
 function showFeedbackFlash(isCorrect) {
     const overlay = document.createElement('div');
     overlay.className = `feedback-overlay ${isCorrect ? 'feedback-correct' : 'feedback-wrong'}`;
     document.body.appendChild(overlay);
-    setTimeout(() => overlay.remove(), 600);
+    setTimeout(() => overlay.remove(), 750);
 }
 
 // Celebration du podium avec avatars
@@ -718,7 +718,7 @@ function closePodium() {
 }
 
 // Classement anime
-function showAnimatedLeaderboard(scores, duration = 3000) {
+function showAnimatedLeaderboard(scores, duration = 3500) {
     showClubhouseScoreboard(scores, null, null, null, duration);
 }
 
@@ -727,7 +727,7 @@ function showAnimatedLeaderboard(scores, duration = 3000) {
 // ============================================
 let _prevScores = {};
 
-function showClubhouseScoreboard(scores, message, round, maxRounds, duration = 3500) {
+function showClubhouseScoreboard(scores, message, round, maxRounds, duration = 4100) {
     const sorted = Object.entries(scores)
         .map(([name, score]) => ({ name, score }))
         .sort((a, b) => b.score - a.score);
