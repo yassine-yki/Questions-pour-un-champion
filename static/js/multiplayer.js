@@ -574,13 +574,14 @@ function showQuestion(data) {
     
     const quizType = data.quizType || 'classic';
     const isBuzzerless = !!data.buzzerless || quizType === 'speed';
+    const isPicguessQuestion = !!data.picguess || data.category === 'picguess' || data.subject === 'picguess';
     
     // Gere l image de la question
     const questionImageEl = document.getElementById('questionImage');
     if (questionImageEl) {
         if (data.image) {
             questionImageEl.style.display = 'block';
-            questionImageEl.classList.toggle('picguess-frame', quizType === 'picguess');
+            questionImageEl.classList.toggle('picguess-frame', isPicguessQuestion);
             const img = questionImageEl.querySelector('img');
             if (img) {
                 img.src = data.image;
@@ -672,7 +673,7 @@ function showQuestion(data) {
                 optionsBox.appendChild(btn);
             });
         } else {
-            // Classique, Speed et Picguess : grille normale en 2x2
+            // Classique, Speed et categories image : grille normale en 2x2
             optionsBox.style.gridTemplateColumns = 'repeat(2, 1fr)';
             const optionKeys = ['A', 'B', 'X', 'Y'];
             data.options.forEach((option, idx) => {
@@ -685,8 +686,8 @@ function showQuestion(data) {
         }
     }
     
-    // Picguess : l image se defloute progressivement
-    if (quizType === 'picguess' && data.image) {
+    // Picguess category: the image progressively reveals during the timer.
+    if (isPicguessQuestion && data.image) {
         const qImg = document.querySelector('#questionImage img');
         if (qImg) {
             const blurStart = data.blurStart || 20;

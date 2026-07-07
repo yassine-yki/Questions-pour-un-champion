@@ -854,7 +854,6 @@ window.renderPlayerCards = function(players, scores = {}) {
         const quizTypeNames = {
             classic: copy('Classique', 'Classic'),
             speed: copy('Vitesse', 'Speed'),
-            picguess: copy('Image', 'Picture'),
             wager: copy('Mise', 'Wager')
         };
         const subjectCount = Number(data.subjectCount || 0);
@@ -1131,13 +1130,12 @@ window.renderPlayerCards = function(players, scores = {}) {
     if (!window.selectedMultiQuizType) window.selectedMultiQuizType = window.selectedQuizType.multi || 'classic';
 
     function readSelectedMultiQuizType() {
-        const validTypes = ['classic', 'speed', 'picguess', 'wager'];
+        const validTypes = ['classic', 'speed', 'wager'];
         if (validTypes.includes(window.selectedMultiQuizType)) return window.selectedMultiQuizType;
 
         const active = [
             ['classic', document.getElementById('quizTypeClassic')],
             ['speed', document.getElementById('quizTypeSpeed')],
-            ['picguess', document.getElementById('quizTypePicguess')],
             ['wager', document.getElementById('quizTypeWager')]
         ].find(([, el]) => el && (el.classList.contains('is-on') || el.classList.contains('selected')));
 
@@ -1257,9 +1255,9 @@ window.renderPlayerCards = function(players, scores = {}) {
     };
 
     // Choix du type de quiz sur l ecran creation.
-    // Change le type de quiz multijoueur : classique, Speed, Picguess ou Mise.
+    // Change le type de quiz multijoueur : classique, Speed ou Mise.
 window.selectMultiQuizType = function(type) {
-        const validTypes = ['classic', 'speed', 'picguess', 'wager'];
+        const validTypes = ['classic', 'speed', 'wager'];
         const nextType = validTypes.includes(type) ? type : 'classic';
         if (!window.selectedQuizType) window.selectedQuizType = { solo: 'classic', multi: 'classic' };
         window.selectedQuizType.multi = nextType;
@@ -1268,7 +1266,6 @@ window.selectMultiQuizType = function(type) {
         const buttons = {
             classic: document.getElementById('quizTypeClassic'),
             speed: document.getElementById('quizTypeSpeed'),
-            picguess: document.getElementById('quizTypePicguess'),
             wager: document.getElementById('quizTypeWager')
         };
         Object.values(buttons).forEach(el => el && el.classList.remove('is-on', 'selected'));
@@ -1281,13 +1278,11 @@ window.selectMultiQuizType = function(type) {
                 fr: {
                     classic: 'Questions classiques au buzzer.',
                     speed: 'Speed simultane : 10 questions, 1 seule manche, tout le monde repond en meme temps. Fait pour les parties tres rapides.',
-                    picguess: 'Image mystere : l image se revele pendant le chrono, puis repondez.',
                     wager: 'Mode Mise : chaque joueur mise une partie de ses points, puis tout le monde repond sans buzzer.'
                 },
                 en: {
                     classic: 'Classic buzzer questions.',
                     speed: 'Simultaneous Speed: 10 questions, 1 round, everyone answers at once. Built for very quick games.',
-                    picguess: 'Picguess: the image reveals during the timer, then you answer.',
                     wager: 'Wager: each player stakes points, then everyone answers without a buzzer.'
                 }
             };

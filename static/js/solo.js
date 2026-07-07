@@ -76,6 +76,14 @@ function selectQuizType(mode, type, el) {
     el.classList.add('selected');
 }
 
+function isPicguessQuestion(question) {
+    return !!question && (
+        question.picguess === true ||
+        question.category === 'picguess' ||
+        question.subject === 'picguess'
+    );
+}
+
 // ============================================
 // TEAM SELECTION
 // ============================================
@@ -157,12 +165,6 @@ async function startSoloGameWithPredefined(name, subjects) {
     soloQuestionIndex = 0;
     resetSoloAdaptive();
     
-    // Ajoute automatiquement les questions Picguess quand ce type de quiz est choisi
-    const soloQType = selectedQuizType.solo || 'classic';
-    if (soloQType === 'picguess' && !subjects.includes('picguess')) {
-        subjects = [...subjects, 'picguess'];
-    }
-
     try {
         const response = await fetch(`/api/questions?language=${selectedLanguage}&subjects=${subjects.join(',')}`);
         const data = await response.json();
@@ -354,14 +356,25 @@ function showNextSoloQuestion() {
         }
     }
     
-    // Gere l image de la question (drapeaux, etc.)
+    const isPicguess = isPicguessQuestion(soloCurrentQuestion);
+
+    // Gere l image de la question (drapeaux, picguess, etc.)
     const questionImageEl = document.getElementById('soloQuestionImage');
     if (questionImageEl) {
+        questionImageEl.querySelectorAll('.picguess-reveal-meter, .picguess-hint').forEach(el => el.remove());
         if (soloCurrentQuestion.image) {
             questionImageEl.style.display = 'block';
-            questionImageEl.querySelector('img').src = soloCurrentQuestion.image;
+            questionImageEl.classList.toggle('picguess-frame', isPicguess);
+            const img = questionImageEl.querySelector('img');
+            if (img) {
+                img.src = soloCurrentQuestion.image;
+                img.style.filter = '';
+                img.style.transform = '';
+                img.style.transition = '';
+            }
         } else {
             questionImageEl.style.display = 'none';
+            questionImageEl.classList.remove('picguess-frame');
         }
     }
     
@@ -382,7 +395,7 @@ function showNextSoloQuestion() {
     const soloQType = selectedQuizType.solo || 'classic';
     let baseTime = soloCurrentQuestion.time || 10;
     if (soloQType === 'speed') baseTime = Math.max(5, Math.floor(baseTime / 2));
-    else if (soloQType === 'picguess') baseTime = 15;
+    else if (isPicguess) baseTime = Math.max(baseTime, 15);
     
     // Applique le modificateur de chrono adaptatif
     const adaptMods = getSoloAdaptiveModifiers();
@@ -468,15 +481,34 @@ function showNextSoloQuestion() {
             });
         }
         
-        // Picguess : deflou progressif
-        if (soloQType === 'picguess' && soloCurrentQuestion.image) {
+        // Picguess category: progressive reveal.
+        if (isPicguess && soloCurrentQuestion.image) {
             const qImg = document.querySelector('#soloQuestionImage img');
             if (qImg) {
-                document.getElementById('soloQuestionImage').style.display = 'block';
+                const holder = document.getElementById('soloQuestionImage');
+                if (holder) {
+                    holder.style.display = 'block';
+                    holder.classList.add('picguess-frame');
+                    holder.insertAdjacentHTML('beforeend', `
+                        <div class="picguess-hint">${selectedLanguage === 'fr' ? 'L image se revele...' : 'Image revealing...'}</div>
+                        <div class="picguess-reveal-meter"><span class="picguess-reveal-meter__fill"></span></div>
+                    `);
+                    const fill = holder.querySelector('.picguess-reveal-meter__fill');
+                    if (fill) fill.style.animationDuration = `${window.soloMaxTime || 15}s`;
+                }
                 qImg.src = soloCurrentQuestion.image;
-                qImg.style.filter = 'blur(20px)';
-                qImg.style.transition = `filter ${(soloCurrentQuestion.time || 10) * 1000}ms linear`;
-                requestAnimationFrame(() => { qImg.style.filter = 'blur(0px)'; });
+                qImg.style.filter = `blur(${soloCurrentQuestion.blurStart || 20}px) brightness(0.72) saturate(0.8)`;
+                qImg.style.transform = 'scale(1.06)';
+                qImg.style.transition = `filter ${((window.soloMaxTime || 15) * 1000)}ms linear, transform ${((window.soloMaxTime || 15) * 1000)}ms linear`;
+                const startReveal = () => requestAnimationFrame(() => {
+                    qImg.style.filter = 'blur(0px) brightness(1) saturate(1)';
+                    qImg.style.transform = 'scale(1)';
+                });
+                if (typeof qImg.decode === 'function') {
+                    qImg.decode().then(startReveal).catch(startReveal);
+                } else {
+                    startReveal();
+                }
             }
         }
     }

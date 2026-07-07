@@ -39,6 +39,43 @@ WAGER_REVEAL_SECONDS = 5.6
 ROUND_COMPLETE_SECONDS = 4.6
 ROUND_TRANSITION_SECONDS = 3.8
 
+VALID_QUIZ_TYPES = {"classic", "speed", "wager", "truefalse"}
+PICGUESS_CATEGORY = "picguess"
+PICGUESS_DEFAULT_TIME = 15
+PICGUESS_BLUR_START = 20
+PICGUESS_BLUR_END = 0
+
+def normalize_quiz_type(value: Any) -> str:
+    """Keep quiz type as a game mechanic; image guessing is a category."""
+    return value if isinstance(value, str) and value in VALID_QUIZ_TYPES else "classic"
+
+def tag_question(question: Dict[str, Any], category: str) -> Dict[str, Any]:
+    tagged = dict(question)
+    tagged.setdefault("category", category)
+    tagged.setdefault("subject", category)
+    if category == PICGUESS_CATEGORY:
+        tagged["picguess"] = True
+        tagged.setdefault("time", PICGUESS_DEFAULT_TIME)
+        tagged.setdefault("blurStart", PICGUESS_BLUR_START)
+        tagged.setdefault("blurEnd", PICGUESS_BLUR_END)
+    return tagged
+
+def is_picguess_question(question: Optional[Dict[str, Any]]) -> bool:
+    if not isinstance(question, dict):
+        return False
+    return (
+        question.get("picguess") is True
+        or question.get("category") == PICGUESS_CATEGORY
+        or question.get("subject") == PICGUESS_CATEGORY
+    )
+
+def add_picguess_payload(payload: Dict[str, Any], question: Dict[str, Any]) -> None:
+    if not is_picguess_question(question):
+        return
+    payload["picguess"] = True
+    payload["blurStart"] = question.get("blurStart", PICGUESS_BLUR_START)
+    payload["blurEnd"] = question.get("blurEnd", PICGUESS_BLUR_END)
+
 # Donne plus de points quand le joueur repond vite.
 def calculate_time_score(time_left: float, max_time: float) -> int:
     """Calcule le score selon le temps restant"""
@@ -931,7 +968,7 @@ async def get_questions(language: str = "en", subjects: str = ""):
     questions = []
     for subject in subject_list:
         if subject in ALL_QUESTIONS.get(language, {}):
-            questions.extend(ALL_QUESTIONS[language][subject])
+            questions.extend(tag_question(q, subject) for q in ALL_QUESTIONS[language][subject])
     
     random.shuffle(questions)
     return {"questions": questions[:20]}
@@ -1087,7 +1124,7 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                 game_mode = msg.get("gameMode", "ffa")
                 is_public = msg.get("isPublic", False)  # Option salle publique
                 ai_questions = msg.get("aiQuestions", None)  # NOUVEAU : questions generees par IA
-                quiz_type = msg.get("quizType", "classic")  # NOUVEAU : classic, truefalse, picguess, speed
+                quiz_type = normalize_quiz_type(msg.get("quizType", "classic"))
                 
                 # Logs de debug
                 print(f"Creating room {code}")
@@ -1782,7 +1819,8 @@ def current_question_payload(room: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     if not q:
         return None
 
-    quiz_type = room.get("quiz_type", "classic")
+    quiz_type = normalize_quiz_type(room.get("quiz_type", "classic"))
+    room["quiz_type"] = quiz_type
     if quiz_type == "wager" and room.get("state") not in ["wager_answer", "wager_done"]:
         return None
 
@@ -1796,15 +1834,18 @@ def current_question_payload(room: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         "questionsPerRound": room.get("questions_per_round", 5),
         "quizType": quiz_type,
     }
+    if "category" in q:
+        payload["category"] = q["category"]
+    if "subject" in q:
+        payload["subject"] = q["subject"]
 
     if quiz_type in ["speed", "wager"]:
         payload["buzzerless"] = True
     if quiz_type == "speed":
         payload["speed"] = True
-    if quiz_type == "picguess":
-        payload.update({"picguess": True, "blurStart": 20, "blurEnd": 0})
     if "image" in q:
         payload["image"] = q["image"]
+    add_picguess_payload(payload, q)
 
     started_at = room.get("question_start_time")
     if started_at:
@@ -2065,11 +2106,8 @@ async def start_question(code: str):
     lang = room.get("language", "en")
     subjects = room.get("subjects", [])
     ai_questions = room.get("ai_questions", None)
-    quiz_type = room.get("quiz_type", "classic")
-    
-    # Pour Picguess, ajoute les questions Picguess si elles manquent
-    if quiz_type == "picguess" and "picguess" not in subjects:
-        subjects = subjects + ["picguess"]
+    quiz_type = normalize_quiz_type(room.get("quiz_type", "classic"))
+    room["quiz_type"] = quiz_type
     
     # Logs de debug
     print(f"start_question called for room {code}")
@@ -2088,12 +2126,12 @@ async def start_question(code: str):
             questions = []
             for subject in subjects:
                 if subject in ALL_QUESTIONS.get(lang, {}):
-                    questions.extend(ALL_QUESTIONS[lang][subject])
-            
+                    questions.extend(tag_question(q, subject) for q in ALL_QUESTIONS[lang][subject])
+
             if not questions:
                 for subject in ALL_QUESTIONS.get(lang, {}).keys():
-                    questions.extend(ALL_QUESTIONS[lang][subject])
-            
+                    questions.extend(tag_question(q, subject) for q in ALL_QUESTIONS[lang][subject])
+
             room["available"] = questions.copy()
             random.shuffle(room["available"])
 
@@ -2117,7 +2155,8 @@ async def start_question(code: str):
         return
 
     q = None
-    quiz_type = room.get("quiz_type", "classic")
+    quiz_type = normalize_quiz_type(room.get("quiz_type", "classic"))
+    room["quiz_type"] = quiz_type
 
     if quiz_type == "wager":
         # Rising difficulty: round 1 = easy (1), round 2 = medium (2), round 3 = hard (3).
@@ -2133,8 +2172,8 @@ async def start_question(code: str):
     base_time = q.get("time", 10)
     if quiz_type == "speed":
         base_time = max(5, base_time // 2)
-    elif quiz_type == "picguess":
-        base_time = 15
+    elif is_picguess_question(q):
+        base_time = max(base_time, PICGUESS_DEFAULT_TIME)
 
     room["timer"] = base_time
     room["max_time"] = room["timer"]
@@ -2164,6 +2203,10 @@ async def start_question(code: str):
         "quizType": quiz_type,
         **phase_timing(room["question_start_time"], room["timer"]),
     }
+    if "category" in q:
+        question_data["category"] = q["category"]
+    if "subject" in q:
+        question_data["subject"] = q["subject"]
     if quiz_type == "speed":
         question_data["buzzerless"] = True
         question_data["speed"] = True
@@ -2185,14 +2228,6 @@ async def start_question(code: str):
             question_data["tfCorrect"] = 1
         # Remplace l index correct pour verifier la reponse
         room["current_q"] = {**q, "options": tf_options, "correct": question_data["tfCorrect"]}
-    elif quiz_type == "picguess":
-        # Picguess : envoie l image avec les infos de flou
-        question_data["options"] = q["options"]
-        question_data["picguess"] = True
-        question_data["blurStart"] = 20  # Flou de depart en pixels
-        question_data["blurEnd"] = 0  # Flou final
-        if "image" in q:
-            question_data["image"] = q["image"]
     else:
         # Classique et Speed utilisent les options normales
         question_data["options"] = q["options"]
@@ -2200,6 +2235,7 @@ async def start_question(code: str):
     # Include image if present (for flag quiz etc.)
     if "image" in q and "image" not in question_data:
         question_data["image"] = q["image"]
+    add_picguess_payload(question_data, q)
     
     await broadcast(code, "question", question_data)
     

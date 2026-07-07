@@ -27,6 +27,9 @@ let selectedTheme = 'neon';
 let gameMode = null;
 let selectedGameMode = 'ffa';
 window.selectedQuizType = window.selectedQuizType || { solo: 'classic', multi: 'classic' };
+if (!['classic', 'speed', 'wager'].includes(window.selectedQuizType.multi)) {
+    window.selectedQuizType.multi = 'classic';
+}
 window.selectedMultiQuizType = window.selectedQuizType.multi || 'classic';
 let myTeam = null;
 let selectedJoinTeam = null;

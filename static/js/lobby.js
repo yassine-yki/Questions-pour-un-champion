@@ -6,7 +6,7 @@ Il ouvre la connexion WebSocket, envoie les infos de salle au serveur et gere le
 
 // Cree une salle multijoueur avec les options choisies par l hote.
 function getSelectedMultiQuizType() {
-    const validTypes = ['classic', 'speed', 'picguess', 'wager'];
+    const validTypes = ['classic', 'speed', 'wager'];
     const fromWindow = window.selectedMultiQuizType || window.selectedQuizType?.multi;
     return validTypes.includes(fromWindow) ? fromWindow : 'classic';
 }
