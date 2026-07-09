@@ -5,6 +5,7 @@
 
 import uuid, random, json, asyncio, time, os, re
 from contextlib import asynccontextmanager
+from urllib.parse import quote, unquote
 try:
     import httpx
 except ImportError:
@@ -44,15 +45,32 @@ PICGUESS_CATEGORY = "picguess"
 PICGUESS_DEFAULT_TIME = 15
 PICGUESS_BLUR_START = 20
 PICGUESS_BLUR_END = 0
+WIKIMEDIA_THUMB_RE = re.compile(
+    r"^https://upload\.wikimedia\.org/wikipedia/commons/thumb/"
+    r"[0-9a-f]/[0-9a-f]{2}/(?P<filename>[^/]+)/\d+px-[^/]+$",
+    re.IGNORECASE,
+)
 
 def normalize_quiz_type(value: Any) -> str:
     """Keep quiz type as a game mechanic; image guessing is a category."""
     return value if isinstance(value, str) and value in VALID_QUIZ_TYPES else "classic"
 
+def normalize_question_image_url(value: Any) -> Any:
+    """Replace retired Wikimedia thumbnail URLs with their stable redirect form."""
+    if not isinstance(value, str):
+        return value
+    match = WIKIMEDIA_THUMB_RE.match(value)
+    if not match:
+        return value
+    filename = quote(unquote(match.group("filename")), safe="")
+    return f"https://commons.wikimedia.org/wiki/Special:Redirect/file/{filename}?width=640"
+
 def tag_question(question: Dict[str, Any], category: str) -> Dict[str, Any]:
     tagged = dict(question)
     tagged.setdefault("category", category)
     tagged.setdefault("subject", category)
+    if "image" in tagged:
+        tagged["image"] = normalize_question_image_url(tagged["image"])
     if category == PICGUESS_CATEGORY:
         tagged["picguess"] = True
         tagged.setdefault("time", PICGUESS_DEFAULT_TIME)
