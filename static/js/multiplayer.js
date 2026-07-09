@@ -585,15 +585,23 @@ function showQuestion(data) {
             const img = questionImageEl.querySelector('img');
             if (img) {
                 img.src = data.image;
-                img.style.filter = '';
-                img.style.transform = '';
-                img.style.transition = '';
+                if (!isPicguessQuestion && typeof window.resetPicguessImageReveal === 'function') {
+                    window.resetPicguessImageReveal(img);
+                } else if (!isPicguessQuestion) {
+                    img.style.filter = '';
+                    img.style.transform = '';
+                    img.style.transition = '';
+                }
             }
             questionImageEl.querySelectorAll('.picguess-reveal-meter, .picguess-hint').forEach(el => el.remove());
         } else {
             questionImageEl.style.display = 'none';
             questionImageEl.classList.remove('picguess-frame');
             questionImageEl.querySelectorAll('.picguess-reveal-meter, .picguess-hint').forEach(el => el.remove());
+            const img = questionImageEl.querySelector('img');
+            if (img && typeof window.resetPicguessImageReveal === 'function') {
+                window.resetPicguessImageReveal(img);
+            }
         }
     }
     
@@ -691,12 +699,8 @@ function showQuestion(data) {
         const qImg = document.querySelector('#questionImage img');
         if (qImg) {
             const blurStart = data.blurStart || 20;
-            qImg.style.filter = `blur(${blurStart}px) brightness(0.72) saturate(0.8)`;
-            qImg.style.transform = 'scale(1.06)';
-            qImg.style.transition = 'filter linear, transform linear';
             // Defloute pendant la duree du chrono
             const deblurDuration = (data.time || 15) * 1000;
-            qImg.style.transitionDuration = `${deblurDuration}ms`;
             const holder = document.getElementById('questionImage');
             if (holder) {
                 holder.insertAdjacentHTML('beforeend', `
@@ -706,14 +710,22 @@ function showQuestion(data) {
                 const fill = holder.querySelector('.picguess-reveal-meter__fill');
                 if (fill) fill.style.animationDuration = `${data.time || 15}s`;
             }
-            const startReveal = () => requestAnimationFrame(() => {
-                qImg.style.filter = 'blur(0px) brightness(1) saturate(1)';
-                qImg.style.transform = 'scale(1)';
-            });
-            if (typeof qImg.decode === 'function') {
-                qImg.decode().then(startReveal).catch(startReveal);
+            if (typeof window.startPicguessImageReveal === 'function') {
+                window.startPicguessImageReveal(qImg, {
+                    blurStart,
+                    durationMs: deblurDuration
+                });
             } else {
-                startReveal();
+                qImg.style.filter = `blur(${blurStart}px) brightness(0.72) saturate(0.8)`;
+                qImg.style.transform = 'scale(1.06)';
+                qImg.style.transition = `filter ${deblurDuration}ms linear, transform ${deblurDuration}ms linear`;
+                void qImg.offsetWidth;
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        qImg.style.filter = 'blur(0px) brightness(1) saturate(1)';
+                        qImg.style.transform = 'scale(1)';
+                    });
+                });
             }
         }
     }

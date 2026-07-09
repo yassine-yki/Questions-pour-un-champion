@@ -368,13 +368,21 @@ function showNextSoloQuestion() {
             const img = questionImageEl.querySelector('img');
             if (img) {
                 img.src = soloCurrentQuestion.image;
-                img.style.filter = '';
-                img.style.transform = '';
-                img.style.transition = '';
+                if (!isPicguess && typeof window.resetPicguessImageReveal === 'function') {
+                    window.resetPicguessImageReveal(img);
+                } else if (!isPicguess) {
+                    img.style.filter = '';
+                    img.style.transform = '';
+                    img.style.transition = '';
+                }
             }
         } else {
             questionImageEl.style.display = 'none';
             questionImageEl.classList.remove('picguess-frame');
+            const img = questionImageEl.querySelector('img');
+            if (img && typeof window.resetPicguessImageReveal === 'function') {
+                window.resetPicguessImageReveal(img);
+            }
         }
     }
     
@@ -496,18 +504,23 @@ function showNextSoloQuestion() {
                     const fill = holder.querySelector('.picguess-reveal-meter__fill');
                     if (fill) fill.style.animationDuration = `${window.soloMaxTime || 15}s`;
                 }
-                qImg.src = soloCurrentQuestion.image;
-                qImg.style.filter = `blur(${soloCurrentQuestion.blurStart || 20}px) brightness(0.72) saturate(0.8)`;
-                qImg.style.transform = 'scale(1.06)';
-                qImg.style.transition = `filter ${((window.soloMaxTime || 15) * 1000)}ms linear, transform ${((window.soloMaxTime || 15) * 1000)}ms linear`;
-                const startReveal = () => requestAnimationFrame(() => {
-                    qImg.style.filter = 'blur(0px) brightness(1) saturate(1)';
-                    qImg.style.transform = 'scale(1)';
-                });
-                if (typeof qImg.decode === 'function') {
-                    qImg.decode().then(startReveal).catch(startReveal);
+                const durationMs = (window.soloMaxTime || 15) * 1000;
+                if (typeof window.startPicguessImageReveal === 'function') {
+                    window.startPicguessImageReveal(qImg, {
+                        blurStart: soloCurrentQuestion.blurStart || 20,
+                        durationMs
+                    });
                 } else {
-                    startReveal();
+                    qImg.style.filter = `blur(${soloCurrentQuestion.blurStart || 20}px) brightness(0.72) saturate(0.8)`;
+                    qImg.style.transform = 'scale(1.06)';
+                    qImg.style.transition = `filter ${durationMs}ms linear, transform ${durationMs}ms linear`;
+                    void qImg.offsetWidth;
+                    requestAnimationFrame(() => {
+                        requestAnimationFrame(() => {
+                            qImg.style.filter = 'blur(0px) brightness(1) saturate(1)';
+                            qImg.style.transform = 'scale(1)';
+                        });
+                    });
                 }
             }
         }
