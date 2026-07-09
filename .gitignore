@@ -3,3 +3,7 @@ __pycache__/
 dump.rdb
 
 benchmarks/**/logs/
+
+node_modules/
+playwright-report/
+test-results/

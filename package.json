@@ -1,0 +1,14 @@
+{
+  "name": "questions-pour-un-champion",
+  "version": "1.0.0",
+  "description": "Browser regression tests for the quiz game.",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed"
+  },
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.61.1"
+  }
+}
