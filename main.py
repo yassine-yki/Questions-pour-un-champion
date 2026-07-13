@@ -1216,9 +1216,10 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                 connections[code] = {}
                 room_locks[code] = asyncio.Lock()
                 record_metric("roomsCreated")
-                await save_room_snapshot(code)
-                
                 await ws.send_json({"event": "roomCreated", "data": {"code": code, "language": language, "gameMode": game_mode, "isPublic": is_public}})
+                # The creator's join arrives on this same socket and process, so
+                # shared-store persistence does not need to delay the acknowledgement.
+                asyncio.create_task(save_room_snapshot(code))
                 
                 # La salle publique sera publiee apres l'arrivee de l'hote,
                 # pour eviter d'afficher une carte temporaire "0/4".

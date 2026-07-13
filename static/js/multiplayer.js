@@ -274,9 +274,10 @@ const MESSAGE_HANDLERS = {
         myTeam = data.team;
         setUXState('waiting', { roomCode: currentRoomCode });
         if (data.language) {
+            const languageChanged = data.language !== selectedLanguage;
             selectedLanguage = data.language;
             if (window.AppState) window.AppState.language = selectedLanguage;
-            applyTranslations();
+            if (languageChanged) applyTranslations();
         }
         showScreen('lobbyScreen');
         document.getElementById('roomCode').textContent = currentRoomCode;
