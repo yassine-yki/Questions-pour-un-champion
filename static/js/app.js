@@ -1717,8 +1717,38 @@ function showWagerQuestion(d) {
 
         const img = document.getElementById('questionImage');
         if (img) {
-            if (d.image) { img.style.display = 'block'; const im = img.querySelector('img'); if (im) im.src = d.image; }
-            else img.style.display = 'none';
+            const isPicguess = !!d.picguess || d.category === 'picguess' || d.subject === 'picguess';
+            img.querySelectorAll('.picguess-reveal-meter, .picguess-hint').forEach(el => el.remove());
+            img.classList.toggle('picguess-frame', isPicguess);
+            if (d.image) {
+                img.style.display = 'block';
+                const im = img.querySelector('img');
+                if (im) {
+                    im.src = d.image;
+                    if (isPicguess && typeof window.startPicguessImageReveal === 'function') {
+                        window.startPicguessImageReveal(im, {
+                            blurStart: d.blurStart || 20,
+                            durationMs: (d.time || 15) * 1000
+                        });
+                    } else if (typeof window.resetPicguessImageReveal === 'function') {
+                        window.resetPicguessImageReveal(im);
+                    }
+                }
+                if (isPicguess) {
+                    img.insertAdjacentHTML('beforeend', `
+                        <div class="picguess-hint">${selectedLanguage === 'fr' ? 'L image se revele...' : 'Image revealing...'}</div>
+                        <div class="picguess-reveal-meter"><span class="picguess-reveal-meter__fill"></span></div>
+                    `);
+                    const fill = img.querySelector('.picguess-reveal-meter__fill');
+                    if (fill) fill.style.animationDuration = `${d.time || 15}s`;
+                }
+            } else {
+                img.style.display = 'none';
+                const im = img.querySelector('img');
+                if (im && typeof window.resetPicguessImageReveal === 'function') {
+                    window.resetPicguessImageReveal(im);
+                }
+            }
         }
 
         const badge = document.getElementById('questionBadge');
@@ -1784,7 +1814,7 @@ function showWagerResult(d) {
         removeWagerOverlay();
 
         const box = document.getElementById('optionsBox');
-        if (box) box.querySelectorAll('.option').forEach((o, i) => {
+        if (box) box.querySelectorAll('.option, .ch-option').forEach((o, i) => {
             o.onclick = null;
             if (i === d.correctIdx) o.classList.add('correct');
         });
@@ -1813,7 +1843,9 @@ function showWagerResult(d) {
         document.body.appendChild(o);
         const ind = document.getElementById('wagerIndicator'); if (ind) ind.remove();
         const holdMs = Math.max(4500, (d.nextEventAt && d.serverNow) ? (d.nextEventAt - d.serverNow) : 5000);
-        setTimeout(() => { const ov = document.getElementById('wagerOverlay'); if (ov) ov.remove(); }, holdMs);
+        // Remove only this result card. A new wager phase may already have reused
+        // the same DOM id by the time this timer fires.
+        setTimeout(() => { if (o.isConnected) o.remove(); }, holdMs);
     }
 
     // Synchronisation de la langue de l interface

@@ -1986,8 +1986,13 @@ async def begin_wager_answers(code: str):
         "difficulty": room.get("wager_difficulty", 1),
         **phase_timing(room["question_start_time"], room["timer"]),
     }
+    if "category" in q:
+        question_data["category"] = q["category"]
+    if "subject" in q:
+        question_data["subject"] = q["subject"]
     if "image" in q:
         question_data["image"] = q["image"]
+    add_picguess_payload(question_data, q)
     await broadcast(code, "question", question_data)
     asyncio.create_task(wager_answer_timer(code))
 
