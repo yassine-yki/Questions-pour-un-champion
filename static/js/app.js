@@ -204,6 +204,10 @@ window.renderPublicRooms = function(rooms) {
 window.renderSubjectsToContainer = function(containerId) {
         const container = document.getElementById(containerId);
         if (!container || typeof SUBJECTS === 'undefined') return;
+        const existingChecks = Array.from(container.querySelectorAll('input[type="checkbox"]'));
+        const selectedBeforeRender = existingChecks.length
+            ? new Set(existingChecks.filter(cb => cb.checked).map(cb => cb.value))
+            : null;
         container.innerHTML = '';
         // Seule la zone solo est visible au depart; createSubjects reste cachee
         // car l ecran de creation montre un resume et le bouton Modifier.
@@ -212,22 +216,26 @@ window.renderSubjectsToContainer = function(containerId) {
         }
 
         SUBJECTS.forEach(subject => {
+            const isSelected = selectedBeforeRender ? selectedBeforeRender.has(subject) : true;
             const pill = document.createElement('button');
             pill.type = 'button';
-            pill.className = 'subject-pill is-on';
+            pill.className = `subject-pill${isSelected ? ' is-on' : ''}`;
             pill.dataset.subject = subject;
 
             const hiddenCb = document.createElement('input');
             hiddenCb.type = 'checkbox';
             hiddenCb.id = `${containerId}-${subject}`;
             hiddenCb.value = subject;
-            hiddenCb.checked = true;
+            hiddenCb.checked = isSelected;
             hiddenCb.style.display = 'none';
 
             const label = t('subjects.' + subject) || subject;
+            const selectionIcon = isSelected
+                ? '<svg width="13" height="13" viewBox="0 0 256 256" fill="currentColor"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg>'
+                : '<svg width="13" height="13" viewBox="0 0 256 256" fill="var(--primary)"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg>';
             pill.innerHTML = `
                 <span class="subject-pill__icon">
-                    <svg width="13" height="13" viewBox="0 0 256 256" fill="currentColor"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg>
+                    ${selectionIcon}
                 </span>
                 <span>${escapeHtml(label)}</span>`;
             pill.appendChild(hiddenCb);
