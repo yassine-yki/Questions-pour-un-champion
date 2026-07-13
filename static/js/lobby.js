@@ -236,8 +236,9 @@ function connectWebSocket(code, playerName, isCreating, subjects, gm = 'ffa', is
     // Recupere l avatar actuel pour l envoyer au serveur
     const avatarConfig = currentAvatar || generateRandomAvatar();
     
-    ws = new WebSocket(getWebSocketUrl(code));
-    ws.onopen = () => {
+    const roomSocket = new WebSocket(getWebSocketUrl(code));
+    ws = roomSocket;
+    roomSocket.onopen = () => {
         if (isCreating) {
             const createData = { 
                 action: 'create', 
@@ -251,15 +252,16 @@ function connectWebSocket(code, playerName, isCreating, subjects, gm = 'ffa', is
             if (aiQuestions && aiQuestions.length > 0) {
                 createData.aiQuestions = aiQuestions;
             }
-            ws.send(JSON.stringify(createData));
-            ws.send(JSON.stringify({ action: 'join', playerName: playerName, avatar: avatarConfig }));
-        } else ws.send(JSON.stringify({ action: 'join', playerName: playerName, team: team, avatar: avatarConfig }));
+            roomSocket.send(JSON.stringify(createData));
+            roomSocket.send(JSON.stringify({ action: 'join', playerName: playerName, avatar: avatarConfig }));
+        } else roomSocket.send(JSON.stringify({ action: 'join', playerName: playerName, team: team, avatar: avatarConfig }));
     };
-    ws.onmessage = (event) => handleMessage(JSON.parse(event.data));
-    ws.onerror = () => {
+    roomSocket.onmessage = (event) => handleMessage(JSON.parse(event.data));
+    roomSocket.onerror = () => {
         if (!isAttemptingReconnect) showMessage(t('connectionError'), 'error', 2600);
     };
-    ws.onclose = () => {
+    roomSocket.onclose = () => {
+        if (ws !== roomSocket) return;
         // Reconnexion automatique si la partie etait en cours
         if (userId && matchToken && currentRoomCode && !isAttemptingReconnect) {
             const activeScreen = document.querySelector('.screen.active');

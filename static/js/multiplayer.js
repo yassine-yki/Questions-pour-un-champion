@@ -6,6 +6,7 @@ Si un evenement vient du serveur pendant une partie multi, il passe presque touj
 
 let isAttemptingReconnect = false;
 let reconnectAttempts = 0;
+let reconnectRetryTimer = null;
 const MAX_RECONNECT_ATTEMPTS = 5;
 const RECONNECT_DELAYS = [0, 650, 1200, 2000, 3000];
 const UX_TIMING = Object.freeze({
@@ -115,9 +116,25 @@ function hideReconnectOverlay() {
     if (overlay) overlay.style.display = 'none';
 }
 
+function clearReconnectRetry() {
+    if (!reconnectRetryTimer) return;
+    clearTimeout(reconnectRetryTimer);
+    reconnectRetryTimer = null;
+}
+
+function scheduleReconnectRetry() {
+    if (!isAttemptingReconnect || reconnectRetryTimer) return;
+    const delay = RECONNECT_DELAYS[reconnectAttempts] || 3000;
+    reconnectRetryTimer = setTimeout(() => {
+        reconnectRetryTimer = null;
+        doReconnectAttempt();
+    }, delay);
+}
+
 function cancelReconnect() {
     isAttemptingReconnect = false;
     reconnectAttempts = 0;
+    clearReconnectRetry();
     hideReconnectOverlay();
     if (ws) { try { ws.close(); } catch(e) {} }
     showHome();
@@ -133,6 +150,7 @@ function attemptReconnect() {
 }
 
 function doReconnectAttempt() {
+    clearReconnectRetry();
     if (!isAttemptingReconnect || reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
         isAttemptingReconnect = false;
         hideReconnectOverlay();
@@ -148,21 +166,23 @@ function doReconnectAttempt() {
     
     console.log(`Reconnect attempt ${reconnectAttempts}/${MAX_RECONNECT_ATTEMPTS} to room ${currentRoomCode}`);
     
-    ws = new WebSocket(getWebSocketUrl(currentRoomCode));
-    ws.onopen = () => {
+    const reconnectSocket = new WebSocket(getWebSocketUrl(currentRoomCode));
+    ws = reconnectSocket;
+    reconnectSocket.onopen = () => {
         // Envoie la demande de reconnexion avec les identifiants sauvegardes
-        ws.send(JSON.stringify({
+        reconnectSocket.send(JSON.stringify({
             action: 'rejoin',
             userId: userId,
             matchToken: matchToken
         }));
     };
-    ws.onmessage = (event) => {
+    reconnectSocket.onmessage = (event) => {
         const msg = JSON.parse(event.data);
         if (msg.event === 'rejoined') {
             // Reconnexion reussie : restaure l etat
             isAttemptingReconnect = false;
             reconnectAttempts = 0;
+            clearReconnectRetry();
             hideReconnectOverlay();
             
             userId = msg.data.userId;
@@ -199,32 +219,32 @@ function doReconnectAttempt() {
             }
             
             // Rebranche le gestionnaire de messages pour la partie en cours
-            ws.onmessage = (event) => handleMessage(JSON.parse(event.data));
-            ws.onclose = () => {
+            reconnectSocket.onmessage = (event) => handleMessage(JSON.parse(event.data));
+            reconnectSocket.onclose = () => {
+                if (ws !== reconnectSocket) return;
                 if (userId && matchToken && currentRoomCode && !isAttemptingReconnect) {
                     const activeScreen = document.querySelector('.screen.active');
                     const inGame = activeScreen && ['gameScreen', 'lobbyScreen'].includes(activeScreen.id);
                     if (inGame) attemptReconnect();
                 }
             };
-            ws.onerror = () => {};
+            reconnectSocket.onerror = () => {};
         } else if (msg.event === 'rejoinFailed' || msg.event === 'error') {
             console.log('Rejoin failed:', msg.data);
-            ws.close();
-            // Nouvelle tentative apres un delai
-            setTimeout(doReconnectAttempt, RECONNECT_DELAYS[reconnectAttempts] || 3000);
+            reconnectSocket.close();
+            scheduleReconnectRetry();
         } else {
             // Evenement different : on est peut-etre deja reconnecte, on traite normalement
             handleMessage(msg);
         }
     };
-    ws.onerror = () => {
-        setTimeout(doReconnectAttempt, RECONNECT_DELAYS[reconnectAttempts] || 3000);
+    reconnectSocket.onerror = () => {
+        if (ws !== reconnectSocket) return;
+        scheduleReconnectRetry();
     };
-    ws.onclose = () => {
-        if (isAttemptingReconnect) {
-            setTimeout(doReconnectAttempt, RECONNECT_DELAYS[reconnectAttempts] || 3000);
-        }
+    reconnectSocket.onclose = () => {
+        if (ws !== reconnectSocket) return;
+        scheduleReconnectRetry();
     };
 }
 

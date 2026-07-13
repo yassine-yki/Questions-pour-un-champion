@@ -55,6 +55,39 @@ def normalize_quiz_type(value: Any) -> str:
     """Keep quiz type as a game mechanic; image guessing is a category."""
     return value if isinstance(value, str) and value in VALID_QUIZ_TYPES else "classic"
 
+def normalize_ai_questions(value: Any) -> List[Dict[str, Any]]:
+    """Accept only complete, playable custom questions from the browser."""
+    if not isinstance(value, list):
+        return []
+    normalized = []
+    for item in value[:20]:
+        if not isinstance(item, dict):
+            continue
+        question = item.get("q") or item.get("question")
+        options = item.get("options")
+        if not isinstance(question, str) or not question.strip():
+            continue
+        if not isinstance(options, list) or not 2 <= len(options) <= 6:
+            continue
+        clean_options = [str(option).strip() for option in options]
+        if any(not option for option in clean_options):
+            continue
+        correct = item.get("correct")
+        if not isinstance(correct, int):
+            answer = item.get("answer")
+            correct = clean_options.index(answer) if answer in clean_options else -1
+        if not 0 <= correct < len(clean_options):
+            continue
+        raw_time = item.get("time", 15)
+        question_time = int(raw_time) if isinstance(raw_time, (int, float)) else 15
+        normalized.append({
+            "q": question.strip(),
+            "options": clean_options,
+            "correct": correct,
+            "time": max(5, min(question_time, 60)),
+        })
+    return normalized
+
 def normalize_question_image_url(value: Any) -> Any:
     """Replace retired Wikimedia thumbnail URLs with their stable redirect form."""
     if not isinstance(value, str):
@@ -1144,13 +1177,17 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                 subjects = msg.get("subjects", [])
                 game_mode = msg.get("gameMode", "ffa")
                 is_public = msg.get("isPublic", False)  # Option salle publique
-                ai_questions = msg.get("aiQuestions", None)  # NOUVEAU : questions generees par IA
+                raw_ai_questions = msg.get("aiQuestions", None)
+                ai_questions = normalize_ai_questions(raw_ai_questions) if raw_ai_questions is not None else None
                 quiz_type = normalize_quiz_type(msg.get("quizType", "classic"))
                 
                 # Logs de debug
                 print(f"Creating room {code}")
                 print(f"AI Questions received: {ai_questions is not None}")
                 print(f"Quiz type: {quiz_type}")
+                if raw_ai_questions is not None and not ai_questions:
+                    await ws.send_json({"event": "error", "data": "No valid AI questions were provided"})
+                    continue
                 if ai_questions:
                     print(f"Number of AI questions: {len(ai_questions)}")
                 
@@ -1454,8 +1491,9 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                 if not disc_entry or disc_entry["match_token"] != rejoin_token:
                     # Verifie aussi s il est encore dans la salle mais marque deconnecte
                     player = room["players"].get(rejoin_user_id)
-                    if player and player.get("match_token") == rejoin_token and not player.get("connected", True):
+                    if player and player.get("match_token") == rejoin_token:
                         # Valid — restore connection
+                        old_ws = connections.setdefault(code, {}).get(rejoin_user_id)
                         player["connected"] = True
                         connections[code][rejoin_user_id] = ws
                         user_id = rejoin_user_id
@@ -1469,6 +1507,11 @@ async def websocket_endpoint(ws: WebSocket, code: str):
                             "data": with_server_now(rejoin_payload(code, room, rejoin_user_id, player))
                         })
                         record_metric("reconnects")
+                        if old_ws and old_ws is not ws:
+                            try:
+                                await old_ws.close()
+                            except Exception:
+                                pass
                         
                         await broadcast(code, "playerReconnected", {
                             "player": player["name"],
@@ -1697,11 +1740,12 @@ async def websocket_endpoint(ws: WebSocket, code: str):
         if user_id and "LOBBY" in connections:
             connections["LOBBY"].pop(user_id, None)
         
-        if code in connections and user_id in connections[code]:
+        owns_connection = bool(user_id and connections.get(code, {}).get(user_id) is ws)
+        if owns_connection:
             connections[code].pop(user_id, None)
         
         room = get_room(code)
-        if room and user_id in room["players"]:
+        if owns_connection and room and user_id in room["players"]:
             player_name = room["players"][user_id]["name"]
             was_host = (user_id == room["host"])
             lang = room.get("language", "en")
@@ -1796,7 +1840,7 @@ async def _delayed_disconnect_cleanup(code: str, user_id: str, player_name: str,
     })
     
     # Termine la partie s il ne reste pas assez de joueurs
-    if game_state in ["question", "buzzed", "answered", "speed_answer", "speed_done"]:
+    if game_state in ["question", "buzzed", "answered", "speed_answer", "speed_done", "wagering", "wager_answer", "wager_done"]:
         connected_players = {uid: p for uid, p in room["players"].items() if p.get("connected", True)}
         min_players = 4 if room.get("game_mode") == "team" else 2
         if len(connected_players) < min_players:
