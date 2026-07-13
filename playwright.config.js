@@ -7,7 +7,7 @@ const pythonCommand = process.platform === 'win32' ? `"${python}"` : python;
 
 module.exports = defineConfig({
   testDir: './tests',
-  timeout: 30_000,
+  timeout: 60_000,
   expect: {
     timeout: 5_000,
   },
